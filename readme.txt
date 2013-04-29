@@ -35,6 +35,10 @@ explains the solution.
 
 Install and activate a Wordpress plugin like Simple Mathjax
 
+= Where is the plugin running?
+
+It's running at [Financial mathematics](http://bdmfst.com/ct1/ "Financial mathematics") 
+
 == Screenshots ==
 
 1. Input form rendered the first time [mortgage] shortcode is rendered.
