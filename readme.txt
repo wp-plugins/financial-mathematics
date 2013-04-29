@@ -35,7 +35,7 @@ explains the solution.
 
 Install and activate a Wordpress plugin like Simple Mathjax
 
-= Where is the plugin running?
+= Where is the plugin running? = 
 
 It's running at [Financial mathematics](http://bdmfst.com/ct1/ "Financial mathematics") 
 
