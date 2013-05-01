@@ -4,7 +4,7 @@ Donate link: http://bdmfst.com/
 Tags: actuarial, actuary, financial mathematics, financial, mathematics, CT1
 Requires at least: 3.5.1
 Tested up to: 3.5.1
-Stable tag: 1.0
+Stable tag: 1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -49,11 +49,18 @@ shortcode.
 
 == Changelog ==
 
+= 1.1 =
+* shortcode attributes enable question or answer form to be excluded.
+* plugin options page (help page) added to admin menu.
+
 = 1.0 =
 * annuityCertain, mortgage shortcodes.
 
 
 == Upgrade Notice ==
+
+= 1.1 =
+Calculator form (for any parameters) can be shown below the question form, according to what attributes you use in the shortcode.
 
 = 1.0 =
 First version.
