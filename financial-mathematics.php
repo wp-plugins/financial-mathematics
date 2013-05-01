@@ -9,6 +9,7 @@
         Licence: GPL2
 */  
 
+include 'ct1_admin.php';
 require_once 'ct1_annuity.php';
 require_once 'ct1_mortgage.php';
 require_once 'ct1_format.php';
@@ -21,8 +22,10 @@ register_activation_hook( __FILE__, 'ct1_install' ); // SETUP
 
 
 function annuityCertain_proc($attr){
+   $pairs = array( 'question'=>1, 'answer' => 1);
+   $a = shortcode_atts( $pairs, $attr  );
   $ac = new ct1_annuity();
-  return $ac->annuityCertain_func($attr);
+  return $ac->annuityCertain_func($a['question'], $a['answer']);
 }
 
 function mortgage_proc($attr){

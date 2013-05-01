@@ -13,47 +13,6 @@ function im($_i, $_frequency){
 }
 
 
-function acceptPOST(){
-  session_start();
-  $_action = $_POST['ct1_action'];
-  $_value = htmlentities($_POST['ct1_value']);
-  $_term = $_POST['ct1_term'];
-  $_frequency = $_POST['ct1_frequency'];
-  $_interest = $_POST['ct1_interest'];
-  $_advance = $_POST['ct1_advance'];
-  $_principal = $_POST['ct1_principal'];
-  if ($_action == 'annuityCertain' || $_action == 'mortgage'){  
-    $marker = new ct1_marker();
-    $_SESSION['REQUEST'] = $_REQUEST;
-    $_ann = annuityCertain($_term, $_interest, $_frequency, $_advance);
-    $redirect = current_page_url() . "&ct1_term=" . $_term . "&ct1_interest=" . $_interest;
-    $redirect.= "&ct1_frequency=" . $_frequency . "&ct1_advance=" . $_advance ;
-    if ($_action == 'annuityCertain' ){  
-      $_questionType = 1; // say for level annuity certain
-      $_scoreRes = $marker->score($_ann, $_value);
-      $redirect.= "&ct1_action=getAnnuityCertain";
-    }
-    if ($_action == 'mortgage' ){  
-      $_questionType = 2; // say for mortgage
-      $_inst_per_year = $_principal / $_ann;
-      $_inst = round($_inst_per_year / $_frequency, 2);
-      $_scoreRes = $marker->score($_inst, $_value);
-      $redirect.= "&ct1_principal=" . $_principal;
-      $redirect.= "&ct1_action=getMortgage";
-    }
-    if ( is_user_logged_in() ) { 
-      $_score = $_scoreRes['credit'];
-      $_available = $_scoreRes['available'];
-      ct1_insert_mark( $_questionType, $_score, $_available);
-    } 
-//    $_SESSION['Redirect'] =  $redirect;
-    wp_redirect($redirect);
-    exit;
-  }
-}
-
-
-
 function problem($_term, $_interest, $_frequency, $_advance){
   $adv = "in arrears";
   $inst = "instalments";
@@ -71,17 +30,35 @@ function problem($_term, $_interest, $_frequency, $_advance){
 }
 
 function form($_term, $_interest, $_frequency, $_advance){
-  $out = "<form method = 'POST'>
+  $out = "<form class='ct1_form' method = 'POST'>
           <p>Calculate the " . $this->problem($_term, $_interest, $_frequency, $_advance) . "</p>";
   $out.= $this->formBottom($_term, $_interest, $_frequency, $_advance, 'annuityCertain');
   return $out;
 }
 
 
+function formGetAnnuity($_term, $_interest, $_frequency, $_advance){
+  $out = "<form class='ct1_form'  method = 'POST'>";
+  $out.= $this->formBottomGetAnnuity($_term, $_interest, $_frequency, $_advance, 'getAnnuityCertain');
+  return $out;
+}
+
+function formBottomGetAnnuity($_term, $_interest, $_frequency, $_advance, $_action){
+  if ($_advance) $_checkAdvance = "CHECKED";
+  $out = "
+    <p><label>Term (years)      <input name='ct1_term' value='$_term' /> </label></p>
+    <p><label>Frequency      <input name='ct1_frequency' value='$_frequency' /> </label></p>
+    <p><label>In advance    <input type = 'checkbox' " . $_checkAdvance . " name='ct1_advance' value=true /></label></p>
+    <p><label>Interest rate <input value='$_interest' name='ct1_interest' /></label></p>
+          <input type = 'hidden' name='ct1_action' value='$_action'>
+          <input type = 'submit' value = 'Just tell me the annuity value'>
+          </form> ";
+  return $out;
+}
 
 function formBottom($_term, $_interest, $_frequency, $_advance, $_action){
   $out = "<p>
-            <label>Value
+            <label>Annuity value
               <input name = 'ct1_value'>
             </label>
           </p>
@@ -90,7 +67,7 @@ function formBottom($_term, $_interest, $_frequency, $_advance, $_action){
           <input type = 'hidden' name='ct1_advance' value='$_advance'>
           <input type = 'hidden' name='ct1_interest' value='$_interest'>
           <input type = 'hidden' name='ct1_action' value='$_action'>
-          <input type = 'submit' value = 'submit'>
+          <input type = 'submit' value = 'Check my value'>
           </form> ";
   return $out;
 }
@@ -205,7 +182,7 @@ function random_float ($min,$max) {
     
 
 
-public function annuityCertain_func( $atts ){
+public function annuityCertain_func( $question = true, $answer = true ){
 //  echo "<pre>SESSION" . print_r($_SESSION,1) . "</pre>";
   if ($_SESSION['REQUEST']['ct1_action']=='annuityCertain'){
       $_REQUEST = $_SESSION['REQUEST'];
@@ -249,7 +226,9 @@ if ($_action == 'annuityCertain'){
     $af = array(1,2,4,12,'continuous');
     $_frequency = $af[rand(0,3)];
     $_advance = rand(0,1)==0;  
-    $out = $this->form($_term, $_interest, $_frequency, $_advance);
+    $out = "";
+    if ($question) $out.= $this->form($_term, $_interest, $_frequency, $_advance);
+    if ($answer) $out.= "<hr/><p>" . $this->formGetAnnuity($_term, $_interest, $_frequency, $_advance) . "</p>";
   }
   return $out;
 }

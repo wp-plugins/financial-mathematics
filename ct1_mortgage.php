@@ -29,17 +29,37 @@ function problemMortgage($_term, $_interest, $_frequency, $_advance, $_principal
 
 
 function formMortgage($_term, $_interest, $_frequency, $_advance, $_principal){
-  $out = "<form method = 'POST'>";
+  $out = "<form class='ct1_form' method = 'POST'>";
   $out.= "<input type = 'hidden' name='ct1_principal' value='$_principal'>";
   $out.= "<p>Calculate the " . $this->problemMortgage($_term, $_interest, $_frequency, $_advance, $_principal) . "</p>";
   $out.= $this->formBottom($_term, $_interest, $_frequency, $_advance, 'mortgage');
   return $out;
 }
 
+function formMortgageGet($_term, $_interest, $_frequency, $_advance, $_principal){
+  $out = "<form class='ct1_form' method = 'POST'>";
+  $out.= "<p><label>Principal<input type = 'text' name='ct1_principal' value='$_principal'></label>";
+  $out.= $this->formBottomGet($_term, $_interest, $_frequency, $_advance, 'getMortgage');
+  return $out;
+}
+
+function formBottomGet($_term, $_interest, $_frequency, $_advance, $_action){
+  if ($_advance) $_checked = " CHECKED ";
+  $out = "
+   <p><label>Term<input type = 'text' name='ct1_term' value='$_term'></label</p>
+   <p><label>Frequency <input type = 'text' name='ct1_frequency' value='$_frequency'></label></p>
+   <p><label>In advance <input type = 'checkbox' " . $_checked . " name='ct1_advance' value='$_advance'></label></p>
+   <p><label>Interest rate pa <input type = 'text' name='ct1_interest' value='$_interest'></label></p>
+          <input type = 'hidden' name='ct1_action' value='$_action'>
+          <input type = 'submit' value = 'Just tell me the instalment amount'>
+          </form> ";
+  return $out;
+}
+
 
 function formBottom($_term, $_interest, $_frequency, $_advance, $_action){
   $out = "<p>
-            <label>Value
+            <label>Instalment amount
               <input name = 'ct1_value'>
             </label>
           </p>
@@ -48,7 +68,7 @@ function formBottom($_term, $_interest, $_frequency, $_advance, $_action){
           <input type = 'hidden' name='ct1_advance' value='$_advance'>
           <input type = 'hidden' name='ct1_interest' value='$_interest'>
           <input type = 'hidden' name='ct1_action' value='$_action'>
-          <input type = 'submit' value = 'submit'>
+          <input type = 'submit' value = 'Check my instalment amount'>
           </form> ";
   return $out;
 }
@@ -207,6 +227,7 @@ if ($_action == 'mortgage'){
     $_advance = rand(0,1)==0;  
     $_principal = round(random_float(100000, 1000000),-3);
     $out = $this->formMortgage($_term, $_interest, $_frequency, $_advance, $_principal);
+    $out.= "<hr/><p>" . $this->formMortgageGet($_term, $_interest, $_frequency, $_advance, $_principal) . "</p>";
   }
   return $out;
 }
