@@ -38,7 +38,7 @@ function form($_term, $_interest, $_frequency, $_advance){
 
 
 function formGetAnnuity($_term, $_interest, $_frequency, $_advance){
-  $out = "<form class='ct1_form'  method = 'POST'>";
+  $out = "<form class='ct1_form'  method = 'GET'>";
   $out.= $this->formBottomGetAnnuity($_term, $_interest, $_frequency, $_advance, 'getAnnuityCertain');
   return $out;
 }

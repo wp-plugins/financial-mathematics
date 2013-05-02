@@ -4,7 +4,7 @@ Donate link: http://bdmfst.com/
 Tags: actuarial, actuary, financial mathematics, financial, mathematics, CT1
 Requires at least: 3.5.1
 Tested up to: 3.5.1
-Stable tag: 1.1
+Stable tag: 1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -49,6 +49,9 @@ shortcode.
 
 == Changelog ==
 
+= 1.2 = 
+* Formulae shown for mortgage repayment schedule.
+
 = 1.1 =
 * shortcode attributes enable question or answer form to be excluded.
 * plugin options page (help page) added to admin menu.
@@ -58,6 +61,9 @@ shortcode.
 
 
 == Upgrade Notice ==
+
+= 1.2 =
+Formulae for mortgage repayment schedule shown explicitly.
 
 = 1.1 =
 Calculator form (for any parameters) can be shown below the question form, according to what attributes you use in the shortcode.

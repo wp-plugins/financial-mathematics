@@ -21,6 +21,13 @@ add_action('after_setup_theme', 'acceptPOST'); // $_POST
 register_activation_hook( __FILE__, 'ct1_install' ); // SETUP
 
 
+add_action('wp_head', 'callbackToAddCSS');
+// source: http://stackoverflow.com/questions/5805888/how-can-i-add-meta-data-to-the-head-section-of-the-page-from-a-wordpress-plugin
+function callbackToAddCSS(){
+  echo "\t  <link rel='stylesheet' type='text/css' href='" . plugin_dir_url(__FILE__) ."ct1.css'> \n";
+}
+
+
 function annuityCertain_proc($attr){
    $pairs = array( 'question'=>1, 'answer' => 1);
    $a = shortcode_atts( $pairs, $attr  );

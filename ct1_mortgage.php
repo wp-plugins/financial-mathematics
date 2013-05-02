@@ -94,17 +94,36 @@ function mortgageSchedule($_term, $_interest, $_frequency, $_advance, $_principa
 
 function getMortgageSchedule($_term, $_interest, $_frequency, $_advance, $_principal){
    $out = "";
+    $a = new ct1_annuity();
+     if (1==$_frequency) {
+        $termj = $_term . " - j + 1"; 
+        $il = "i"; 
+        $iexpl = "i = " . $_interest; 
+     }
+     else {
+        $mult = $_frequency;
+        $termj = $_term . " - \\frac{j-1}{" . $_frequency . "}"; 
+        $il = " \\frac{i^{(" . $_frequency . ")}}{" . $_frequency . "}";
+        $p_i = 1 + $_interest;
+        $im_m = $this->im($_interest, $_frequency) / $_frequency; 
+        $im_m = round($im_m,8);  // HARD CODED ROUNDING (FOR DISPLAY ONLY)
+        $iexpl = $il . " = " . $p_i . "^{\\frac{-1}{ " . $_frequency . "}} -1 = " . $im_m;
+     }
+     if ($_advance) $int = $il . " \\left( P_j - A \\right)";
+     else           $int = $il . "        P_j ";
+   $an = $a->latexAnnuity($termj, $_interest, $_frequency, $_advance);
    $s = $this->mortgageSchedule($_term, $_interest, $_frequency, $_advance, $_principal);
    if (count($s)>0){
        $out.= "<p>Repayment schedule:</p>";
+       $out.= "<p>$ " . $iexpl . " $</p>";
        $out.= "<table class='schedule'>";
        $out.= "<thead>";
        $out.= "<tr>";
-       $out.= "<th>Instalment count</th>";
-       $out.= "<th>Principal</th>";
-       $out.= "<th>Interest</th>";
-       $out.= "<th>Repayment of Capital</th>";
-       $out.= "<th>Instalment amount</th>";
+       $out.= "<th>Instalment counter $$ j $$ </th>";
+       $out.= "<th>Principal \\begin{align*} P_j  & = P_{j-1} - R_{j-1} \\\\  \\\\ & = $mult A\\ " . $an . " \\end{align*}  </th>";
+       $out.= "<th>Interest $$ I_j  = " . $int . "$$ </th>";
+       $out.= "<th>Capital Repayment $$ R_j = A - I_j $$ </th>";
+       $out.= "<th>Instalment amount $$ A $$ </th>";
        $out.= "</tr>";
        $out.= "</thead>";
        $out.= "<tbody>";
@@ -114,7 +133,9 @@ function getMortgageSchedule($_term, $_interest, $_frequency, $_advance, $_princ
        foreach ($s AS $i){
          $out.= "<tr>";
          $out.= "<td>" . ct1_format::mynumber($i['count']) . "</td>";
-         $out.= "<td>" . ct1_format::mynumber($i['oldPrincipal']) . "</td>";
+         if (0!=$_frequency) $tt = $_term - ($i['count'] -1) / $_frequency;
+         $link = current_page_url() . "&ct1_term=" . $tt . "&ct1_frequency=" . $_frequency . "&ct1_interest=" . $_interest . "&ct1_advance=" . $_advance . "&ct1_action=getAnnuityCertain";
+         $out.= "<td><a href='" . $link . "'>" . ct1_format::mynumber($i['oldPrincipal']) . "</a></td>";
          $out.= "<td>" . ct1_format::mynumber($i['interest']) . "</td>";
          $out.= "<td>" . ct1_format::mynumber($i['capRepay']) . "</td>";
          $out.= "<td>" . ct1_format::mynumber($i['instalment']) . "</td>";
@@ -183,6 +204,10 @@ function mortgage_func( $atts ){
       $_SESSION['REQUEST']['ct1_action']='';
   }
   $_action = $_REQUEST['ct1_action'];
+if ($_action == 'getAnnuityCertain'){  
+  $ac = new ct1_annuity();
+  return $ac->annuityCertain_func();
+  }
   $_value = htmlentities($_REQUEST['ct1_value']);
   $_term = $_REQUEST['ct1_term'];
   $_frequency = $_REQUEST['ct1_frequency'];
