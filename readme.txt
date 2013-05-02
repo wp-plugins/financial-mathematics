@@ -63,7 +63,7 @@ shortcode.
 == Upgrade Notice ==
 
 = 1.2 =
-Formulae for mortgage repayment schedule shown explicitly.
+Formulae for mortgage repayment schedule shown explicitly.  Plugin's styles defined in ct1.css and added to header.
 
 = 1.1 =
 Calculator form (for any parameters) can be shown below the question form, according to what attributes you use in the shortcode.
