@@ -45,8 +45,15 @@ public function score_answer($correct, $attempt){
 	return 0;
 }
 
+public function no_dps($d){
+	for ($i=0; $i<30; $i++){
+		if ($d==round($d, $i)) return $i;
+	}
+	return 30;
+}
 
-private function no_sig_fig($d){
+
+public function no_sig_fig($d){
 	if ($d < 0) return $this->no_sig_fig(-$d);
 	for ($i=1; $i<30; $i++){
 		if ($d==$this->round_sig_fig($d, $i)) return $i;
@@ -84,7 +91,19 @@ private function testscore(){
   return array( 'sumcredit'=>$score_res->sumcredit, 'sumavailable'=>$score_res->sumavailable);
 }
 
+public function tempSF($d){
+   return $this->no_sig_fig($d);
+}
 
+public function tempDP($d){
+   return $this->no_dps($d);
+}
 
 }
+
+/*$m = new ct1_marker();
+echo $m->tempSF(0.005)."\r\n";
+echo $m->tempDP(0.005)."\r\n";
+echo $m->tempDP(0.005567798)."\r\n";
+*/
 ?>
