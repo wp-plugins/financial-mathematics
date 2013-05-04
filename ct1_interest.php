@@ -54,7 +54,14 @@ public function getFrequency(){
   return " convertible " . $this->m . " times per year";
 }
 
-
+public function getLabel(){
+  if ($this->isContinuous()) return "\\delta";
+  if ($this->advance) $out="d";
+  else $out="i";
+  if (1!=$this->m) $out.="^{(" . $this->m . ")}";
+  return $out;
+}
+  
 public function set_i($i){
   if (is_numeric($i)){
     $this->i = $i;
@@ -90,6 +97,7 @@ public function set_m($m){
 }
 
 protected function getIEffective(){
+  if ($this->isContinuous()) return exp( $this->i) - 1;
   if (!$this->advance){
     $v_m = 1.0 / (1 + $this->i / $this->m );
   }
@@ -101,14 +109,23 @@ protected function getIEffective(){
 }
 
 protected function getIEffectiveLatex(){
-  $out = ""; $years = "year";
+  $years = "year";
+  $out = "For " . $this->getDescription() . " rate \$" . $this->getLabel() . " = ". $this->i . "\$, ";
+  if ($this->isContinuous()){
+    $out.= " after 1 year \$1\$ accumulates to \$\$ \exp\\left( " . $this->getLabel() . " \\right) = " . (1 + $this->getIEffective()) . ".\$\$";
+    return $out;
+  }
   if (1==$this->m) { $term = "1"; $im = $this->i;}
   else {$term = "\\frac{1}{" . $this->m . "}"; $im = "\\frac{" . $this->i . "}{" . $this->m . "}";}
   if (!$this->advance){
-    $out = "\$1\$ accumulates to \$1 + $im\$ after a term of \$$term\$ $years.";
+    $out.= "\$1\$ accumulates to \$1 + $im\$ after a term of \$$term\$ $years.";
+    if (1!=$this->m) $out.="  So after 1 year, \$1\$ accumulates to \$\$ \\left( 1 + $im \\right)^{" . $this->m . "} = " . (1 + $this->getIEffective()) . ".\$\$"; 
+//    else $out.="  So after 1 year, \$1\$ accumulates to \$\$ \\left( 1 + $im \\right) = " . (1 + $this->getIEffective()) . ".\$\$"; 
   }
   else{
-    $out = "\$1\$ payable after a term of $term $years has present value \$1 - $im\$.";
+    $out.= "\$1\$ payable after a term of \$$term\$ $years has present value \$1 - $im\$, so \$1\$ payable now will accumulate to \$ \\dfrac{1}{1 - $im} \$ after \$$term\$ $years.";
+    if (1!=$this->m) $out.="  So after 1 year, \$1\$ accumulates to \$\$ \\left( \\dfrac{1}{1 - $im} \\right)^{" . $this->m . "} = " . (1 + $this->getIEffective()) . ".\$\$"; 
+    else $out.="  So after 1 year, \$1\$ accumulates to \$\$ \\left( \\dfrac{1}{1 - $im} \\right) = " . (1 + $this->getIEffective()) . ".\$\$"; 
   }
   return $out;
 }
@@ -159,8 +176,6 @@ public function temp(){
 
 // test
 $i = new ct1_interest();
-$i->set_m(2);
-$i->set_d(0.2);
 /*
 echo "i4 " . print_r($i->getI(4),1) . "\r\n";
 //$i->set_d('alpha');
@@ -170,5 +185,7 @@ echo "d365" . print_r($i->getD(365),1) . "\r\n";
 echo "i1365" . print_r($i->getI(1365),1) . "\r\n";
 echo "d1365" . print_r($i->getD(1365),1) . "\r\n";
 */
-echo $i->temp();
+$i->set_m(1);
+$i->set_d(0.2);
+echo $i->temp() . "\r\n";
 ?>
