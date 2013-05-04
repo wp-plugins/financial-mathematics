@@ -100,6 +100,19 @@ protected function getIEffective(){
   return $ip - 1;
 }
 
+protected function getIEffectiveLatex(){
+  $out = ""; $years = "year";
+  if (1==$this->m) { $term = "1"; $im = $this->i;}
+  else {$term = "\\frac{1}{" . $this->m . "}"; $im = "\\frac{" . $this->i . "}{" . $this->m . "}";}
+  if (!$this->advance){
+    $out = "\$1\$ accumulates to \$1 + $im\$ after a term of \$$term\$ $years.";
+  }
+  else{
+    $out = "\$1\$ payable after a term of $term $years has present value \$1 - $im\$.";
+  }
+  return $out;
+}
+
 public function getD($m = 1){
     if ($this->isValid()){
       if ($this->mContinuous($m)){
@@ -138,15 +151,18 @@ public function getI($m = 1){
     }
 }
 
+public function temp(){
+   return $this->getIEffectiveLatex();
+}
 
 } // end of class ct1_interest
 
-/*
 // test
 $i = new ct1_interest();
-//$i->set_m(2);
+$i->set_m(2);
+$i->set_d(0.2);
+/*
 echo "i4 " . print_r($i->getI(4),1) . "\r\n";
-//$i->set_i(0.2);
 //$i->set_d('alpha');
 echo "d4" . print_r($i->getD(4),1) . "\r\n";
 echo "i365" . print_r($i->getI(365),1) . "\r\n";
@@ -154,4 +170,5 @@ echo "d365" . print_r($i->getD(365),1) . "\r\n";
 echo "i1365" . print_r($i->getI(1365),1) . "\r\n";
 echo "d1365" . print_r($i->getD(1365),1) . "\r\n";
 */
+echo $i->temp();
 ?>
