@@ -73,10 +73,10 @@ public function convert_func( $atts ){
     if ($_REQUEST['ct1_advance']) $source->set_d($_REQUEST['ct1_interest']);
     else $source->set_i($_REQUEST['ct1_interest']);
     $target->set_m($_REQUEST['ct1_frequency_target']);
-    if ($_REQUEST['ct1_advance_target']) $source->set_d(0);
-    else $source->set_i(0);
-    if ($_REQUEST['ct1_advance_target']) $solution = $source->getD($_REQUEST['ct1_frequency_target']);
-    else $solution = $source->getI($_REQUEST['ct1_frequency_target']);
+    if ($_REQUEST['ct1_advance_target']) $target->set_d(0);
+    else $target->set_i(0);
+    $sol = $source->showI($target);
+    $solution = $sol['value'];
     if ($_action == 'convert'){  
       $out = "<p>Problem was to calculate " . $this->problem($source, $target) . "</p>";
       $out .= "<p>You say rate  = $_value.</p>";
@@ -84,10 +84,12 @@ public function convert_func( $atts ){
       $marker = new ct1_marker();
       $_scoreRes = $marker->score($solution, $_value);
       $out.= $marker->yourscore($_scoreRes['credit'], $_scoreRes['available']);
+      $out.= $sol['explanation'];
      }
      elseif ($_action == 'getConversion'){  
        $out = "<p>To calculate " . $this->problem($source, $target) . "</p>";
        $out .= "<p>Rate = $solution.</p>";
+       $out.= $sol['explanation'];
      }
   }
   else {

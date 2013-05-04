@@ -10,6 +10,7 @@
 */  
 
 include 'ct1_admin.php';
+require_once 'ct1_convert.php';
 require_once 'ct1_annuity.php';
 require_once 'ct1_mortgage.php';
 require_once 'ct1_format.php';
@@ -17,6 +18,7 @@ global $ct1_db_version;
 $ct1_db_version = "1.1";
 add_shortcode( 'annuityCertain', 'annuityCertain_proc' ); // DISPLAY
 add_shortcode( 'mortgage', 'mortgage_proc' ); // DISPLAY
+add_shortcode( 'convert', 'convert_proc' ); // DISPLAY
 add_action('after_setup_theme', 'acceptPOST'); // $_POST
 register_activation_hook( __FILE__, 'ct1_install' ); // SETUP
 
@@ -38,6 +40,11 @@ function annuityCertain_proc($attr){
 function mortgage_proc($attr){
   $m = new ct1_mortgage();
   return $m->mortgage_func($attr);
+}
+
+function convert_proc($attr){
+  $c = new ct1_convert();
+  return $c->convert_func($attr);
 }
 
 function acceptPOST(){
