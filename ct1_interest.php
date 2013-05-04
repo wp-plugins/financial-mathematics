@@ -39,6 +39,10 @@ public function getDescription(){
 }
 
 
+public function getAdvance(){
+  return $this->advance;
+}
+
 public function getRate(){
   $m = new ct1_marker();
   $d = $m->no_dps(100*$this->i);
@@ -130,62 +134,83 @@ protected function getIEffectiveLatex(){
   return $out;
 }
 
-public function getD($m = 1){
-    if ($this->isValid()){
-      if ($this->mContinuous($m)){
-        $val =  log(1 + $this->getIEffective());
-        $logo = "\\delta";
-      }
-      else{
-        $v_m = pow(1.0 + $this->getIEffective(),(-1/$m));
-        $val = (1 - $v_m) * $m;
-        $logo = "d^{" . $m . "}";
-        if (1==$m) $logo="d";
-      }
-      return array('value'=>$val, 'logo'=>$logo);
-    }
-    else{
-      throw new Exception('attempt to get invalid interest rate');
-    }
-}
-
-public function getI($m = 1){
+public function getI(ct1_interest $t){
     if ($this->isValid()){ 
-       if ($this->mContinuous($m)){
+       if ($t->isContinuous()){
          $val = log(1 + $this->getIEffective());
-         $logo = "\\delta";
        }
        else{
-         $ip1_m = pow(1.0 +$this->getIEffective(),(1/$m));
-         $logo = "i^{" . $m . "}";
-         if (1==$m) $logo="i";
-         $val = ($ip1_m - 1) * $m;
+         if ($t->getAdvance()){
+           $v_m = pow(1.0 + $this->getIEffective(),(-1/$t->m));
+           $val = (1 - $v_m) * $t->m;
+         }
+         else{
+           $ip1_m = pow(1.0 +$this->getIEffective(),(1/$t->m));
+           $val = ($ip1_m - 1) * $t->m;
+         }
        }
-       return array('value'=>$val, 'logo'=>$logo);
+      return $val;
     }
     else{
       throw new Exception('attempt to get invalid interest rate');
     }
 }
 
-public function temp(){
-   return $this->getIEffectiveLatex();
+public function showI($m = 1, $advance = true){
+    $t = new ct1_interest();
+    $t->set_m($m);
+    if ($advance){ $t->set_d(0); }
+    else         { $t->set_i(0); }
+    return array('value'=>$this->getI($t), 'logo'=>$t->getLabel(), 'explanation'=>$this->getILatex($t));
 }
+
+public function getILatex(ct1_interest $t){
+       $out = $this->getIEffectiveLatex() . "\r\n";
+       $out.= "\\begin{align*}
+       ";
+       if ($t->isContinuous()){
+         $out.= $t->getLabel() . " & = \\log(" . (1 + $this->getIEffective()) . ") \\
+         ";
+       }
+       else{
+         if (1!=$t->m){ $mtimes = $t->m . " \\times "; } 
+         if ($t->advance){ 
+           if (1==$t->m){ $minv = "-1"; } 
+           else         { $minv = "\\frac{-1}{" . $t->m . "}"; } 
+           $out.= $t->getLabel() . " & = " . $mtimes . " \\left(1 - " . (1 + $this->getIEffective()) . "^{ $minv } \\right) \\
+         ";
+         }
+         else{
+           if (1==$t->m){ $mpow = ""; } 
+           else         { $mpow = "^{\\frac{1}{" . $t->m . "}"; } 
+           $out.= $t->getLabel() . " & = " . $mtimes . " \\left(" . (1 + $this->getIEffective()) . "$mpow - 1 \\right) \\
+         ";
+         }
+       }
+       $out.= "& = " . $this->getI($t) . ".
+       ";
+       $out.= "\\end{align*}
+       ";
+       return $out;
+ }
+
 
 } // end of class ct1_interest
 
 // test
-$i = new ct1_interest();
 /*
+$i = new ct1_interest();
 echo "i4 " . print_r($i->getI(4),1) . "\r\n";
 //$i->set_d('alpha');
-echo "d4" . print_r($i->getD(4),1) . "\r\n";
 echo "i365" . print_r($i->getI(365),1) . "\r\n";
 echo "d365" . print_r($i->getD(365),1) . "\r\n";
 echo "i1365" . print_r($i->getI(1365),1) . "\r\n";
 echo "d1365" . print_r($i->getD(1365),1) . "\r\n";
+$i->set_m(12);
+$i->set_i(0.1);
+echo "i1" . print_r($i->showI(1,0),1) . "\r\n";
+echo "d1" . print_r($i->showI(1,1),1) . "\r\n";
+echo "i4" . print_r($i->showI(4,0),1) . "\r\n";
+echo "d2" . print_r($i->showI(2,1),1) . "\r\n";
 */
-$i->set_m(1);
-$i->set_d(0.2);
-echo $i->temp() . "\r\n";
 ?>
