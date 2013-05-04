@@ -9,6 +9,7 @@
         Licence: GPL2
 */  
 
+session_start();
 include 'ct1_admin.php';
 require_once 'ct1_convert.php';
 require_once 'ct1_annuity.php';
@@ -18,7 +19,7 @@ global $ct1_db_version;
 $ct1_db_version = "1.1";
 add_shortcode( 'annuityCertain', 'annuityCertain_proc' ); // DISPLAY
 add_shortcode( 'mortgage', 'mortgage_proc' ); // DISPLAY
-add_shortcode( 'convert', 'convert_proc' ); // DISPLAY
+add_shortcode( 'convertInt', 'convert_proc' ); // DISPLAY
 add_action('after_setup_theme', 'acceptPOST'); // $_POST
 register_activation_hook( __FILE__, 'ct1_install' ); // SETUP
 
@@ -31,24 +32,41 @@ function callbackToAddCSS(){
 
 
 function annuityCertain_proc($attr){
+  try{
    $pairs = array( 'question'=>1, 'answer' => 1);
    $a = shortcode_atts( $pairs, $attr  );
   $ac = new ct1_annuity();
   return $ac->annuityCertain_func($a['question'], $a['answer']);
+  }
+  catch (Exception $e){
+    return "Exception " . $e->getMessage();
+  }
 }
 
 function mortgage_proc($attr){
+  try{
   $m = new ct1_mortgage();
   return $m->mortgage_func($attr);
+  }
+  catch (Exception $e){
+    return "Exception " . $e->getMessage();
+  }
 }
 
 function convert_proc($attr){
+  try{
   $c = new ct1_convert();
-  return $c->convert_func($attr);
+    return $c->convert_func($attr);
+  }
+  catch (Exception $e){
+    return "Exception " . $e->getMessage();
+  }
 }
 
 function acceptPOST(){
+try{
   session_start();
+//  $_SESSION['REQUEST'] = $_REQUEST;
   $_action = $_POST['ct1_action'];
   $_value = htmlentities($_POST['ct1_value']);
   $_term = $_POST['ct1_term'];
@@ -56,6 +74,31 @@ function acceptPOST(){
   $_interest = $_POST['ct1_interest'];
   $_advance = $_POST['ct1_advance'];
   $_principal = $_POST['ct1_principal'];
+  if ( 'convert' == $_action || 'annuityCertain' == $_action || 'mortgage' == $_action){  
+  if ( 'convert' == $_action ){  
+    $source = new ct1_interest();
+    $target = new ct1_interest();
+    $_value = (float)$_REQUEST['ct1_value'];
+    $source->set_m((float)$_REQUEST['ct1_frequency']);
+    if ($_REQUEST['ct1_advance']) $source->set_d((float)$_REQUEST['ct1_interest']);
+    else $source->set_i((float)$_REQUEST['ct1_interest']);
+    $target->set_m((float)$_REQUEST['ct1_frequency_target']);
+    if ($_REQUEST['ct1_advance_target']) $target->set_d(0);
+    else $target->set_i(0);
+    $marker = new ct1_marker();
+//
+    $sol = $source->showI($target);
+    $solution = $sol['value'];
+    $_questionType = 3; // say for rate conversion
+    $_scoreRes = $marker->score($solution, $_value);
+//    echo "<pre> score res" . print_r($_scoreRes,1) . "</pre>";
+//
+    $redirect = current_page_url() . "&ct1_interest=" . $_interest;
+    $redirect.= "&ct1_frequency=" . $_frequency . "&ct1_advance=" . $_advance ;
+    $redirect.= "&ct1_frequency_target=" . $_POST['ct1_frequency_target'] . "&ct1_advance_target=" . $_POST['advance_target'] ;
+    $redirect.= "&ct1_action=getConversion";
+    $_SESSION['REQUEST'] = $_REQUEST;
+  }
   if ( 'annuityCertain' == $_action || 'mortgage' == $_action){  
     $a = new ct1_annuity();
     $marker = new ct1_marker();
@@ -76,14 +119,21 @@ function acceptPOST(){
       $redirect.= "&ct1_principal=" . $_principal;
       $redirect.= "&ct1_action=getMortgage";
     }
-    if ( is_user_logged_in() ) { 
-      $_score = $_scoreRes['credit'];
-      $_available = $_scoreRes['available'];
-      $marker->insert_mark( $_questionType, $_score, $_available);
-    } 
+  }
+  if ( is_user_logged_in() ) { 
+//    echo "<pre> score2 res" . print_r($_scoreRes,1) . "</pre>";
+    $_score = $_scoreRes['credit'];
+    $_available = $_scoreRes['available'];
+    $marker->insert_mark( $_questionType, $_score, $_available);
+  } 
 //    $_SESSION['Redirect'] =  $redirect;
-    wp_redirect($redirect);
-    exit;
+//echo "redirect" . $redirect;
+  wp_redirect($redirect);
+  exit;
+  }
+  }
+  catch (Exception $e){
+    echo "Exception " . $e->getMessage();
   }
 }
 

@@ -33,6 +33,13 @@ public function getAll(){
   return array('i'=>$this->i, 'm'=> $this->m, 'adv'=> $this->advance);
 }
 
+public function sameForm(ct1_interest $c){
+  $thisAll = $this->getAll();
+  $cAll = $c->getAll();
+  if( $thisAll['m']==$cAll['m'] && $thisAll['adv']==$cAll['adv'] ) return true;
+  return false;
+}
+
 public function getDescription(){
   if ($this->advance) return "discount";
   return "interest";
@@ -41,6 +48,10 @@ public function getDescription(){
 
 public function getAdvance(){
   return $this->advance;
+}
+
+public function setAdvance($b){
+  $this->advance = $b;
 }
 
 public function getRate(){
@@ -87,16 +98,17 @@ public function set_d($d){
 }
 
 public function set_m($m){
+//  echo "set_m" . gettype($m);
   if (is_numeric($m)){
     if ($m > 0){
       $this->m = $m;
     }
     else{
-      throw new Exception('attempt to set non-positive frequency');
+      throw new Exception('attempt to set non-positive frequencyi ' . $m);
     }
   }
   else{
-    throw new Exception('attempt to set non-numeric frequency');
+    throw new Exception('attempt to set non-numeric frequency ' . gettype($m));
   }
 }
 
@@ -156,11 +168,7 @@ public function getI(ct1_interest $t){
     }
 }
 
-public function showI($m = 1, $advance = true){
-    $t = new ct1_interest();
-    $t->set_m($m);
-    if ($advance){ $t->set_d(0); }
-    else         { $t->set_i(0); }
+public function showI(ct1_interest $t){
     return array('value'=>$this->getI($t), 'logo'=>$t->getLabel(), 'explanation'=>$this->getILatex($t));
 }
 
@@ -169,7 +177,7 @@ public function getILatex(ct1_interest $t){
        $out.= "\\begin{align*}
        ";
        if ($t->isContinuous()){
-         $out.= $t->getLabel() . " & = \\log(" . (1 + $this->getIEffective()) . ") \\
+         $out.= $t->getLabel() . " & = \\log(" . (1 + $this->getIEffective()) . ") \\\\
          ";
        }
        else{
@@ -177,13 +185,13 @@ public function getILatex(ct1_interest $t){
          if ($t->advance){ 
            if (1==$t->m){ $minv = "-1"; } 
            else         { $minv = "\\frac{-1}{" . $t->m . "}"; } 
-           $out.= $t->getLabel() . " & = " . $mtimes . " \\left(1 - " . (1 + $this->getIEffective()) . "^{ $minv } \\right) \\
+           $out.= $t->getLabel() . " & = " . $mtimes . " \\left(1 - " . (1 + $this->getIEffective()) . "^{ $minv } \\right) \\\\
          ";
          }
          else{
            if (1==$t->m){ $mpow = ""; } 
-           else         { $mpow = "^{\\frac{1}{" . $t->m . "}"; } 
-           $out.= $t->getLabel() . " & = " . $mtimes . " \\left(" . (1 + $this->getIEffective()) . "$mpow - 1 \\right) \\
+           else         { $mpow = "^{\\frac{1}{" . $t->m . "}}"; } 
+           $out.= $t->getLabel() . " & = " . $mtimes . " \\left(" . (1 + $this->getIEffective()) . "$mpow - 1 \\right) \\\\
          ";
          }
        }

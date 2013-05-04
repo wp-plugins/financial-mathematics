@@ -1,7 +1,9 @@
 <?php   
 require_once 'ct1_format.php';
+define("_NEGLIGIBLE",0.0000000001);
 
 class ct1_marker{
+
 
 public function score($actual, $guess){
       $_available = $this->no_sig_fig($actual);
@@ -47,7 +49,7 @@ public function score_answer($correct, $attempt){
 
 public function no_dps($d){
 	for ($i=0; $i<30; $i++){
-		if ($d==round($d, $i)) return $i;
+		if (abs($d-round($d, $i)) < _NEGLIGIBLE ) return $i;
 	}
 	return 30;
 }
@@ -56,7 +58,7 @@ public function no_dps($d){
 public function no_sig_fig($d){
 	if ($d < 0) return $this->no_sig_fig(-$d);
 	for ($i=1; $i<30; $i++){
-		if ($d==$this->round_sig_fig($d, $i)) return $i;
+		if (abs($d-$this->round_sig_fig($d, $i)) < _NEGLIGIBLE ) return $i;
 	}
 	return 30;
 }
