@@ -25,6 +25,7 @@ private function form(ct1_interest $source, ct1_interest $target){
 }
 
 
+
 function formBottom(ct1_interest $source, ct1_interest $target, $_action, $_submit){
   $s = $source->getAll();
   $t = $target->getAll();
@@ -41,13 +42,57 @@ function formBottom(ct1_interest $source, ct1_interest $target, $_action, $_subm
   return $out;
 }
 
+function formBottomShort($_action, $_submit){
+  $out = "
+          <input type = 'hidden' name='page_id' value='" . $_REQUEST['page_id'] . "'>
+          <input type = 'hidden' name='ct1_action' value='$_action'>
+          <input type = 'submit' value = '$_submit'>
+          </form> 
+          ";
+  return $out;
+}
+
 
 function formGetConversion(ct1_interest $source, ct1_interest $target){
+  $s = $source->getAll();
+  $t = $target->getAll();
+  if ($s['adv']) $sCheck = " CHECKED ";
+  if ($t['adv']) $tCheck = " CHECKED ";
   $out = "<form class='ct1_form'  method = 'GET'>
          ";
   $out.= "<p>Calculate " . $this->problem( $source,  $target) . "</p>
          ";
-  $out.= $this->formBottom( $source,  $target, 'getConversion', 'Just show me the rate');
+  $out.= "<p>
+            <label>From: rate per year
+              <input name = 'ct1_interest' value='" . $s['i'] . "'>
+            </label>
+          </p>
+          ";
+  $out.= "<p>
+            <label>From: frequency per year
+              <input name = 'ct1_frequency' value='" . $s['m'] . "'>
+            </label>
+          </p>
+          ";
+  $out.= "<p>
+            <label>From: interest payable in advance (i.e. discount rate)
+              <input type='checkbox' $sCheck  name = 'ct1_advance'>
+            </label>
+          </p>
+          ";
+  $out.= "<p>
+            <label>To: frequency per year
+              <input name = 'ct1_frequency_target' value='" . $t['m'] . "'>
+            </label>
+          </p>
+          ";
+  $out.= "<p>
+            <label>To: interest payable in advance (i.e. discount rate)
+              <input type='checkbox' $tCheck name = 'ct1_advance_target'>
+            </label>
+          </p>
+          ";
+  $out.= $this->formBottomShort('getConversion', 'Just show me the rate');
   return $out;
 }
 
@@ -105,8 +150,7 @@ public function convert_func( $atts ){
      else $target->set_i(0);
      $out = "";
      $pairs = array( 'question'=>1, 'answer' => 1);
-//    $a = shortcode_atts( $pairs, $attr  );
-     $a = $pairs;
+     $a = shortcode_atts( $pairs, $atts  );
      if ($source->sameForm($target)) $target->setAdvance(!($target->getAdvance));
      if ($a['question']) $out.= $this->form($source, $target);
      if ($a['answer']) $out.= "<hr/><p>" . $this->formGetConversion($source, $target) . "</p>";

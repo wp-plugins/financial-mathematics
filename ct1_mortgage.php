@@ -251,8 +251,11 @@ if ($_action == 'mortgage'){
     $_frequency = $af[rand(0,2)];
     $_advance = rand(0,1)==0;  
     $_principal = round(random_float(100000, 1000000),-3);
-    $out = $this->formMortgage($_term, $_interest, $_frequency, $_advance, $_principal);
-    $out.= "<hr/><p>" . $this->formMortgageGet($_term, $_interest, $_frequency, $_advance, $_principal) . "</p>";
+     
+     $pairs = array( 'question'=>1, 'answer' => 1);
+     $a = shortcode_atts( $pairs, $atts  );
+     if ($a['question']) $out = $this->formMortgage($_term, $_interest, $_frequency, $_advance, $_principal);
+     if ($a['answer']) $out.= "<hr/><p>" . $this->formMortgageGet($_term, $_interest, $_frequency, $_advance, $_principal) . "</p>";
   }
   return $out;
 }

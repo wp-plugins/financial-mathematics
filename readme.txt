@@ -4,7 +4,7 @@ Donate link: http://bdmfst.com/
 Tags: actuarial, actuary, financial mathematics, financial, mathematics, CT1
 Requires at least: 3.5.1
 Tested up to: 3.5.1
-Stable tag: 1.3
+Stable tag: 1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -49,6 +49,9 @@ shortcode.
 
 == Changelog ==
 
+= 1.4 =
+* Bug fix.  Shortcode attributes now work.
+
 = 1.3 =
 * convertInt shortcode added (converts interest rates).
 
@@ -64,6 +67,10 @@ shortcode.
 
 
 == Upgrade Notice ==
+
+= 1.4 =
+Bug fix.  Shortcode attributes now work so that question or answer form can be
+excluded.
 
 = 1.3 = 
 Interest rate conversion questions added e.g. convert from annual effective
