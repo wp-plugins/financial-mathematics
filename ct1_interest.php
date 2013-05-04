@@ -173,8 +173,10 @@ public function showI(ct1_interest $t){
 }
 
 public function getILatex(ct1_interest $t){
-       $out = $this->getIEffectiveLatex() . "\r\n";
-       $out.= "\\begin{align*}
+       $out = "<p>First, get annual effective growth factor.</p>
+              " . $this->getIEffectiveLatex() . "\r\n";
+       $out.= "<p>Second, convert annual effective growth factor.</p>
+              \\begin{align*}
        ";
        if ($t->isContinuous()){
          $out.= $t->getLabel() . " & = \\log(" . (1 + $this->getIEffective()) . ") \\\\

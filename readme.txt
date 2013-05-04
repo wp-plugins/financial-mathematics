@@ -4,12 +4,12 @@ Donate link: http://bdmfst.com/
 Tags: actuarial, actuary, financial mathematics, financial, mathematics, CT1
 Requires at least: 3.5.1
 Tested up to: 3.5.1
-Stable tag: 1.2
+Stable tag: 1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Practice financial mathematics questions for the actuarial exams. Define and
-calculate annuity certain, mortgage repayment schedule.
+calculate interest rates, annuity certain, mortgage repayment schedule.
 
 == Description ==
 
@@ -49,6 +49,9 @@ shortcode.
 
 == Changelog ==
 
+= 1.3 =
+* convertInt shortcode added (converts interest rates).
+
 = 1.2 = 
 * Formulae shown for mortgage repayment schedule.
 
@@ -61,6 +64,10 @@ shortcode.
 
 
 == Upgrade Notice ==
+
+= 1.3 = 
+Interest rate conversion questions added e.g. convert from annual effective
+rate to discount rate convertible monthly.
 
 = 1.2 =
 Formulae for mortgage repayment schedule shown explicitly.  Plugin's styles defined in ct1.css and added to header.

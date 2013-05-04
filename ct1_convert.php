@@ -61,14 +61,13 @@ function random_float ($min,$max) {
 public function convert_func( $atts ){
   $source = new ct1_interest();
   $target = new ct1_interest();
-  if ('convert'==$_SESSION['REQUEST']['ct1_action'] && 'getConversion'!=$_REQUEST['ct1_action']){
+//  if ('convert'==$_SESSION['REQUEST']['ct1_action'] && 'getConversion'!=$_REQUEST['ct1_action']){
+  if ('convert'==$_SESSION['REQUEST']['ct1_action'] ){
     $_REQUEST = $_SESSION['REQUEST'];
     $_action = 'convert';
     $_SESSION['REQUEST']['ct1_action']='';
   }
-// echo "session <pre>" . print_r($_SESSION, 1) . "</pre>";
-  if ('getConversion'==$_REQUEST['ct1_action']){ $_action='getConversion'; }
-// echo "action" . $_action;
+  if ('getConversion'==$_REQUEST['ct1_action'] && 'convert'!=$_action){ $_action='getConversion'; }
   if ('convert'==$_action || 'getConversion'==$_action){
     $_value = (float)$_REQUEST['ct1_value'];
     $source->set_m((float)$_REQUEST['ct1_frequency']);
