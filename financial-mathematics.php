@@ -4,7 +4,7 @@
         Plugin URI: http://bdmfst.com/ct1
         Description: Provides online quizes in financial mathematics for actuarial students
         Author: O.Kellie-Smith
-        Version: 1.4 
+        Version: 1.5 
         Author URI: http://www.bdmfst.com
         Licence: GPL2
 */  

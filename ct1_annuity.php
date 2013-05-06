@@ -51,6 +51,7 @@ function formBottomGetAnnuity($_term, $_interest, $_frequency, $_advance, $_acti
     <p><label>In advance    <input type = 'checkbox' " . $_checkAdvance . " name='ct1_advance' value=true /></label></p>
     <p><label>Interest rate <input value='$_interest' name='ct1_interest' /></label></p>
           <input type = 'hidden' name='ct1_action' value='$_action'>
+          <input type = 'hidden' name='page_id' value='" . $_REQUEST['page_id'] . "'>
           <input type = 'submit' value = 'Just tell me the annuity value'>
           </form> ";
   return $out;

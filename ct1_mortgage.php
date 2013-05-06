@@ -107,7 +107,7 @@ function getMortgageSchedule($_term, $_interest, $_frequency, $_advance, $_princ
         $p_i = 1 + $_interest;
         $im_m = $this->im($_interest, $_frequency) / $_frequency; 
         $im_m = round($im_m,8);  // HARD CODED ROUNDING (FOR DISPLAY ONLY)
-        $iexpl = $il . " = " . $p_i . "^{\\frac{-1}{ " . $_frequency . "}} -1 = " . $im_m;
+        $iexpl = $il . " = " . $p_i . "^{\\frac{1}{ " . $_frequency . "}} -1 = " . $im_m;
      }
      if ($_advance) $int = $il . " \\left( P_j - A \\right)";
      else           $int = $il . "        P_j ";

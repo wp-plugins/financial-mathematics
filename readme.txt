@@ -4,7 +4,7 @@ Donate link: http://bdmfst.com/
 Tags: actuarial, actuary, financial mathematics, financial, mathematics, CT1
 Requires at least: 3.5.1
 Tested up to: 3.5.1
-Stable tag: 1.4
+Stable tag: 1.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -49,6 +49,10 @@ shortcode.
 
 == Changelog ==
 
+= 1.5 =
+* Bug fix. Annuity "Just show me the answer" button redirects to correct page.
+* Bug fix. Formula for i(m) in mortgage schedule has right sign in power.  
+
 = 1.4 =
 * Bug fix.  Shortcode attributes now work.
 
@@ -67,6 +71,9 @@ shortcode.
 
 
 == Upgrade Notice ==
+
+= 1.5 =
+* Bug fix. Annuity "Just show me the answer" button redirects to correct page.
 
 = 1.4 =
 Bug fix.  Shortcode attributes now work so that question or answer form can be
