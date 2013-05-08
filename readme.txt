@@ -43,6 +43,7 @@ It's running at [Financial mathematics](http://bdmfst.com/ct1/ "Financial mathem
 
 Install phpunit and enter
 $for i in $(ls *test*.php); do echo $i; phpunit --colors $i; done
+
 == Screenshots ==
 
 1. Input form rendered the first time [mortgage] shortcode is rendered.
