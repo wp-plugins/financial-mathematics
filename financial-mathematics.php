@@ -10,11 +10,11 @@
 */  
 
 session_start();
-include 'ct1_admin.php';
-require_once 'ct1_convert.php';
-require_once 'ct1_annuity.php';
-require_once 'ct1_mortgage.php';
-require_once 'ct1_format.php';
+include 'ct1-admin-menu.php';
+require_once 'class-ct1-convert.php';
+require_once 'class-ct1-annuity.php';
+require_once 'class-ct1-mortgage.php';
+require_once 'class-ct1-format.php';
 global $ct1_db_version;
 $ct1_db_version = "1.1";
 add_shortcode( 'annuityCertain', 'annuityCertain_proc' ); // DISPLAY

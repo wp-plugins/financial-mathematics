@@ -1,9 +1,8 @@
 <?php   
-require_once 'ct1_format.php';
+//require_once 'class-ct1-format.php';
 define("_NEGLIGIBLE",0.0000000001);
 
-class ct1_marker{
-
+class CT1_Marker{
 
 public function score($actual, $guess){
       $_available = $this->no_sig_fig($actual);
@@ -37,7 +36,7 @@ public function insert_mark( $questionid, $credit, $available) {
 }
 
 
-public function score_answer($correct, $attempt){
+protected function score_answer($correct, $attempt){
 	// return 1 for exact, otherwise a fraction from 0 to 1 for 'close'
 	$n = $this->no_sig_fig($correct);
 	if ($this->round_sig_fig($attempt, $n)==$correct) return 1;
@@ -63,7 +62,7 @@ public function no_sig_fig($d){
 	return 30;
 }
 
-private function round_sig_fig($d, $n){
+protected function round_sig_fig($d, $n){
  	if ($d==0) return 0;
   	return round($d, ceil(0 - log10($d)) + $n - 1); 
 }
@@ -84,7 +83,7 @@ function showsf($number){
 */
 
 
-private function testscore(){
+protected function testscore(){
    global $wpdb;
    $table_name = $wpdb->prefix . "ct1";
    global $userdata;
@@ -93,6 +92,7 @@ private function testscore(){
   return array( 'sumcredit'=>$score_res->sumcredit, 'sumavailable'=>$score_res->sumavailable);
 }
 
+/* 
 public function tempSF($d){
    return $this->no_sig_fig($d);
 }
@@ -100,12 +100,14 @@ public function tempSF($d){
 public function tempDP($d){
    return $this->no_dps($d);
 }
+*/
 
 }
 
-/*$m = new ct1_marker();
+/*
+//TEST 
+$m = new CT1_Marker();
 echo $m->tempSF(0.005)."\r\n";
 echo $m->tempDP(0.005)."\r\n";
 echo $m->tempDP(0.005567798)."\r\n";
 */
-?>

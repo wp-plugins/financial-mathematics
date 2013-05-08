@@ -1,6 +1,6 @@
 <?php   
 
-class ct1_format{
+class CT1_Format{
 
   public function mycurrency($amount){
    return money_format('%i',$amount);
@@ -15,4 +15,3 @@ class ct1_format{
   }
 
 }
-?>

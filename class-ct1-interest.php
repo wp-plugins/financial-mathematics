@@ -3,7 +3,7 @@
 require_once 'ct1_format.php';
 require_once 'ct1_marker.php';
 
-class ct1_interest{
+class CT1_Interest{
 
 protected $m_cont = 366; // any frequency > $m_cont will be treatead as continuous;
 protected $i = 0;

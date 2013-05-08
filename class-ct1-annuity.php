@@ -1,20 +1,55 @@
 <?php   
-require_once 'ct1_format.php';
-require_once 'ct1_marker.php';
+require_once 'ct1_interest.php';
 
-class ct1_annuity{
+class Ct1_Annuity extends Ct1_Interest{
 
-function annuityDecimalPLaces(){
+protected $term;
+
+public function set_term($n){
+  if (is_numeric($n)){
+    if ($n >= 0){
+      $this->term = $n;
+    }
+    else{
+      throw new Exception('attempt to set negative term');
+    }
+  }
+  else{
+    throw new Exception('attempt to set non-numeric term');
+  }
+}
+
+public function get_term($n){
+  if (is_numeric($n)){
+    if ($n >= 0){
+      $this->term = $n;
+    }
+    else{
+      throw new Exception('attempt to set negative term');
+    }
+  }
+  else{
+    throw new Exception('attempt to set non-numeric term');
+  }
+}
+
+
+protected function annuityDecimalPLaces(){
     return 5; // HARDCODE
 }
 
-function im($_i, $_frequency){ 
-  if ($_frequency=='continuous') return log(1+$_i);
-  return $_frequency * ( pow(1 + $_i,(1.0 / $_frequency)) - 1);
+public function im($_i, $_frequency){ 
+  $s = new ct1_interest();
+  $t = new ct1_interest();
+  if ($_frequency=='continuous') $t->set_m(999);
+  else $t->set_m($_frequency);
+  $s->set_i($_i);
+  $s->set_m(1);
+  return $s->getI($t);
 }
 
 
-function problem($_term, $_interest, $_frequency, $_advance){
+protected function problem($_term, $_interest, $_frequency, $_advance){
   $adv = "in arrears";
   $inst = "instalments";
   if ($_frequency ==1) $inst = "instalment";
@@ -30,7 +65,7 @@ function problem($_term, $_interest, $_frequency, $_advance){
   return $out;
 }
 
-function form($_term, $_interest, $_frequency, $_advance){
+public function form($_term, $_interest, $_frequency, $_advance){
   $out = "<form class='ct1_form' method = 'POST'>
           <p>Calculate the " . $this->problem($_term, $_interest, $_frequency, $_advance) . "</p>";
   $out.= $this->formBottom($_term, $_interest, $_frequency, $_advance, 'annuityCertain');
@@ -38,13 +73,13 @@ function form($_term, $_interest, $_frequency, $_advance){
 }
 
 
-function formGetAnnuity($_term, $_interest, $_frequency, $_advance){
+public function formGetAnnuity($_term, $_interest, $_frequency, $_advance){
   $out = "<form class='ct1_form'  method = 'GET'>";
   $out.= $this->formBottomGetAnnuity($_term, $_interest, $_frequency, $_advance, 'getAnnuityCertain');
   return $out;
 }
 
-function formBottomGetAnnuity($_term, $_interest, $_frequency, $_advance, $_action){
+protected function formBottomGetAnnuity($_term, $_interest, $_frequency, $_advance, $_action){
   if ($_advance) $_checkAdvance = "CHECKED";
   $out = "
     <p><label>Term (years)      <input name='ct1_term' value='$_term' /> </label></p>
@@ -58,7 +93,7 @@ function formBottomGetAnnuity($_term, $_interest, $_frequency, $_advance, $_acti
   return $out;
 }
 
-function formBottom($_term, $_interest, $_frequency, $_advance, $_action){
+protected function formBottom($_term, $_interest, $_frequency, $_advance, $_action){
   $out = "<p>
             <label>Annuity value
               <input name = 'ct1_value'>
@@ -76,12 +111,12 @@ function formBottom($_term, $_interest, $_frequency, $_advance, $_action){
 
 
 
-function annuityCertainApprox($_term, $_interest){
+protected function annuityCertainApprox($_term, $_interest){
   return round($_term / (1.0 + 0.5 * $_term * $_interest),1);
 }
  
 
-function annuityCertain($_term, $_interest, $_frequency, $_advance){
+public function annuityCertain($_term, $_interest, $_frequency, $_advance){
   $_i = $_interest;
 
   // calculate annuity
@@ -109,7 +144,7 @@ function annuityCertain($_term, $_interest, $_frequency, $_advance){
 
 
 
-function latexAnnuity($_term, $_i, $_frequency, $_advance){
+protected function latexAnnuity($_term, $_i, $_frequency, $_advance){
    $a = "a";
    if ($_frequency == 'continuous') $a = "\\overline{a}";
    else{
@@ -124,7 +159,7 @@ function latexAnnuity($_term, $_i, $_frequency, $_advance){
 
 
 
-function latexApprox($_term, $_i){
+protected function latexApprox($_term, $_i){
   if ($_i != 0) {
     $out = "<p>";
     $out.= "$$\\begin{align*} " . $this->latexAnnuity($_term, $_i, 'continuous', false);
@@ -137,7 +172,7 @@ function latexApprox($_term, $_i){
 
 
 
-function latex($_term, $_i, $_frequency, $_advance, $_ann){
+protected function latex($_term, $_i, $_frequency, $_advance, $_ann){
   if ($_i == 0) {
     $out = "<p>$$" . $this->latexAnnuity($_term, $_i, $_frequency, $_advance) . " =  n = " . $_ann . ". $$</p>";
   }
@@ -177,7 +212,7 @@ function latex($_term, $_i, $_frequency, $_advance, $_ann){
   return $out;
 }
 
-function random_float ($min,$max) {
+protected function random_float ($min,$max) {
    // returns random number uniformly distributed between $min and $max
    return ($min+lcg_value()*(abs($max-$min)));
 }
