@@ -54,6 +54,10 @@ shortcode.
 
 == Changelog ==
 
+= 1.6 =
+* Renamed files to conform better to Wordpress PHP coding standards.
+* Added phpunit tests.
+
 = 1.5 =
 * Bug fix. Annuity "Just show me the answer" button redirects to correct page.
 * Bug fix. Formula for i(m) in mortgage schedule has right sign in power.  

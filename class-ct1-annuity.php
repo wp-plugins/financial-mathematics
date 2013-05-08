@@ -111,7 +111,7 @@ protected function formBottom($_term, $_interest, $_frequency, $_advance, $_acti
 
 
 
-protected function annuityCertainApprox($_term, $_interest){
+public function annuityCertainApprox($_term, $_interest){
   return round($_term / (1.0 + 0.5 * $_term * $_interest),1);
 }
  
@@ -144,7 +144,7 @@ public function annuityCertain($_term, $_interest, $_frequency, $_advance){
 
 
 
-protected function latexAnnuity($_term, $_i, $_frequency, $_advance){
+public function latexAnnuity($_term, $_i, $_frequency, $_advance){
    $a = "a";
    if ($_frequency == 'continuous') $a = "\\overline{a}";
    else{
@@ -159,7 +159,7 @@ protected function latexAnnuity($_term, $_i, $_frequency, $_advance){
 
 
 
-protected function latexApprox($_term, $_i){
+public function latexApprox($_term, $_i){
   if ($_i != 0) {
     $out = "<p>";
     $out.= "$$\\begin{align*} " . $this->latexAnnuity($_term, $_i, 'continuous', false);
@@ -172,7 +172,7 @@ protected function latexApprox($_term, $_i){
 
 
 
-protected function latex($_term, $_i, $_frequency, $_advance, $_ann){
+public function latex($_term, $_i, $_frequency, $_advance, $_ann){
   if ($_i == 0) {
     $out = "<p>$$" . $this->latexAnnuity($_term, $_i, $_frequency, $_advance) . " =  n = " . $_ann . ". $$</p>";
   }
