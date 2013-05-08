@@ -23,6 +23,10 @@ class ct1_annuity_test extends PHPUnit_Framework_TestCase
     return $this->acalc->annuityCertain($this->term, $this->i, $this->freq, $this->adv);
   }
 
+  private function ival(){
+    return $this->acalc->im($this->i, $this->freq);
+  }
+
   private function an(){
     if (0==$this->i) return $this->term;
     return (1 - pow((1 + $this->i), -$this->term))/$this->i;
@@ -66,4 +70,19 @@ class ct1_annuity_test extends PHPUnit_Framework_TestCase
     $this->term = 0;
     $this->assertEquals( $this->aval(), 0) ;
   }  
+  
+  public function test_im()
+  {
+    $this->adv = false;
+    $this->assertTrue( abs($this->ival() - 0.058411) < 0.000001 );
+    // source of numbers: Formulae and tables 6% p.58  i(12)
+  }  
+
+  public function test_delta()
+  {
+    $this->freq = 'continuous';
+    $this->assertTrue( abs($this->ival() - 0.058269) < 0.000001 );
+    // source of numbers: Formulae and tables 6% p.58   delta
+  }  
+
 }

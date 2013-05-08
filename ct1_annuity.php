@@ -9,6 +9,7 @@ function annuityDecimalPLaces(){
 }
 
 function im($_i, $_frequency){ 
+  if ($_frequency=='continuous') return log(1+$_i);
   return $_frequency * ( pow(1 + $_i,(1.0 / $_frequency)) - 1);
 }
 
