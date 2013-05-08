@@ -1,7 +1,7 @@
 <?php   
-require_once 'ct1_interest.php';
+require_once 'class-ct1-interest.php';
 
-class Ct1_Annuity extends Ct1_Interest{
+class CT1_Annuity extends CT1_Interest{
 
 protected $term;
 
@@ -39,8 +39,8 @@ protected function annuityDecimalPLaces(){
 }
 
 public function im($_i, $_frequency){ 
-  $s = new ct1_interest();
-  $t = new ct1_interest();
+  $s = new CT1_Interest();
+  $t = new CT1_Interest();
   if ($_frequency=='continuous') $t->set_m(999);
   else $t->set_m($_frequency);
   $s->set_i($_i);
@@ -85,7 +85,7 @@ protected function formBottomGetAnnuity($_term, $_interest, $_frequency, $_advan
     <p><label>Term (years)      <input name='ct1_term' value='$_term' /> </label></p>
     <p><label>Frequency      <input name='ct1_frequency' value='$_frequency' /> </label></p>
     <p><label>In advance    <input type = 'checkbox' " . $_checkAdvance . " name='ct1_advance' value=true /></label></p>
-    <p><label>Interest rate <input value='$_interest' name='ct1_interest' /></label></p>
+    <p><label>Interest rate <input value='$_interest' name='CT1_Interest' /></label></p>
           <input type = 'hidden' name='ct1_action' value='$_action'>
           <input type = 'hidden' name='page_id' value='" . $_REQUEST['page_id'] . "'>
           <input type = 'submit' value = 'Just tell me the annuity value'>
@@ -102,7 +102,7 @@ protected function formBottom($_term, $_interest, $_frequency, $_advance, $_acti
           <input type = 'hidden' name='ct1_term' value='$_term'>
           <input type = 'hidden' name='ct1_frequency' value='$_frequency'>
           <input type = 'hidden' name='ct1_advance' value='$_advance'>
-          <input type = 'hidden' name='ct1_interest' value='$_interest'>
+          <input type = 'hidden' name='CT1_Interest' value='$_interest'>
           <input type = 'hidden' name='ct1_action' value='$_action'>
           <input type = 'submit' value = 'Check my value'>
           </form> ";
@@ -229,7 +229,7 @@ public function annuityCertain_func( $question = true, $answer = true ){
   $_value = htmlentities($_REQUEST['ct1_value']);
   $_term = $_REQUEST['ct1_term'];
   $_frequency = $_REQUEST['ct1_frequency'];
-  $_interest = $_REQUEST['ct1_interest'];
+  $_interest = $_REQUEST['CT1_Interest'];
   $_advance = $_REQUEST['ct1_advance'];
 
 //  $_i = (1 + $_interest)/(1 + $_escalation) - 1;
@@ -272,4 +272,3 @@ if ($_action == 'annuityCertain'){
 
 
 }
-?>

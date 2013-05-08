@@ -1,7 +1,7 @@
 <?php
 
-require_once 'ct1_annuity.php';
-class ct1_annuity_test extends PHPUnit_Framework_TestCase
+require_once 'class-ct1-annuity.php';
+class CT1_Annuity_Test extends PHPUnit_Framework_TestCase
 {
   private $acalc;
   private $term;
@@ -11,7 +11,7 @@ class ct1_annuity_test extends PHPUnit_Framework_TestCase
   private $neg = 0.00001;
   
   public function setup(){
-    $this->acalc = new ct1_annuity();
+    $this->acalc = new CT1_Annuity();
     $this->term = 10;
     $this->i = 0.06;
     $this->freq = 12;

@@ -1,22 +1,22 @@
 <?php   
 
-require_once 'ct1_annuity.php';
-require_once 'ct1_format.php';
+require_once 'class-ct1-annuity.php';
+require_once 'class-ct1-format.php';
 
-class ct1_mortgage{
+class CT1_Mortgage{
 
 function im($_i, $_frequency){ 
   return $_frequency * ( pow(1 + $_i,(1.0 / $_frequency)) - 1);
 }
 
 function problemMortgage($_term, $_interest, $_frequency, $_advance, $_principal){
-  setlocale(LC_MONETARY, ct1_format::locale()); // HARDCODE!
+  setlocale(LC_MONETARY, CT1_Format::locale()); // HARDCODE!
   $adv = "in arrears";
   $inst = "instalments";
   if ($_frequency ==1) $inst = "instalment";
   if ($_advance) $adv = "in advance";
   $out = "amount of each mortgage instalment payment for a repayment mortgage ";
-  $out.= "on a loan of " . ct1_format::mycurrency($_principal) . " "  ;
+  $out.= "on a loan of " . CT1_Format::mycurrency($_principal) . " "  ;
   if ($_frequency=='continuous'){
     $out.= "repaid continuously for a total term of $_term years ";
   }
@@ -74,7 +74,7 @@ function formBottom($_term, $_interest, $_frequency, $_advance, $_action){
 }
 
 function mortgageSchedule($_term, $_interest, $_frequency, $_advance, $_principal){
-    $a = new ct1_annuity();
+    $a = new CT1_Annuity();
     $_ann = $a->annuityCertain($_term, $_interest, $_frequency, $_advance);
     $_inst_per_year = $_principal / $_ann;
     $_inst = round($_inst_per_year / $_frequency, 2);
@@ -94,7 +94,7 @@ function mortgageSchedule($_term, $_interest, $_frequency, $_advance, $_principa
 
 function getMortgageSchedule($_term, $_interest, $_frequency, $_advance, $_principal){
    $out = "";
-    $a = new ct1_annuity();
+    $a = new CT1_Annuity();
      if (1==$_frequency) {
         $termj = $_term . " - j + 1"; 
         $il = "i"; 
@@ -132,13 +132,13 @@ function getMortgageSchedule($_term, $_interest, $_frequency, $_advance, $_princ
        $totalInst = 0;
        foreach ($s AS $i){
          $out.= "<tr>";
-         $out.= "<td>" . ct1_format::mynumber($i['count']) . "</td>";
+         $out.= "<td>" . CT1_Format::mynumber($i['count']) . "</td>";
          if (0!=$_frequency) $tt = $_term - ($i['count'] -1) / $_frequency;
          $link = current_page_url() . "&ct1_term=" . $tt . "&ct1_frequency=" . $_frequency . "&ct1_interest=" . $_interest . "&ct1_advance=" . $_advance . "&ct1_action=getAnnuityCertain";
-         $out.= "<td><a href='" . $link . "'>" . ct1_format::mynumber($i['oldPrincipal']) . "</a></td>";
-         $out.= "<td>" . ct1_format::mynumber($i['interest']) . "</td>";
-         $out.= "<td>" . ct1_format::mynumber($i['capRepay']) . "</td>";
-         $out.= "<td>" . ct1_format::mynumber($i['instalment']) . "</td>";
+         $out.= "<td><a href='" . $link . "'>" . CT1_Format::mynumber($i['oldPrincipal']) . "</a></td>";
+         $out.= "<td>" . CT1_Format::mynumber($i['interest']) . "</td>";
+         $out.= "<td>" . CT1_Format::mynumber($i['capRepay']) . "</td>";
+         $out.= "<td>" . CT1_Format::mynumber($i['instalment']) . "</td>";
          $out.= "</tr>";
          $totalCap += $i['capRepay'];
          $totalInt += $i['interest'];
@@ -147,9 +147,9 @@ function getMortgageSchedule($_term, $_interest, $_frequency, $_advance, $_princ
        $out.= "<tr class='sum'>";
        $out.= "<td></td>";
        $out.= "<td>Sum</td>";
-       $out.= "<td>" . ct1_format::mynumber($totalInt) . "</td>";
-       $out.= "<td>" . ct1_format::mynumber($totalCap) . "</td>";
-       $out.= "<td>" . ct1_format::mynumber($totalInst) . "</td>";
+       $out.= "<td>" . CT1_Format::mynumber($totalInt) . "</td>";
+       $out.= "<td>" . CT1_Format::mynumber($totalCap) . "</td>";
+       $out.= "<td>" . CT1_Format::mynumber($totalInst) . "</td>";
        $out.= "</tr>";
        $out.= "</tbody>";
        $out.= "</table>";
@@ -163,26 +163,26 @@ function roundingForApproxMortgage(){
 }
 
 function latexApproxMortgage($_term, $_i, $_principal){
-  $a = new ct1_annuity();
+  $a = new CT1_Annuity();
   if ($_i != 0) {
     $out = "<p>";
-    $out.= "\\begin{align*} \\dfrac{" . ct1_format::mynumber($_principal) . "}{" . $a->latexAnnuity($_term, $_i, 'continuous', false) . "} ";
-    $out.= "& \\approx  \dfrac{ ". ct1_format::mynumber($_principal) ."}{n} \\left(1 + i \  n/2 \\right) \\\\ ";
+    $out.= "\\begin{align*} \\dfrac{" . CT1_Format::mynumber($_principal) . "}{" . $a->latexAnnuity($_term, $_i, 'continuous', false) . "} ";
+    $out.= "& \\approx  \dfrac{ ". CT1_Format::mynumber($_principal) ."}{n} \\left(1 + i \  n/2 \\right) \\\\ ";
     $out.= "& = ";
-    $out.= " \dfrac{ " .  ct1_format::mynumber($_principal) . "}{" . $_term . "} \\times \\left(1 + " . $_i . " \\times " . $_term . " / 2 \\right)   \\\\";
+    $out.= " \dfrac{ " .  CT1_Format::mynumber($_principal) . "}{" . $_term . "} \\times \\left(1 + " . $_i . " \\times " . $_term . " / 2 \\right)   \\\\";
     $out.= " &  \\approx ";
-    $out.= ct1_format::mynumber(round($_principal / $a->annuityCertainApprox($_term, $_i), $this->roundingForApproxMortgage())) . ".";
+    $out.= CT1_Format::mynumber(round($_principal / $a->annuityCertainApprox($_term, $_i), $this->roundingForApproxMortgage())) . ".";
     $out.= " \\end{align*}"; 
   }
   return $out;
 }
 
 function latexMortgage($_term, $_i, $_frequency, $_advance, $_ann, $_principal, $_instalment){
-    $a = new ct1_annuity();
+    $a = new CT1_Annuity();
     $out = "<p>Repayment per year ";
-    $out.= "= $$ \\dfrac{" . ct1_format::mynumber($_principal) . "}{" . $a->latexAnnuity($_term, $_i, $_frequency, $_advance) . "} ";
-    $out.= "= \dfrac{" . ct1_format::mynumber($_principal) . "}{" . $_ann . "} ";
-    $out.= "= " . ct1_format::mynumber(round($_principal / $_ann, 0)) .  ".$$";
+    $out.= "= $$ \\dfrac{" . CT1_Format::mynumber($_principal) . "}{" . $a->latexAnnuity($_term, $_i, $_frequency, $_advance) . "} ";
+    $out.= "= \dfrac{" . CT1_Format::mynumber($_principal) . "}{" . $_ann . "} ";
+    $out.= "= " . CT1_Format::mynumber(round($_principal / $_ann, 0)) .  ".$$";
     $out.= "</p>";
     return $out;
 }
@@ -196,16 +196,16 @@ function random_float ($min,$max) {
 
 function mortgage_func( $atts ){
 //  echo "<pre>SESSION" . print_r($_SESSION,1) . "</pre>";
-  $a = new ct1_annuity();
+  $a = new CT1_Annuity();
   $marker = new ct1_marker();
-  setlocale(LC_MONETARY, ct1_format::locale()); // HARDCODE!
+  setlocale(LC_MONETARY, CT1_Format::locale()); // HARDCODE!
   if ($_SESSION['REQUEST']['ct1_action']=='mortgage'){
       $_REQUEST = $_SESSION['REQUEST'];
       $_SESSION['REQUEST']['ct1_action']='';
   }
   $_action = $_REQUEST['ct1_action'];
 if ($_action == 'getAnnuityCertain'){  
-  $ac = new ct1_annuity();
+  $ac = new CT1_Annuity();
   return $ac->annuityCertain_func();
   }
   $_value = htmlentities($_REQUEST['ct1_value']);
@@ -222,8 +222,8 @@ if ($_action == 'getAnnuityCertain'){
 
 if ($_action == 'mortgage'){  
     $out = "<p>Problem was to calculate the " . $this->problemMortgage($_term, $_interest, $_frequency, $_advance, $_principal) . "</p>";
-    $out .= "<p>You say instalment amount is  ". ct1_format::mycurrency($_value) . ".</p>";
-    $out .= "<p>I say instalment amount is  " . ct1_format::mycurrency($_inst) . " so that repayment per year is " . ct1_format::mycurrency($_frequency * $_inst) . ".</p>";
+    $out .= "<p>You say instalment amount is  ". CT1_Format::mycurrency($_value) . ".</p>";
+    $out .= "<p>I say instalment amount is  " . CT1_Format::mycurrency($_inst) . " so that repayment per year is " . CT1_Format::mycurrency($_frequency * $_inst) . ".</p>";
     $out .= $this->latexMortgage($_term, $_interest, $_frequency, $_advance, $_ann, $_principal, $_inst);
     $out .= $a->latex($_term, $_interest, $_frequency, $_advance, $_ann);
     if ($_interest !=0){
@@ -235,7 +235,7 @@ if ($_action == 'mortgage'){
   }
   elseif ($_action == 'getMortgage'){  
     $out = "<p>To calculate the " . $this->problemMortgage($_term, $_interest, $_frequency, $_advance, $_principal) . "</p>";
-    $out .= "<p>Instalment amount is " . ct1_format::mycurrency($_inst) . " so that repayment per year is " . ct1_format::mycurrency($_frequency * $_inst) . ".</p>";
+    $out .= "<p>Instalment amount is " . CT1_Format::mycurrency($_inst) . " so that repayment per year is " . CT1_Format::mycurrency($_frequency * $_inst) . ".</p>";
     $out .= $this->latexMortgage($_term, $_interest, $_frequency, $_advance, $_ann, $_principal, $_inst);
     $out .= $a->latex($_term, $_interest, $_frequency, $_advance, $_ann);
     if ($_interest !=0){
@@ -261,4 +261,3 @@ if ($_action == 'mortgage'){
 }
 
 }
-?>

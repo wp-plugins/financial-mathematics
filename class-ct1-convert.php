@@ -1,8 +1,8 @@
 <?php   
-require_once 'ct1_interest.php';
-require_once 'ct1_marker.php';
+require_once 'class-ct1-interest.php';
+require_once 'class-ct1-marker.php';
 
-class ct1_convert{
+class CT1_Convert{
 
 private function problem(ct1_interest $source, ct1_interest $target){
   $out = "the amount of the annual " . $target->getDescription() . " rate " . $target->getFrequency();
@@ -173,4 +173,3 @@ $d->set_m(999);
 //echo $c->form($s, $d) . "\r\n";
 */
 //echo $c->convert_func(array());
-?>

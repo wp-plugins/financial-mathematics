@@ -1,7 +1,7 @@
 <?php
 
-require_once 'ct1_mortgage.php';
-class ct1_mortgage_test extends PHPUnit_Framework_TestCase
+require_once 'class-ct1-mortgage.php';
+class CT1_Mortgage_Test extends PHPUnit_Framework_TestCase
 {
   private $schedule;
   private $mcalc;
@@ -14,8 +14,8 @@ class ct1_mortgage_test extends PHPUnit_Framework_TestCase
   private $neg = 0.00001;
   
   public function setup(){
-    $this->acalc = new ct1_annuity();
-    $this->mcalc = new ct1_mortgage();
+    $this->acalc = new CT1_Annuity();
+    $this->mcalc = new CT1_Mortgage();
     $this->term = 10;
     $this->i = 0.06;
     $this->freq = 12;

@@ -1,7 +1,7 @@
 <?php   
 
-require_once 'ct1_format.php';
-require_once 'ct1_marker.php';
+//require_once 'ct1_format.php';
+require_once 'class-ct1-marker.php';
 
 class CT1_Interest{
 
@@ -33,7 +33,7 @@ public function getAll(){
   return array('i'=>$this->i, 'm'=> $this->m, 'adv'=> $this->advance);
 }
 
-public function sameForm(ct1_interest $c){
+public function sameForm(CT1_Interest $c){
   $thisAll = $this->getAll();
   $cAll = $c->getAll();
   if( $thisAll['m']==$cAll['m'] && $thisAll['adv']==$cAll['adv'] ) return true;
@@ -55,7 +55,7 @@ public function setAdvance($b){
 }
 
 public function getRate(){
-  $m = new ct1_marker();
+  $m = new CT1_Marker();
   $d = $m->no_dps(100*$this->i);
   return sprintf('%.' . ($d) . 'f%%', 100 * $this->i);
 }
@@ -146,7 +146,7 @@ protected function getIEffectiveLatex(){
   return $out;
 }
 
-public function getI(ct1_interest $t){
+public function getI(CT1_Interest $t){
     if ($this->isValid()){ 
        if ($t->isContinuous()){
          $val = log(1 + $this->getIEffective());
@@ -168,11 +168,11 @@ public function getI(ct1_interest $t){
     }
 }
 
-public function showI(ct1_interest $t){
+public function showI(CT1_Interest $t){
     return array('value'=>$this->getI($t), 'logo'=>$t->getLabel(), 'explanation'=>$this->getILatex($t));
 }
 
-public function getILatex(ct1_interest $t){
+public function getILatex(CT1_Interest $t){
        $out = "<p>First, get annual effective growth factor.</p>
               " . $this->getIEffectiveLatex() . "\r\n";
        $out.= "<p>Second, convert annual effective growth factor.</p>
@@ -205,11 +205,11 @@ public function getILatex(ct1_interest $t){
  }
 
 
-} // end of class ct1_interest
+} // end of class CT1_Interest
 
 // test
 /*
-$i = new ct1_interest();
+$i = new CT1_Interest();
 echo "i4 " . print_r($i->getI(4),1) . "\r\n";
 //$i->set_d('alpha');
 echo "i365" . print_r($i->getI(365),1) . "\r\n";
@@ -223,4 +223,3 @@ echo "d1" . print_r($i->showI(1,1),1) . "\r\n";
 echo "i4" . print_r($i->showI(4,0),1) . "\r\n";
 echo "d2" . print_r($i->showI(2,1),1) . "\r\n";
 */
-?>

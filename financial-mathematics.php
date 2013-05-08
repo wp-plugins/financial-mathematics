@@ -35,7 +35,7 @@ function annuityCertain_proc($attr){
   try{
    $pairs = array( 'question'=>1, 'answer' => 1);
    $a = shortcode_atts( $pairs, $attr  );
-  $ac = new ct1_annuity();
+  $ac = new CT1_Annuity();
   return $ac->annuityCertain_func($a['question'], $a['answer']);
   }
   catch (Exception $e){
@@ -45,7 +45,7 @@ function annuityCertain_proc($attr){
 
 function mortgage_proc($attr){
   try{
-  $m = new ct1_mortgage();
+  $m = new CT1_Mortgage();
   return $m->mortgage_func($attr);
   }
   catch (Exception $e){
@@ -55,7 +55,7 @@ function mortgage_proc($attr){
 
 function convert_proc($attr){
   try{
-  $c = new ct1_convert();
+  $c = new CT1_Convert();
     return $c->convert_func($attr);
   }
   catch (Exception $e){
@@ -76,8 +76,8 @@ try{
   $_principal = $_POST['ct1_principal'];
   if ( 'convert' == $_action || 'annuityCertain' == $_action || 'mortgage' == $_action){  
   if ( 'convert' == $_action ){  
-    $source = new ct1_interest();
-    $target = new ct1_interest();
+    $source = new CT1_Interest();
+    $target = new CT1_Interest();
     $_value = (float)$_REQUEST['ct1_value'];
     $source->set_m((float)$_REQUEST['ct1_frequency']);
     if ($_REQUEST['ct1_advance']) $source->set_d((float)$_REQUEST['ct1_interest']);
@@ -85,7 +85,7 @@ try{
     $target->set_m((float)$_REQUEST['ct1_frequency_target']);
     if ($_REQUEST['ct1_advance_target']) $target->set_d(0);
     else $target->set_i(0);
-    $marker = new ct1_marker();
+    $marker = new CT1_Marker();
 //
     $sol = $source->showI($target);
     $solution = $sol['value'];
@@ -101,7 +101,7 @@ try{
   }
   if ( 'annuityCertain' == $_action || 'mortgage' == $_action){  
     $a = new ct1_annuity();
-    $marker = new ct1_marker();
+    $marker = new CT1_Marker();
     $_SESSION['REQUEST'] = $_REQUEST;
     $_ann = $a->annuityCertain($_term, $_interest, $_frequency, $_advance);
     $redirect = current_page_url() . "&ct1_term=" . $_term . "&ct1_interest=" . $_interest;
@@ -193,5 +193,3 @@ function current_page_url() {
 	return $pageURL;
 }
 
-
-?>

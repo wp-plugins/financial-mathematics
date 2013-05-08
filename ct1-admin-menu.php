@@ -20,7 +20,7 @@ function ct1_admin_init() {
 
 
 function ct1_section_one_callback() {
-	include 'ct1_plugin_help.html';
+	include 'ct1-plugin-help.html';
 }
 
 

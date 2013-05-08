@@ -36,5 +36,20 @@ class CT1_Marker_Test extends PHPUnit_Framework_TestCase
 
   }  
 
+  public function test_dps(){
+    $this->assertEquals( $this->marker->no_dps(0.123), 3);
+    $this->assertEquals( $this->marker->no_dps(987.123), 3);
+    $this->assertEquals( $this->marker->no_dps(-987.123), 3);
+    $this->assertEquals( $this->marker->no_dps(10), 0);
+  }
+
+
+  public function test_sigfig(){
+    $this->assertEquals( $this->marker->no_sig_fig(0.123), 3);
+    $this->assertEquals( $this->marker->no_sig_fig(987.123), 6);
+    $this->assertEquals( $this->marker->no_sig_fig(-987.123), 6);
+    $this->assertEquals( $this->marker->no_sig_fig(10), 1);
+    $this->assertEquals( $this->marker->no_sig_fig(1230000000), 3);
+  }
 
 }

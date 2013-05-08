@@ -1,14 +1,14 @@
 <?php
 
-require_once 'ct1_interest.php';
-class ct1_interest_test extends PHPUnit_Framework_TestCase
+require_once 'class-ct1-interest.php';
+class CT1_Interest_test extends PHPUnit_Framework_TestCase
 {
   private $icalc;
   private $i;
   private $freq;
   
   public function setup(){
-    $this->icalc = new ct1_interest();
+    $this->icalc = new CT1_Interest();
     $this->i = 0.06;
     $this->freq = 1;
     $this->icalc->set_m($this->freq);
@@ -18,7 +18,7 @@ class ct1_interest_test extends PHPUnit_Framework_TestCase
   
   public function test_iconverti()
   {
-    $t = new ct1_interest();
+    $t = new CT1_Interest();
     $t->set_m(12);
     $t->set_i(0);
     $this->assertTrue( abs($this->icalc->getI($t)-  0.058411) < 0.000001);
@@ -27,7 +27,7 @@ class ct1_interest_test extends PHPUnit_Framework_TestCase
 
   public function test_iconvertd()
   {
-    $t = new ct1_interest();
+    $t = new CT1_Interest();
     $t->set_m(12);
     $t->set_d(0);
     $this->assertTrue( abs($this->icalc->getI($t)-  0.06 / 1.032211) < 0.000001);
@@ -36,7 +36,7 @@ class ct1_interest_test extends PHPUnit_Framework_TestCase
 
   public function test_iconvertdel()
   {
-    $t = new ct1_interest();
+    $t = new CT1_Interest();
     $t->set_m(367); // anything greater than 366 is treated as continuous
     $t->set_d(0);
     $this->assertTrue( abs($this->icalc->getI($t)-  0.058269) < 0.000001);
