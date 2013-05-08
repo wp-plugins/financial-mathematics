@@ -97,9 +97,9 @@ function annuityCertain($_term, $_interest, $_frequency, $_advance){
   else{
     $_im = $_frequency * ( pow(1 + $_i,(1.0 / $_frequency)) - 1);
     $_ann = (1 - $_vn) / $_im;
-  }
-  if ($_advance){
-    $_ann = $_ann * pow(1 + $_i,(1.0 / $_frequency)) ;
+    if ($_advance){
+      $_ann = $_ann * pow(1 + $_i,(1.0 / $_frequency)) ;
+    }
   }
   $_ann = round($_ann, $this->annuityDecimalPLaces());
   return $_ann;
