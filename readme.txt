@@ -39,6 +39,10 @@ Install and activate a Wordpress plugin like Simple Mathjax
 
 It's running at [Financial mathematics](http://bdmfst.com/ct1/ "Financial mathematics") 
 
+= How do I run the unit tests? =
+
+Install phpunit and enter
+$for i in $(ls *test*.php); do echo $i; phpunit --colors $i; done
 == Screenshots ==
 
 1. Input form rendered the first time [mortgage] shortcode is rendered.
