@@ -26,6 +26,24 @@ public function set_score( $inputs){
 	return;
 }
 
+private function isValid(){
+  if ($this->m < 0) { return false;}
+  if (!is_numeric($this->m)) {  return false;}
+  if (!is_numeric($this->delta)) {  return false;}
+  if (!is_bool($this->advance)) {  return false;}
+  return true;
+}
+
+private function mContinuous($m){
+  $m_continuous = 366;
+  if ($m > $m_continuous) return true;
+  return false;
+}
+
+private function isContinuous(){
+  return $this->mContinuous($this->m);
+}
+
 public function get_delta(){
   return $this->delta;
 }
@@ -50,15 +68,7 @@ public function set_advance($b){
   if (is_bool($b)) $this->advance = $b;
 }
 
-private function mContinuous($m){
-  $m_continuous = 366;
-  if ($m > $m_continuous) return true;
-  return false;
-}
 
-private function isContinuous(){
-  return $this->mContinuous($this->m);
-}
 
 public function sameForm(CT1_Interest $c){
   $thisAll = $this->getAll();

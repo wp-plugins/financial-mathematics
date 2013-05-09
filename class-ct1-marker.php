@@ -67,7 +67,8 @@ public function no_sig_fig($d){
 }
 
 protected function round_sig_fig($d, $n){
- 	if ($d==0) return 0;
+     	if ($d==0) return 0;
+        if ($d<0) return -$this->round_sig_fig(-$d, $n);
   	return round($d, ceil(0 - log10($d)) + $n - 1); 
 }
 
