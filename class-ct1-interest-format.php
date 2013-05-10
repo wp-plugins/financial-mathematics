@@ -2,8 +2,13 @@
 
 class CT1_Interest_Format {
 
-private $m = 1;
-private $advance = false;
+protected $m = 1;
+protected $advance = false;
+
+public function __construct( $m=1, $advance=false ){
+  $this->set_m($m);
+  $this->set_advance($advance);
+}
 
 public function get_m(){
 	return $this->m;
@@ -21,9 +26,10 @@ public function set_advance($b){
 	if (is_bool($b)) $this->advance = $b;
 }
 
-public function equals(CT1_Interest_Format $f){
-	if( $c->get_m       != $this->get_m )       return false;
-	if( $c->get_advance != $this->get_advance ) return false;
+public function equals($f){
+	if(!($f instanceof CT1_Interest_Format))        return false;
+	if( $f->get_m()       != $this->get_m()       ) return false;
+	if( $f->get_advance() != $this->get_advance() ) return false;
 	return true;
 }
 

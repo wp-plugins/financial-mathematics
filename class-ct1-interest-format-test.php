@@ -34,5 +34,14 @@ class CT1_Interest_test extends PHPUnit_Framework_TestCase
     $this->assertEquals( $this->f->get_advance(), false);
   }  
 
+  public function test_equals()
+  {
+    $t = new CT1_Interest_Format(2, true);
+    $this->assertTrue( $this->f->equals($t) );
+    $t->set_m(4);
+    $this->assertFalse( $this->f->equals($t) );
+  }  
+
+
 
 }

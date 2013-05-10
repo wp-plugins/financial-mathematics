@@ -3,51 +3,67 @@
 require_once 'class-ct1-annuity.php';
 class CT1_Annuity_Test extends PHPUnit_Framework_TestCase
 {
+  private $debug = false;
   private $acalc;
-  private $term;
+  private $term = 10;
   private $i;
-  private $freq;
-  private $adv;
+  private $freq = 12;
+  private $adv = true;
   private $neg = 0.00001;
   
   public function setup(){
-    $this->acalc = new CT1_Annuity();
-    $this->term = 10;
+    $this->acalc = new CT1_Annuity(10, true, log(1.06), 12);
     $this->i = 0.06;
-    $this->freq = 12;
-    $this->adv = true;
   }
   public function tearDown(){}
   
+  private function reset(){
+  	$this->acalc->set_m($this->freq);
+  	$this->acalc->set_advance($this->adv);
+  	$this->acalc->set_delta(log(1+$this->i));
+  	$this->acalc->set_term($this->term);
+  }
+  	
   private function aval(){
-    return $this->acalc->annuityCertain($this->term, $this->i, $this->freq, $this->adv);
+  	$this->reset();
+    return $this->acalc->get_annuity_certain();
   }
 
   private function ival(){
-    return $this->acalc->im($this->i, $this->freq);
+  	$this->reset();
+    return $this->acalc->get_rate_in_form($this->acalc);
   }
 
   private function an(){
-    if (0==$this->i) return $this->term;
-    return (1 - pow((1 + $this->i), -$this->term))/$this->i;
+    return (1 - exp(-10*log(1.06)))/0.06;
   }
 
   public function test_an()
   {
+    if ($this->debug) $this->assertEquals( $this->an() , 7.3601);
     $this->assertTrue( abs($this->an() - 7.3601) < 0.0001 );
     // source of numbers: Formulae and tables 6% p.58 an 
+  }  
+
+  public function test_rate()
+  {
+    if ($this->debug) $this->assertEquals( $this->acalc->get_rate_in_form($this->acalc) , 0.06/1.032211);
+    $this->assertTrue( abs($this->aval() - $this->an()*1.032211) < $this->neg );
+    // source of numbers: Formulae and tables 6% p.58  i/d(12)
   }  
  
   public function test_annuityValueAdvance()
   {
+    if ($this->debug) $this->assertEquals( $this->aval() , $this->an()*1.032211);
     $this->assertTrue( abs($this->aval() - $this->an()*1.032211) < $this->neg );
     // source of numbers: Formulae and tables 6% p.58  i/d(12)
   }  
 
   public function test_annuityValueContinuous()
   {
-    $this->freq = 'continuous';
+    $this->freq = 999;
 //    $this->assertEquals( $this->aval() , $this->an()*1.029709);
+    if ($this->debug) $this->assertEquals( $this->aval() , $this->an()*1.029709);
     $this->assertTrue( abs($this->aval() - $this->an()*1.029709) < $this->neg );
     // source of numbers: Formulae and tables 6% p.58   i/delta
   }  
@@ -55,6 +71,7 @@ class CT1_Annuity_Test extends PHPUnit_Framework_TestCase
   public function test_annuityValueArrears()
   {
     $this->adv = false;
+    if ($this->debug) $this->assertEquals( $this->aval() , $this->an()*1.027211);
     $this->assertTrue( abs($this->aval() - $this->an()*1.027211) < $this->neg );
     // source of numbers: Formulae and tables 6% p.58  i/i(12)
   }  
@@ -74,13 +91,15 @@ class CT1_Annuity_Test extends PHPUnit_Framework_TestCase
   public function test_im()
   {
     $this->adv = false;
+    if ($this->debug) $this->assertEquals( $this->ival() , 0.058411);
     $this->assertTrue( abs($this->ival() - 0.058411) < 0.000001 );
     // source of numbers: Formulae and tables 6% p.58  i(12)
   }  
 
   public function test_delta()
   {
-    $this->freq = 'continuous';
+    $this->freq = '999';
+    if ($this->debug) $this->assertEquals( $this->ival() , 0.058269);
     $this->assertTrue( abs($this->ival() - 0.058269) < 0.000001 );
     // source of numbers: Formulae and tables 6% p.58   delta
   }  
