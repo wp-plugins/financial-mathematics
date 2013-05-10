@@ -5,15 +5,31 @@ class CT1_Annuity extends CT1_Interest{
 
 protected $term;
 
+public function get_valid_options(){ 
+	$r = parent::get_valid_options();
+	$r['term'] = array(
+						'type'=>'number',
+						'decimal'=>'.',
+						'min'=>0,
+					);
+	return $r; 
+}
+
+protected function get_values(){ 
+	$r = parent::get_values();
+	$r['term'] = $this->get_term();
+	return $r; 
+}
+
 public function __construct( $m = 1, $advance = false, $delta = 0, $term = 0 ){
 	parent::__construct( $m, $advance, $delta);
 	$this->set_term($term);
 }
 
 public function set_term($n){
-	if (is_numeric($n) && $n>=0 ){
-		$this->term = $n;
-	}
+  $candidate = array('term'=>$n);
+  $valid = $this->get_validation($candidate);
+	if ($valid['term']) $this->term = $n;
 }
 
 public function get_term(){

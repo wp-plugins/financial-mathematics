@@ -6,15 +6,30 @@ class CT1_Mortgage extends CT1_Annuity{
 
 protected $principal;
 
+public function get_valid_options(){ 
+	$r = parent::get_valid_options();
+	$r['principal'] = array(
+						'type'=>'number',
+						'decimal'=>'.',
+					);
+	return $r; 
+}
+
+protected function get_values(){ 
+	$r = parent::get_values();
+	$r['principal'] = $this->get_principal();
+	return $r; 
+}
+
 public function __construct( $m = 1, $advance = false, $delta = 0, $term = 0, $principal = 0 ){
 	parent::__construct( $m, $advance, $delta, $term);
 	$this->set_principal($principal);
 }
 
 public function set_principal($p){
-	if (is_numeric($p)){
-		$this->principal = $p;
-	}
+  $candidate = array('principal'=>$p);
+  $valid = $this->get_validation($candidate);
+	if ($valid['principal']) $this->principal = $p;
 }
 
 public function get_principal(){

@@ -14,13 +14,15 @@ public function get_valid_options(){
 						'decimal'=>'.',
 						'min'=>0.00001,
 					);
-	return $r; }
+	return $r; 
+}
 
 protected function get_values(){ 
 	$r = parent::get_values();
 	$r['m'] = $this->get_m();
 	$r['advance'] = $this->get_advance();
-	return $r; }
+	return $r; 
+}
 		
 public function __construct( $m=1, $advance=false ){
   $this->set_m($m);
