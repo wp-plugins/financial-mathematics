@@ -13,7 +13,6 @@ public function get_valid_options(){
 	$r['delta'] = array(
 						'type'=>'number',
 						'decimal'=>'.',
-						'min'=>-1,
 					);
 	return $r; 
 }
