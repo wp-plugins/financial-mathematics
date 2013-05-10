@@ -1,10 +1,27 @@
 <?php   
 
-class CT1_Interest_Format {
+require_once 'class-ct1-object.php';
+
+class CT1_Interest_Format extends CT1_Object{
 
 protected $m = 1;
 protected $advance = false;
 
+public function get_valid_options(){ 
+	$r = parent::get_valid_options();
+	$r['m'] = array(
+						'type'=>'number',
+						'decimal'=>'.',
+						'min'=>0.00001,
+					);
+	return $r; }
+
+protected function get_values(){ 
+	$r = parent::get_values();
+	$r['m'] = $this->get_m();
+	$r['advance'] = $this->get_advance();
+	return $r; }
+		
 public function __construct( $m=1, $advance=false ){
   $this->set_m($m);
   $this->set_advance($advance);
@@ -15,13 +32,15 @@ public function get_m(){
 }
 
 public function set_m($m){
-	if (is_numeric($m) && $m > 0) $this->m = $m;
+  $candidate = array('m'=>$m);
+  $valid = $this->get_validation($candidate);
+	if ($valid['m']) $this->m = $m;
 }
 
 public function get_advance(){
 	return $this->advance;
 }
-
+ 
 public function set_advance($b){
 	if (is_bool($b)) $this->advance = $b;
 }
@@ -57,3 +76,10 @@ protected function is_continuous(){
 
   
 } // end of class
+
+
+/*
+$ir = new CT1_Interest_Format();
+  $values = array('m'=>-1);
+	print_r(Validate::multiple($values, $ir->valid_options));
+*/
