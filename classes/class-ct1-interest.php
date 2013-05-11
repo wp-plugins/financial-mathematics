@@ -28,16 +28,17 @@ public function get_parameters(){
 			'name'=>'delta',
 			'label'=>'Interest rate per year (continuously compounded)',
 			);
-	$r['i'] = array(
+	$r['i_effective'] = array(
 			'name'=>'i_effective',
 			'label'=>'Interest rate per year (annual effective rate)',
 			);
 	return $r; 
 }
 
-protected function get_values(){ 
+public function get_values(){ 
 	$r = parent::get_values();
 	$r['delta'] = $this->get_delta();
+	$r['i_effective'] = $this->get_i_effective();
 	return $r; 
 }
 

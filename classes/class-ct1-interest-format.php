@@ -14,6 +14,9 @@ public function get_valid_options(){
 						'decimal'=>'.',
 						'min'=>0.00001,
 					);
+	$r['advance'] = array(
+						'type'=>'boolean',
+					);
 	return $r; 
 }
 
@@ -30,7 +33,7 @@ public function get_parameters(){
 	return $r; 
 }
 
-protected function get_values(){ 
+public function get_values(){ 
 	$r = parent::get_values();
 	$r['m'] = $this->get_m();
 	$r['advance'] = $this->get_advance();

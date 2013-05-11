@@ -1,6 +1,7 @@
 <?php
 
-require_once 'class-ct1-mortgage.php';
+require 'test-constants.php';
+require_once $class_directory . 'class-ct1-mortgage.php';
 class CT1_Mortgage_Test extends PHPUnit_Framework_TestCase
 {
   private $debug = false;

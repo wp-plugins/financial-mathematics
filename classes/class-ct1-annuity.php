@@ -24,7 +24,7 @@ public function get_parameters(){
 	return $r; 
 }
 
-protected function get_values(){ 
+public function get_values(){ 
 	$r = parent::get_values();
 	$r['term'] = $this->get_term();
 	return $r; 

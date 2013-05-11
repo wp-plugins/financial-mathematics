@@ -1,6 +1,7 @@
 <?php
 
-require_once 'class-ct1-interest.php';
+require 'test-constants.php';
+require_once $class_directory . 'class-ct1-interest.php';
 class CT1_Interest_test extends PHPUnit_Framework_TestCase
 {
   private $debug=false;
