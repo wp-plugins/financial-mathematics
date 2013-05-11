@@ -15,6 +15,15 @@ public function get_valid_options(){
 	return $r; 
 }
 
+public function get_parameters(){ 
+	$r = parent::get_parameters();
+	$r['term'] = array(
+			'name'=>'term',
+			'label'=>'Term (years)',
+			);
+	return $r; 
+}
+
 protected function get_values(){ 
 	$r = parent::get_values();
 	$r['term'] = $this->get_term();

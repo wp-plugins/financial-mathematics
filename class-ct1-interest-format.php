@@ -17,6 +17,19 @@ public function get_valid_options(){
 	return $r; 
 }
 
+public function get_parameters(){ 
+	$r = parent::get_parameters();
+	$r['m'] = array(
+			'name'=>'frequency',
+			'label'=>'Frequency per year',
+			);
+	$r['advance'] = array(
+			'name'=>'advance',
+			'label'=>'In advance',
+			);
+	return $r; 
+}
+
 protected function get_values(){ 
 	$r = parent::get_values();
 	$r['m'] = $this->get_m();

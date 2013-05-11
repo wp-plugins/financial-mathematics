@@ -14,6 +14,24 @@ public function get_valid_options(){
 						'type'=>'number',
 						'decimal'=>'.',
 					);
+	$r['i_effective'] = array(
+						'type'=>'number',
+						'decimal'=>'.',
+						'min'=>'-0.99',
+					);
+	return $r; 
+}
+
+public function get_parameters(){ 
+	$r = parent::get_parameters();
+	$r['delta'] = array(
+			'name'=>'delta',
+			'label'=>'Interest rate per year (continuously compounded)',
+			);
+	$r['i'] = array(
+			'name'=>'i_effective',
+			'label'=>'Interest rate per year (annual effective rate)',
+			);
 	return $r; 
 }
 
@@ -36,6 +54,16 @@ public function set_delta($d){
   $candidate = array('delta'=>$d);
   $valid = $this->get_validation($candidate);
 	if ($valid['delta']) $this->delta = $d;
+}
+
+public function get_i_effective(){
+	return exp($this->delta)-1;
+}
+
+public function set_i_effective($i){
+  $candidate = array('i_effective'=>$i);
+  $valid = $this->get_validation($candidate);
+	if ($valid['i_effective']) $this->set_delta(log(1+$i));
 }
 
 public function get_rate_in_form($f){

@@ -43,4 +43,9 @@ class CT1_Interest_test extends PHPUnit_Framework_TestCase
     // source of numbers: Formulae and tables 6% p.58   delta
   }  
 
+  public function test_i_effective()
+  {
+    $this->icalc->set_i_effective(0.10);
+    $this->assertEquals( $this->icalc->get_delta(), log(1.10));
+  }
 }

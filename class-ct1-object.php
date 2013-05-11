@@ -6,6 +6,8 @@ abstract class CT1_Object {
 
 public function get_valid_options(){ return array(); }
 
+public function get_parameters(){ return array(); }
+
 public function get_validation($candidate){
 	return Validate::multiple($candidate, $this->get_valid_options());
 }

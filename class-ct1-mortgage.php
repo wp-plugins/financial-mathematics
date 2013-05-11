@@ -15,6 +15,15 @@ public function get_valid_options(){
 	return $r; 
 }
 
+public function get_parameters(){ 
+	$r = parent::get_parameters();
+	$r['principal'] = array(
+			'name'=>'principal',
+			'label'=>'Principal',
+			);
+	return $r; 
+}
+
 protected function get_values(){ 
 	$r = parent::get_values();
 	$r['principal'] = $this->get_principal();
