@@ -41,8 +41,11 @@ It's running at [Financial mathematics](http://bdmfst.com/ct1/ "Financial mathem
 
 = How do I run the unit tests? =
 
+$cd tests
 Install phpunit and enter
-$for i in $(ls *test*.php); do echo $i; phpunit --colors $i; done
+$for i in $(ls class*test*.php); do echo $i; phpunit --colors $i; done
+or just run the run_all_tests script by typing
+$./run_all_tests
 
 == Screenshots ==
 

@@ -1,11 +1,12 @@
 <?php   
 
-require_once 'class-ct1-mortgage.php';
+//require_once 'class-ct1-mortgage.php';
+require_once 'interface-ct1-concept.php';
 
-class CT1_Form{
+abstract class CT1_Form implements CT1_Concept {
 
 private $prefix = "CT1_";
-private $obj;
+protected $obj;
 
 public function __construct(CT1_Object $obj){
 	$this->set_obj($obj);
@@ -15,11 +16,47 @@ public function set_obj(CT1_Object $obj){
 	$this->obj = $obj;
 }
 
-public function get_calculator($exclude = array()){
+public function get_solution($parameters){
+	return;
+}
+
+public function get_calculator(
+		$exclude = array(), 
+		$request='',
+		$submit="Submit",
+		$type='', 
+		$special_input = '',
+		$action='', 
+		$method='GET', 
+		$_dummy = NULL){
 	$out = ""; 
+	$out.="<form action='" . $action . "' method='" . $method . "'>" . "\r\n";
 	$parameters = $this->obj->get_parameters();
 	$valid_options = $this->obj->get_valid_options();
 	$values = $this->obj->get_values();
+	if (count($parameters) > 0){
+		$out.= $this->get_form_inputs($parameters, $exclude, $valid_options, $values, $type);
+	}
+	$out.= $special_input;
+	$out.="<input type='hidden' name='" . $this->get_prefix() . "request' value='" . $request . "' />" . "\r\n";
+	$out.="<input type='submit' value='" . $submit . "' />" . "\r\n";
+	$out.="</form>" . "\r\n";
+	return $out;
+}
+
+protected function set_received_input(&$_INPUT = array()){
+	$pre = $this->get_prefix();
+	foreach (array_keys($this->obj->get_parameters()) as $p){
+		if (!isset($_INPUT[$pre. $p])) $_INPUT[$pre. $p] = NULL;
+	}
+}
+
+private function get_form_inputs($parameters = array(), 
+		$exclude=array(), 
+		$valid_options= array(), 
+		$values=array(), 
+		$type=''){
+	$out = "";
 	if (count($parameters) > 0){
 		foreach(array_keys($parameters) as $key){
 			if (!in_array($key, $exclude)){
@@ -32,32 +69,46 @@ public function get_calculator($exclude = array()){
 				if (array_key_exists($key,$values)){
 					$value = $values[$key];
 				}
-				$out.= $this->get_input($valid_option, $parameter, $value);
+				$out.= $this->get_input($valid_option, $parameter, $value, $type);
 			}
 		}
+		return $out;
 	}
-	return $out;
-}
 
-private function get_input($valid_option = array(), $parameter=array(), $value=''){
+}
+private function get_input(
+		$valid_option = array(), 
+		$parameter=array(), 
+		$value='', 
+		$type=''
+){
 	$out = "";
 	if (array_key_exists('type',$valid_option)){
-  	$out.= "<p>" ."\r\n";
-  	$out.= "<label>" . $parameter['label'] . "\r\n";
-	  if ('number'==$valid_option['type']){
-  		$out.= "<input type='text' ";
-  		$out.= "name='" . $this->get_prefix() . $parameter['name'] . "' ";
+	if ('hidden'!=$type){
+  		$out.= "<p>" ."\r\n";
+  		$out.= "<label>" . $parameter['label'] . "\r\n";
+	}
+  	$out.= "<input ";
+  	$out.= "name='" . $this->get_prefix() . $parameter['name'] . "' ";
+	if ('hidden'==$type){
+		$out.= "type='hidden' ";
   		$out.= "value='" . $value . "' ";
-  		$out.= ">" . "\r\n";
   	}
-  	elseif ('boolean'==$valid_option['type']){
-  		$out.= "<input type='checkbox' ";
-  		$out.= "name='" . $this->get_prefix() . $parameter['name'] . "' ";
-  		if (true == $value) $out.= "CHECKED ";
-  		$out.= ">" . "\r\n";
+	else{
+		if ('number'==$valid_option['type']){
+			$out.= "type='text' ";
+  			$out.= "value='" . $value . "' ";
+  		}
+  		elseif ('boolean'==$valid_option['type']){
+			$out.= "type='checkbox' ";
+  			if (true == $value) $out.= "CHECKED ";
+		}
   	}
-  	$out.= "</label>" . "\r\n";
-  	$out.= "</p>" ."\r\n";
+  	$out.= "/>" . "\r\n";
+	if ('hidden'!=$type){
+  		$out.= "</label>" . "\r\n";
+  		$out.= "</p>" ."\r\n";
+	}
   }
   return $out;
 }
@@ -68,10 +119,4 @@ public function get_prefix(){
 
 }
 
-/*
-    $obj = new CT1_Mortgage(12, true, log(1.06), 10, 1000000);
-    $form = new CT1_Form($obj);
-    $html = $form->get_calculator(array("delta"));
-echo $html;
-*/
 

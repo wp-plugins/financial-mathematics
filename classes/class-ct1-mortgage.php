@@ -58,7 +58,7 @@ private function interest_per_period(){
  	return exp($this->get_delta() / $this->get_m()) - 1;
 }
 
-function get_mortgage_schedule(){
+public function get_mortgage_schedule(){
 	if ($this->is_continuous()) throw new Exception("Can't get mortgage schedule for continuously paid mortgage");
 	$rounding = 2;
  	$_principal = $this->get_principal();
