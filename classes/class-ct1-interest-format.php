@@ -23,7 +23,7 @@ public function get_valid_options(){
 public function get_parameters(){ 
 	$r = parent::get_parameters();
 	$r['m'] = array(
-			'name'=>'frequency',
+			'name'=>'m',
 			'label'=>'Frequency per year',
 			);
 	$r['advance'] = array(
@@ -90,6 +90,17 @@ protected function is_continuous(){
 	$m_continuous = 366;
 	if ($this->m > $m_continuous) return true;
 	return false;
+}
+
+public function set_from_input($_INPUT = array(), $pre = ''){
+	try{
+		$this->set_m(	$_INPUT[$pre. 'm'] );
+		$this->set_advance($_INPUT[$pre . 'advance']);
+		return true;
+	}
+	catch( Exception $e ){ 
+		return false; 
+	}
 }
 
   

@@ -55,4 +55,19 @@ public function get_annuity_certain(){
 	return (1 - $vn) / $this->get_rate_in_form($this);
 }
 
+public function set_from_input($_INPUT = array(), $pre = ''){
+	try{
+		if (parent::set_from_input($_INPUT, $pre)){
+			$this->set_term(	$_INPUT[$pre. 'term'] );
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	catch( Exception $e ){ 
+		return false; 
+	}
+}
+
 }

@@ -9,8 +9,10 @@
         Licence: GPL2
 */  
 
-session_start();
+require 'classes/class-ct1-concept-mortgage.php';
+/*
 include 'ct1-admin-menu.php';
+session_start();
 require_once 'class-ct1-convert.php';
 require_once 'class-ct1-annuity.php';
 require_once 'class-ct1-mortgage.php';
@@ -192,4 +194,4 @@ function current_page_url() {
 	}
 	return $pageURL;
 }
-
+*/

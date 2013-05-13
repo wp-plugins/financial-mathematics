@@ -46,6 +46,7 @@ public function get_principal(){
 }
 
 private function instalment_per_year(){
+	if (0==$this->get_annuity_certain()) return NULL;
 	return $this->get_principal() / $this->get_annuity_certain();
 }
 
@@ -79,6 +80,19 @@ public function get_mortgage_schedule(){
 														);
     }
   return $schedule;
+}
+
+public function set_from_input($_INPUT = array(), $pre = ''){
+	try{
+		if (parent::set_from_input($_INPUT, $pre)){
+			$this->set_principal( $_INPUT[$pre. 'principal']);	
+			return true;
+		}
+		else return false;
+	}
+	catch( Exception $e ){ 
+		return false; 
+	}
 }
 
 }

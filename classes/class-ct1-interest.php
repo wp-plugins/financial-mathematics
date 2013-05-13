@@ -77,5 +77,26 @@ public function get_rate_in_form($f){
 	else	return $i_m;
 }
 
+public function set_from_input($_INPUT = array(), $pre = ''){
+	try{
+		if (parent::set_from_input($_INPUT, $pre)){
+			if (isset($_INPUT[$pre . 'delta'])){
+				$this->set_delta(	$_INPUT[$pre. 'delta'] );
+			} 
+			if (isset($_INPUT[$pre . 'i_effective'])){
+				$this->set_i_effective($_INPUT[$pre . 'i_effective']);
+			} 
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	catch( Exception $e ){ 
+		return false; 
+	}
+}
+
+
 } // end of class CT1_Interest
 
