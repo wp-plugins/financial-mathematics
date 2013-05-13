@@ -1,7 +1,7 @@
 <?php
 
 require 'test-constants.php';
-require_once $class_directory . '../classes/class-ct1-form.php';
+require_once $class_directory . 'class-ct1-concept-mortgage.php';
 
 class CT1_Form_Test extends PHPUnit_Framework_TestCase
 {
@@ -12,7 +12,7 @@ class CT1_Form_Test extends PHPUnit_Framework_TestCase
   
   public function setup(){
     $this->obj = new CT1_Mortgage(12, true, log(1.06), 10, 1000000);
-    $this->form = new CT1_Form($this->obj);
+    $this->form = new CT1_Concept_Mortgage($this->obj);
     $this->html = $this->form->get_calculator();
   }
   public function tearDown(){}

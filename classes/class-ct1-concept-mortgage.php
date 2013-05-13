@@ -20,6 +20,18 @@ public function get_calculator($exclude = array()){
 	return $out;
 }
 
+public function get_controller($_INPUT = array()){
+	if (isset($_INPUT[$this->get_prefix() . 'request'])){
+		if ('get_mortgage_instalment' == $_INPUT[$this->get_prefix() . 'request']){
+			$this->set_mortgage($_INPUT);
+			return $this->get_solution();
+		}
+	}
+	else{
+		return $this->get_calculator(array("delta"));
+	}
+}
+
 public function set_mortgage($_INPUT = array()){
 	$this->set_received_input($_INPUT);
 	$pre = $this->get_prefix();
@@ -28,6 +40,7 @@ public function set_mortgage($_INPUT = array()){
 
 } // end of class
 
+/*
 $IN = array('CT1_m'=>'12','CT1_i_effective'=>'0.06', 'CT1_advance'=>'on', 'CT1_principal'=>'1000000','CT1_term'=>10);
 //$IN = array();
 $concept = new CT1_Concept_Mortgage();
@@ -35,3 +48,4 @@ $concept->set_mortgage($IN);
 $html = $concept->get_calculator(array("delta"));
 echo $html;
 print_r($concept->get_solution());
+*/
