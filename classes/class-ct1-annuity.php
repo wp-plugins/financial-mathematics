@@ -30,7 +30,7 @@ public function get_values(){
 	return $r; 
 }
 
-public function __construct( $m = 1, $advance = false, $delta = 0, $term = 0 ){
+public function __construct( $m = 1, $advance = false, $delta = 0, $term = 1 ){
 	parent::__construct( $m, $advance, $delta);
 	$this->set_term($term);
 }

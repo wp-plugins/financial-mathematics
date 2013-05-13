@@ -38,10 +38,19 @@ public function get_calculator(
 		$out.= $this->get_form_inputs($parameters, $exclude, $valid_options, $values, $type);
 	}
 	$out.= $special_input;
+	$out.= $this->hidden_page();
 	$out.="<input type='hidden' name='" . $this->get_prefix() . "request' value='" . $request . "' />" . "\r\n";
 	$out.="<input type='submit' value='" . $submit . "' />" . "\r\n";
 	$out.="</form>" . "\r\n";
 	return $out;
+}
+
+private function current_page(){
+	return $_GET['page_id'];
+}
+
+private function hidden_page(){
+	return "<input type='hidden' name='page_id' value='" .$this->current_page() . "' />";
 }
 
 protected function set_received_input(&$_INPUT = array()){

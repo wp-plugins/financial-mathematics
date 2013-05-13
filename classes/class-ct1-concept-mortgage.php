@@ -11,7 +11,7 @@ public function __construct(CT1_Object $obj=null){
 }
 
 public function get_solution($unused_parameter=NULL){
-	return "<p>Mortgage schedule is " . print_r($this->obj->get_mortgage_schedule(),1) . ".</p>";
+	return "<p>Mortgage schedule is:</p><pre>" . print_r($this->obj->get_mortgage_schedule(),1) . "</pre></p>";
 }
 	
 public function get_calculator($exclude = array()){
@@ -41,11 +41,11 @@ public function set_mortgage($_INPUT = array()){
 } // end of class
 
 /*
-$IN = array('CT1_m'=>'12','CT1_i_effective'=>'0.06', 'CT1_advance'=>'on', 'CT1_principal'=>'1000000','CT1_term'=>10);
-//$IN = array();
+$IN = array('CT1_request'=>'get_mortgage_instalment','page_id'=>5, 'CT1_m'=>'1','CT1_i_effective'=>'0', 'CT1_advance'=>'on', 'CT1_principal'=>'1000000','CT1_term'=>10);
 $concept = new CT1_Concept_Mortgage();
+$html = $concept->get_controller($IN);
+//echo $html;
 $concept->set_mortgage($IN);
 $html = $concept->get_calculator(array("delta"));
-echo $html;
 print_r($concept->get_solution());
 */
