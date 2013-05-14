@@ -30,20 +30,40 @@ public function get_calculator(
 		$action='', 
 		$method='GET', 
 		$_dummy = NULL){
-	$out = ""; 
-	$out.="<form action='" . $action . "' method='" . $method . "'>" . "\r\n";
+	$form = new HTML_QuickForm2('CT1_calculator','GET');
+	$form->addDataSource(new HTML_QuickForm2_DataSource_Array( $this->obj->get_values() ) );
+//	$out = ""; 
+//	$out.="<form action='" . $action . "' method='" . $method . "'>" . "\r\n";
 	$parameters = $this->obj->get_parameters();
 	$valid_options = $this->obj->get_valid_options();
 	$values = $this->obj->get_values();
 	if (count($parameters) > 0){
-		$out.= $this->get_form_inputs($parameters, $exclude, $valid_options, $values, $type);
+		$fieldset = $form->addElement('fieldset')->setLabel('Fieldset Label');
+		foreach(array_keys($parameters) as $key){
+			if (!in_array($key, $exclude)){
+				$parameter = $parameters[$key];
+				$valid_option = array();
+				if (array_key_exists($key,$valid_options)){
+					$valid_option = $valid_options[$key];
+					if ('number'==$valid_option['type']) $input_type='text';
+					if ('boolean'==$valid_option['type']) $input_type='checkbox';
+					
+				}
+				$value = '';
+//				$out.= $this->get_input($valid_option, $parameter, $value, $type);
+				$fieldset->addElement($input_type, $key)->setLabel($parameter['label']);
+			}
+		}
+//		$out.= $this->get_form_inputs($parameters, $exclude, $valid_options, $values, $type);
 	}
-	$out.= $special_input;
-	$out.= $this->hidden_page();
-	$out.="<input type='hidden' name='" . $this->get_prefix() . "request' value='" . $request . "' />" . "\r\n";
-	$out.="<input type='submit' value='" . $submit . "' />" . "\r\n";
-	$out.="</form>" . "\r\n";
-	return $out;
+//	$out.= $special_input;
+//	$out.= $this->hidden_page();
+//	$out.="<input type='hidden' name='" . $this->get_prefix() . "request' value='" . $request . "' />" . "\r\n";
+//	$out.="<input type='submit' value='" . $submit . "' />" . "\r\n";
+	$fieldset->addElement('submit', null, array('value' => $submit));
+//	$out.="</form>" . "\r\n";
+	return $form;
+//	return $out;
 }
 
 private function current_page(){
