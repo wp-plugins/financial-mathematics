@@ -1,3 +1,0 @@
-
-for i in $(ls class*test*); do echo $i; phpunit  --colors $i; done
-

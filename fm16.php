@@ -9,20 +9,33 @@
         Licence: GPL2
 */  
 
-require 'classes/class-ct1-concept-mortgage.php';
-add_shortcode( 'concept_mortgage', 'concept_mortgage_proc' ); 
-add_shortcode( 'annuityCertain', 'annuityCertain_proc' ); // DISPLAY
+if ( ! class_exists( 'FM16' ) ){
 
-function annuityCertain_proc($attr){
-  return "<p>annuityCertain in FM16 </p>  ";
+class FM16{
+
+
+	public function __construct(){
+		require_once 'classes/class-ct1-concept-mortgage.php';
+		add_shortcode( 'concept_mortgage', 'concept_mortgage_proc' ); 
+		add_shortcode( 'annuityCertain', 'annuityCertain_proc' ); 
+	}
+
+	public function annuityCertain_proc($attr){
+		return "<p>annuityCertain in FM16 </p>  ";
+	}
+
+	public function concept_mortgage_proc($attr){
+		try{
+			$m = new CT1_Concept_Mortgage();
+			return $m->get_controller($_GET);
+		}
+		catch (Exception $e){
+			return "Exception " . $e->getMessage();
+		}
+	}
+
 }
 
-function concept_mortgage_proc($attr){
-	try{
-		$m = new CT1_Concept_Mortgage();
-		return $m->get_controller($_GET);
-	}
-	catch (Exception $e){
-		return "Exception " . $e->getMessage();
-	}
+$GLOBALS['fm16'] = new FM16();
+
 }

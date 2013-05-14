@@ -20,7 +20,7 @@ class CT1_Form_Test extends PHPUnit_Framework_TestCase
   public function test_form_mortgage()
   {
   
-  	$expected = file_get_contents("test-form-mortgage.html");
+  	$expected = file_get_contents($GLOBALS['test_directory'] . "test-form-mortgage.html");
 	  $this->assertEquals( $expected, $this->html ) ;
   }  
 
@@ -28,7 +28,7 @@ class CT1_Form_Test extends PHPUnit_Framework_TestCase
   {
   
     $this->html = $this->form->get_calculator(array("delta"));
-  	$expected = file_get_contents("test-form-mortgage-no-delta.html");
+  	$expected = file_get_contents($GLOBALS['test_directory'] . "test-form-mortgage-no-delta.html");
 	  $this->assertEquals( $expected, $this->html ) ;
   }  
   

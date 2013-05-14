@@ -46,11 +46,11 @@ public function get_calculator(
 }
 
 private function current_page(){
-	return $_GET['page_id'];
+	if (isset($_GET['page_id'])) return $_GET['page_id'];
 }
 
 private function hidden_page(){
-	return "<input type='hidden' name='page_id' value='" .$this->current_page() . "' />";
+	return "<input type='hidden' name='page_id' value='" .$this->current_page() . "' />" . "\r\n";
 }
 
 protected function set_received_input(&$_INPUT = array()){

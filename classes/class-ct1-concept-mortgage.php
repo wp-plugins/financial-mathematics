@@ -40,12 +40,4 @@ public function set_mortgage($_INPUT = array()){
 
 } // end of class
 
-/*
-$IN = array('CT1_request'=>'get_mortgage_instalment','page_id'=>5, 'CT1_m'=>'1','CT1_i_effective'=>'0', 'CT1_advance'=>'on', 'CT1_principal'=>'1000000','CT1_term'=>10);
-$concept = new CT1_Concept_Mortgage();
-$html = $concept->get_controller($IN);
-//echo $html;
-$concept->set_mortgage($IN);
-$html = $concept->get_calculator(array("delta"));
-print_r($concept->get_solution());
-*/
+
