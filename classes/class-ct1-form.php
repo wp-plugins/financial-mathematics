@@ -1,12 +1,11 @@
 <?php   
 
 require_once 'interface-ct1-concept.php';
-require_once 'functions.php';
-CT1_autoloader('HTML_QuickForm2','HTML/QuickForm2.php');
+//require_once 'functions.php';
+//CT1_autoloader('HTML_QuickForm2','HTML/QuickForm2.php');
 
 abstract class CT1_Form implements CT1_Concept {
 
-private $prefix = "CT1_";
 protected $obj;
 
 public function __construct(CT1_Object $obj){
@@ -17,53 +16,29 @@ public function set_obj(CT1_Object $obj){
 	$this->obj = $obj;
 }
 
-public function get_solution($parameters){
+public function get_solution(){
 	return;
 }
 
-public function get_calculator(
-		$exclude = array(), 
-		$request='',
-		$submit="Submit",
-		$type='', 
-		$special_input = '',
-		$action='', 
-		$method='GET', 
-		$_dummy = NULL){
-	$form = new HTML_QuickForm2('CT1_calculator','GET');
-	$form->addDataSource(new HTML_QuickForm2_DataSource_Array( $this->obj->get_values() ) );
-//	$out = ""; 
-//	$out.="<form action='" . $action . "' method='" . $method . "'>" . "\r\n";
-	$parameters = $this->obj->get_parameters();
-	$valid_options = $this->obj->get_valid_options();
-	$values = $this->obj->get_values();
-	if (count($parameters) > 0){
-		$fieldset = $form->addElement('fieldset')->setLabel('Fieldset Label');
-		foreach(array_keys($parameters) as $key){
-			if (!in_array($key, $exclude)){
-				$parameter = $parameters[$key];
-				$valid_option = array();
-				if (array_key_exists($key,$valid_options)){
-					$valid_option = $valid_options[$key];
-					if ('number'==$valid_option['type']) $input_type='text';
-					if ('boolean'==$valid_option['type']) $input_type='checkbox';
-					
-				}
-				$value = '';
-//				$out.= $this->get_input($valid_option, $parameter, $value, $type);
-				$fieldset->addElement($input_type, $key)->setLabel($parameter['label']);
-			}
-		}
-//		$out.= $this->get_form_inputs($parameters, $exclude, $valid_options, $values, $type);
-	}
-//	$out.= $special_input;
-//	$out.= $this->hidden_page();
-//	$out.="<input type='hidden' name='" . $this->get_prefix() . "request' value='" . $request . "' />" . "\r\n";
-//	$out.="<input type='submit' value='" . $submit . "' />" . "\r\n";
-	$fieldset->addElement('submit', null, array('value' => $submit));
-//	$out.="</form>" . "\r\n";
-	return $form;
-//	return $out;
+public function get_calculator( $parameters) {
+		// returns associative array which can be passed to a form renderer e.g. QuickForm2
+	$p = $parameters;
+	$this->get_form_parameters($p);
+	$return = array();
+	$return['name'] = 'CT1_calculator';
+	$return['method'] = $p['method'];
+	$return['parameters'] = $this->obj->get_parameters();
+	$return['valid_options'] = $this->obj->get_valid_options();
+	$return['values'] = $this->obj->get_values();
+	$return['request'] = $p['request'];
+	$return['submit'] = $p['submit'];
+	$return['type'] = $p['type'];
+	$return['special_input'] = $p['special_input'];
+	$return['action'] = $p['action'];
+	$return['exclude'] = $p['exclude'];
+	$return['render'] = $p['render'];
+	$return['introduction'] = $p['introduction'];
+	return $return;			
 }
 
 private function current_page(){
@@ -75,78 +50,32 @@ private function hidden_page(){
 }
 
 protected function set_received_input(&$_INPUT = array()){
-	$pre = $this->get_prefix();
 	foreach (array_keys($this->obj->get_parameters()) as $p){
-		if (!isset($_INPUT[$pre. $p])) $_INPUT[$pre. $p] = NULL;
+		if (!isset($_INPUT[$p])) $_INPUT[$p] = NULL;
 	}
 }
 
-private function get_form_inputs($parameters = array(), 
-		$exclude=array(), 
-		$valid_options= array(), 
-		$values=array(), 
-		$type=''){
-	$out = "";
-	if (count($parameters) > 0){
-		foreach(array_keys($parameters) as $key){
-			if (!in_array($key, $exclude)){
-				$parameter = $parameters[$key];
-				$valid_option = array();
-				if (array_key_exists($key,$valid_options)){
-					$valid_option = $valid_options[$key];
-				}
-				$value = '';
-				if (array_key_exists($key,$values)){
-					$value = $values[$key];
-				}
-				$out.= $this->get_input($valid_option, $parameter, $value, $type);
-			}
-		}
-		return $out;
+protected function get_form_parameters(&$_parameters = array()){
+	$def = $this->get_form_parameters_default();
+	foreach (array_keys($def) as $p){
+		if (!array_key_exists($p, $_parameters)) $_parameters[ $p] = $def[$p];
 	}
-
-}
-private function get_input(
-		$valid_option = array(), 
-		$parameter=array(), 
-		$value='', 
-		$type=''
-){
-	$out = "";
-	if (array_key_exists('type',$valid_option)){
-	if ('hidden'!=$type){
-  		$out.= "<p>" ."\r\n";
-  		$out.= "<label>" . $parameter['label'] . "\r\n";
-	}
-  	$out.= "<input ";
-  	$out.= "name='" . $this->get_prefix() . $parameter['name'] . "' ";
-	if ('hidden'==$type){
-		$out.= "type='hidden' ";
-  		$out.= "value='" . $value . "' ";
-  	}
-	else{
-		if ('number'==$valid_option['type']){
-			$out.= "type='text' ";
-  			$out.= "value='" . $value . "' ";
-  		}
-  		elseif ('boolean'==$valid_option['type']){
-			$out.= "type='checkbox' ";
-  			if (true == $value) $out.= "CHECKED ";
-		}
-  	}
-  	$out.= "/>" . "\r\n";
-	if ('hidden'!=$type){
-  		$out.= "</label>" . "\r\n";
-  		$out.= "</p>" ."\r\n";
-	}
-  }
-  return $out;
 }
 
-public function get_prefix(){ 
-	return $this->prefix;
+protected function get_form_parameters_default(){
+	return array( 'exclude' =>array(), 
+		'request'=>'',
+		'submit'=>"Submit",
+		'type'=>'', 
+		'special_input'=>'',
+		'action'=>'', 
+		'method'=>'GET', 
+		'render'=>'HTML', 
+		'introduction'=>'', 
+		);
 }
 
 }
+
 
 

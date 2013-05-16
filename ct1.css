@@ -1,3 +1,7 @@
+p.label{
+	display: inline;
+}
+
 table.schedule th{
 	padding: 8px;
 }

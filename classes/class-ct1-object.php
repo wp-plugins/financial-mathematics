@@ -6,7 +6,8 @@
  * @author     Owen Kellie-Smith owen@bdmfst.com
  */
 
-require_once 'Validate.php';
+//require_once 'functions.php';
+CT1_autoloader('Validate','Validate.php');
 
 /**
  * CT1 Object class
