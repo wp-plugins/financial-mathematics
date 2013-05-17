@@ -24,10 +24,11 @@ public function get_calculator($parameters){
 
 public function get_controller($_INPUT ){
 	if (isset($_INPUT['request'])){
-		$render = new CT1_Render();
 		if ('get_mortgage_instalment' == $_INPUT['request']){
-			$this->set_mortgage($_INPUT);
-			return "<pre>" . print_r($this->get_solution(),1) .  "</pre>";
+			if ($this->set_mortgage($_INPUT))
+				return "<pre>" . print_r($this->get_solution(),1) .  "</pre>";
+			else
+				return "<p>Error setting mortgage from:<pre>" . print_r($_INPUT,1) .  "</pre>";
 		}
 	}
 	else{
@@ -44,6 +45,7 @@ public function set_mortgage($_INPUT = array()){
 } // end of class
 
 /*
+// test case
 $obj = new CT1_Mortgage(12, true, log(1.06), 10, 1000000);
 $form = new CT1_Concept_Mortgage($obj);
 print_r($form->get_calculator(array()));

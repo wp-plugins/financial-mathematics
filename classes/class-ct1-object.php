@@ -55,6 +55,14 @@ abstract class CT1_Object {
      */
 	public function get_values(){ return array(); }
 		
+    /**
+     * List displayable labels of object
+     *
+     * @return array
+     *
+     * @access public
+     */
+	public function get_labels(){ return array(); }
 					
 } // end of class
 

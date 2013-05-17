@@ -111,7 +111,7 @@ class CT1_Interest_Format extends CT1_Object{
 	}
 
 	public function get_description(){
-		if ($this->isContinuous()) return "interest rate continuously compounded";
+		if ($this->is_continuous()) return "interest rate continuously compounded";
 		if ($this->advance) $out =  "discount rate";
 		else $out = "interest rate";
 		if (1!=$this->m) $out.=" convertible " . $this->m . " times per year";
@@ -119,11 +119,24 @@ class CT1_Interest_Format extends CT1_Object{
 	}
 
 	public function get_label(){
-		if ($this->isContinuous()) return "\\delta";
-		if ($this->advance) $out="d";
-		else $out="i";
-		if (1!=$this->m) $out.="^{(" . $this->m . ")}";
-		return $out;
+		return $this->label_interest_format();
+	}
+
+	protected function label_interest_format(){
+		if ($this->is_continuous()) $return = "\\delta";
+		else{
+			if ($this->advance) $out="d";
+			else $out="i";
+			if (1!=$this->m) $out.="^{(" . $this->m . ")}";
+			$return = $out;
+		}
+		return $return;
+	}
+
+	public function get_labels(){
+		$labels = parent::get_labels();
+		$labels['CT1_Interest_Format'] = $this->label_interest_format();
+		return $labels;
 	}
 
 	protected function is_continuous(){

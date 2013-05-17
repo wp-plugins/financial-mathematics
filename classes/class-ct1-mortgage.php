@@ -9,8 +9,8 @@ protected $principal;
 public function get_valid_options(){ 
 	$r = parent::get_valid_options();
 	$r['principal'] = array(
-						'type'=>'number',
-						'decimal'=>'.',
+					'type'=>'number',
+					'decimal'=>'.',
 					);
 	return $r; 
 }
@@ -72,12 +72,12 @@ public function get_mortgage_schedule(){
 		$_principal = $_principal + $int;
 		$capRepay = $oldPrincipal - $_principal;
 		$schedule[$i] = array(	'count' =>$i, 
-														'oldPrincipal'=>$oldPrincipal, 
-														'interest'=>$int, 
-														'capRepay'=>$capRepay, 
-														'newPrincipal' => $_principal, 
-														'instalment'=>$_inst,
-														);
+					'oldPrincipal'=>$oldPrincipal, 
+					'interest'=>$int, 
+					'capRepay'=>$capRepay, 
+					'newPrincipal' => $_principal, 
+					'instalment'=>$_inst,
+					);
     }
   return $schedule;
 }
@@ -95,6 +95,21 @@ public function set_from_input($_INPUT = array(), $pre = ''){
 	}
 }
 
+	public function get_label(){
+		return $this->label_mortgage();
+	}
+
+	protected function label_mortgage(){
+		return number_format($this->instalment_per_year()) . "\\ " . $this->label_annuity();
+	}
+
+	public function get_labels(){
+		$labels = parent::get_labels();
+		$labels['CT1_Mortgage'] = $this->label_mortgage();
+		return $labels;
+	}
 }
 
 
+$m = new CT1_Mortgage(4, true, 0.1, 10, 1000000);
+print_r($m->get_labels());
