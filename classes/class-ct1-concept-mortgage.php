@@ -12,8 +12,11 @@ public function __construct(CT1_Object $obj=null){
 }
 
 public function get_solution(){
-	$return = $this->obj->get_mortgage_schedule();
-	$return['introduction'] = "Mortgage schedule";
+//	$return = $this->obj->get_mortgage_schedule();
+//	$return['introduction'] = "Mortgage schedule";
+		$render = new CT1_Render();
+//		return $render->test_popup();
+	$return = $render->get_render_latex($this->obj->explain_instalment());
 	return $return;
 }
 	
@@ -26,7 +29,7 @@ public function get_controller($_INPUT ){
 	if (isset($_INPUT['request'])){
 		if ('get_mortgage_instalment' == $_INPUT['request']){
 			if ($this->set_mortgage($_INPUT))
-				return "<pre>" . print_r($this->get_solution(),1) .  "</pre>";
+				return $this->get_solution();
 			else
 				return "<p>Error setting mortgage from:<pre>" . print_r($_INPUT,1) .  "</pre>";
 		}

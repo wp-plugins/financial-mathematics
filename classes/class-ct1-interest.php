@@ -77,6 +77,27 @@ public function get_rate_in_form($f){
 	else	return $i_m;
 }
 
+public function explain_rate_in_form($f){
+	$return = array();
+	$return[0]['left'] = "\\delta";
+	$return[0]['right'] = $this->delta; 
+	if (!$f->is_continuous()){ 
+		if ($f->get_advance()){
+			$return[1]['left'] = $f->label_interest_format();
+			$return[1]['right'] =  "m \\left\{ 1 - \\exp{ \\left( -\\delta / m \\right) } \\right\}";
+			$return[2]['right'] =  $f->m . " \\times \\left\{ 1 - \\exp{ \\left( " . -$this->delta . " / ". $f->m ." \\right) } \\right\}";
+			$return[3]['right'] =  $this->get_rate_in_form($f);
+		}
+		else{
+			$return[1]['left'] = $f->get_label();
+			$return[1]['right'] =  "m \\left\{ \\exp{ \\left( \\delta / m \\right) }  - 1 \\right\}";
+			$return[2]['right'] =  $f->m . " \\times \\left\{ \\exp{ \\left( " . $this->delta . " / ". $f->m ." \\right) }  - 1 \\right\}";
+			$return[3]['right'] =  $this->get_rate_in_form($f);
+		}
+	}
+	return $return;
+}
+
 public function set_from_input($_INPUT = array(), $pre = ''){
 	try{
 		if (parent::set_from_input($_INPUT, $pre)){
@@ -100,3 +121,9 @@ public function set_from_input($_INPUT = array(), $pre = ''){
 
 } // end of class CT1_Interest
 
+// example
+//$s = new CT1_Interest(1,false,0.06);
+//$f = new CT1_Interest_Format(1,true);
+//$f = new CT1_Interest_Format(12,true);
+//$f = new CT1_Interest_Format(4,false);
+//print_r($s->explain_rate_in_form($f));

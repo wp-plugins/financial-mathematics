@@ -45,12 +45,28 @@ public function get_principal(){
 	return $this->principal;
 }
 
+public function get_instalment($rounding = 2){
+	return $this->instalment($rounding);
+}
+
+
+	public function explain_instalment($rounding = 2){
+		$return = array();
+		$return[0]['left'] = "\\mbox{Instalment amount }";
+		$return[0]['right'] = "\\frac{ \\mbox{Principal}}{ m " . $this->label_annuity() . "} ";
+		$return[1]['right']['summary'] = "\\frac{ " . $this->get_principal()  . "}{" . $this->get_m() . " \\times " . $this->get_annuity_certain() . "} ";
+		$return[1]['right']['detail'] = $this->explain_annuity_certain();
+		$return[2]['right'] = $this->get_instalment($rounding);
+		return $return;
+	}
+
+
 private function instalment_per_year(){
 	if (0==$this->get_annuity_certain()) return NULL;
 	return $this->get_principal() / $this->get_annuity_certain();
 }
 
-private function instalment($rounding){
+private function instalment($rounding = 2){
 	if ($this->is_continuous()) throw new Exception("Can't get instalments for continuously paid mortgage");
 	return round($this->instalment_per_year() / $this->get_m(), $rounding);
 }
@@ -111,5 +127,7 @@ public function set_from_input($_INPUT = array(), $pre = ''){
 }
 
 
-$m = new CT1_Mortgage(4, true, 0.1, 10, 1000000);
-print_r($m->get_labels());
+// example
+//$m = new CT1_Mortgage(4, true, 0.1, 10, 1000000);
+//print_r($m->get_labels());
+//print_r($m->explain_instalment());

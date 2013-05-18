@@ -55,6 +55,19 @@ class CT1_Annuity extends CT1_Interest{
 		return (1 - $vn) / $this->get_rate_in_form($this);
 	}
 
+	public function explain_annuity_certain(){
+		$return = array();
+		$return[0]['left'] = "\\delta";
+		$return[0]['right'] = $this->get_delta();
+		$return[1]['left'] = $this->label_annuity();
+		$return[1]['right'] =  "\\frac{ 1 - \\exp{ -\\delta n } }{ " . $this->label_interest_format() . " } ";
+		$return[2]['right']['summary'] =  "\\frac{ 1 - \\exp{ " . -$this->get_delta() . " \\times " . $this->get_term() . " } }{ " . $this->get_rate_in_form($this) . " } ";
+		$return[2]['right']['detail'] = $this->explain_rate_in_form($this);
+		$return[3]['right'] = $this->get_annuity_certain() ;
+		return $return;
+	}
+
+
 	public function set_from_input($_INPUT = array(), $pre = ''){
 		try{
 			if (parent::set_from_input($_INPUT, $pre)){
@@ -98,4 +111,5 @@ class CT1_Annuity extends CT1_Interest{
 // example 
 //$a = new CT1_Annuity(2, true, 0.1, 13);
 //print_r($a->get_labels());
+//print_r($a->explain_annuity_certain());
 
