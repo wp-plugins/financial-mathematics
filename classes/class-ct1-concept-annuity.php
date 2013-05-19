@@ -1,13 +1,13 @@
 <?php
 
-require_once 'class-ct1-annuity.php';
+require_once 'class-ct1-annuity-escalating.php';
 require_once 'class-ct1-form.php';
 require_once 'class-ct1-render.php';
 
 class CT1_Concept_Annuity extends CT1_Form{
 
 public function __construct(CT1_Object $obj=null){
-	if (null === $obj) $obj = new CT1_Annuity();
+	if (null === $obj) $obj = new CT1_Annuity_Escalating();
 	parent::__construct($obj);
 }
 
@@ -25,15 +25,16 @@ public function get_calculator($parameters){
 public function get_controller($_INPUT ){
 	if (isset($_INPUT['request'])){
 		if ('get_annuity' == $_INPUT['request']){
-			if ($this->set_annuity($_INPUT))
+			if ($this->set_annuity($_INPUT)){
 				return $this->get_solution();
-			else
+			} else {
 				return "<p>Error setting annuity from:<pre>" . print_r($_INPUT,1) .  "</pre>";
+			}
 		}
 	}
 	else{
 		$render = new CT1_Render();
-		return $render->get_render_form($this->get_calculator(array("delta")));
+		return $render->get_render_form($this->get_calculator(array("delta", "escalation_delta")));
 	}
 }
 

@@ -105,8 +105,48 @@ class CT1_Annuity_Escalating extends CT1_Annuity{
 		}
 	}
 
+	private function explain_net_interest_rate(){
+		$return[0]['left'] = "\\mbox{Net interest rate } \\delta";
+		$return[0]['right'] = "\\log \\left( \\frac{1 + \\mbox{ effective interest rate}}{ 1 + \\mbox{ effective escalation rate} } \\right) ";
+		$return[1]['right'] = "\\log \\left( \\frac{ " . (1 + $this->get_i_effective()) . "}{ " . (1 + $this->get_escalation_rate_effective()) . " } \\right) ";
+		$return[2]['right'] = $this->explain_format( $this->get_delta_net()  ) ;
+		return $return;
+	}
+
+	private function explain_annuity_certain_escalation_stepped(){
+		$a_flat = $this->a_flat();
+		$a_inc = $this->a_inc();
+		$sub[0]['left'] = "\\mbox{Annuity value}";
+		$sub[0]['right']['summary'] = $a_flat->label_annuity() . " (i_{\\mbox{gross}})" . " \\times  m_{\\mbox{esc}} \\times " . $a_inc->label_annuity() . "(\\delta_{\\mbox{net}})";
+		$sub[1]['right']['summary'] = $this->explain_format( $a_flat->get_annuity_certain() ) . " \\times " . $this->get_escalation_frequency() . " \\times " . $this->explain_format( $a_inc->get_annuity_certain() );
+		$sub[2]['right'] = $this->explain_format( $this->get_annuity_certain() );
+		$sub[0]['right']['detail'] = $a_flat->explain_annuity_certain();
+		$sub[1]['right']['detail'] = $a_inc->explain_annuity_certain();
+		return array_merge( $sub, $this->explain_net_interest_rate() );
+	}
+
+	private function explain_annuity_certain_escalation_continual(){
+		$a = new CT1_Annuity($this->get_m(), $this->get_advance(), $this->get_delta_net(), $this->get_term());
+		if ( $a->is_continuous() || $a->get_advance() ){
+			return array_merge( $this->explain_net_interest_rate(), $a->explain_annuity_certain() );
+		} else {
+			// deflate by implied escalation to first payment
+			$del_esc[0]['left'] = "\\delta_{\mbox{esc}}";
+			$del_esc[0]['right'] = "\\log \\left( 1 + \\mbox{ effective escalation rate} \\right)";
+			$del_esc[1]['right'] = "\\log \\left( " . (1 + $this->get_escalation_rate_effective() ) . " \\right)";
+			$del_esc[2]['right'] = $this->explain_format( $this->get_escalation_delta() );
+			$sub[0]['left'] = "\\mbox{Annuity value}";
+			$sub[0]['right']['summary'] = "\\exp \\left( - \\delta_{\mbox{esc}} / m \\right) \\times " . $this->label_annuity();
+			$sub[0]['right']['detail'] = $del_esc;
+			$sub[1]['right']['summary'] = "\\exp \\left( - " . $this->explain_format( $this->get_escalation_delta() ) . " / " . $this->get_m() . " \\right) \\times " . $this->explain_format( $a->get_annuity_certain() );
+			$sub[1]['right']['detail'] = $a->explain_annuity_certain();
+			$sub[2]['right'] = $this->explain_format( $this->get_annuity_certain() );
+			return array_merge( $sub, $this->explain_net_interest_rate() );
+		}
+	}
+
 	private function get_annuity_certain_escalation_continual(){
-		$a = new CT1_annuity($this->get_m(), $this->get_advance(), $this->get_delta_net(), $this->get_term());
+		$a = new CT1_Annuity($this->get_m(), $this->get_advance(), $this->get_delta_net(), $this->get_term());
 		$raw = $a->get_annuity_certain();
 		if ( $a->is_continuous() || $a->get_advance() ){
 			return $raw;
@@ -116,18 +156,26 @@ class CT1_Annuity_Escalating extends CT1_Annuity{
 		}	
 	}
 
-	private function get_annuity_certain_escalation_stepped(){
-		$a_flat = new CT1_annuity($this->get_m(), 
+	private function a_flat(){
+		return  new CT1_annuity($this->get_m(), 
 				$this->get_advance(), 
 				$this->get_delta(), 
 				1.0 / $this->get_escalation_frequency()
 				);
-		
-		$a_inc = new CT1_annuity($this->get_escalation_frequency(), 
+	}
+
+	private function a_inc(){
+		return  new CT1_annuity($this->get_escalation_frequency(), 
 				true, 
 				$this->get_delta_net(), 
 				$this->get_term()
 				);
+	}
+
+
+	private function get_annuity_certain_escalation_stepped(){
+		$a_flat = $this->a_flat();
+		$a_inc = $this->a_inc();
 		return $a_inc->get_annuity_certain() * $this->get_escalation_frequency() * $a_flat->get_annuity_certain();
 	}
 
@@ -137,18 +185,12 @@ class CT1_Annuity_Escalating extends CT1_Annuity{
 
 
 	public function explain_annuity_certain(){
-		$return = array();
-		$return[0]['left'] = $this->label_annuity();
-		if (0==$this->get_delta()){
-			$return[0]['right'] =  "n";
-			$return[1]['right'] =  $this->get_term();
+		$escalation_format = new CT1_Interest_Format( $this->get_escalation_frequency() );
+		if ( $escalation_format->is_continuous() || $this->get_escalation_frequency() >= $this->get_m() ){ 
+			return $this->explain_annuity_certain_escalation_continual();
 		} else {
-			$return[0]['right'] =  "\\frac{ 1 - \\exp{( -\\delta n) } }{ " . $this->label_interest_format() . " } ";
-			$return[1]['right']['summary'] =  "\\frac{ 1 - \\exp{ (" . $this->explain_format( -$this->get_delta() ) . " \\times " . $this->get_term() . ") } }{ " . $this->explain_format( $this->get_rate_in_form( $this ) ) . " } ";
-			$return[1]['right']['detail'] = $this->explain_rate_in_form( $this );
-			$return[2]['right'] = $this->explain_format( $this->get_annuity_certain() ) ;
+			return $this->explain_annuity_certain_escalation_stepped();
 		}
-		return $return;
 	}
 
 
@@ -157,8 +199,8 @@ class CT1_Annuity_Escalating extends CT1_Annuity{
 			if (parent::set_from_input($_INPUT, $pre)){
 				if ( isset( $_INPUT[$pre. 'escalation_delta'] ) )
 					$this->set_escalation_delta(	$_INPUT[$pre. 'escalation_delta'] );
-				if ( isset( $_INPUT[$pre. 'escalation_effective'] ) )
-					$this->set_escalation_rate_effective(	$_INPUT[$pre. 'escalation_effective'] );
+				if ( isset( $_INPUT[$pre. 'escalation_rate_effective'] ) )
+					$this->set_escalation_rate_effective(	$_INPUT[$pre. 'escalation_rate_effective'] );
 				$this->set_escalation_frequency(	$_INPUT[$pre. 'escalation_frequency'] );
 				return true;
 			}

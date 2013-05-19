@@ -57,11 +57,11 @@ class CT1_Interest_Format extends CT1_Object{
 		$r = parent::get_parameters();
 		$r['m'] = array(
 				'name'=>'m',
-				'label'=>'Frequency per year',
+				'label'=>'Instalment frequency per year',
 				);
 		$r['advance'] = array(
 				'name'=>'advance',
-				'label'=>'In advance',
+				'label'=>'Paid in advance',
 				);
 		return $r; 
 	}

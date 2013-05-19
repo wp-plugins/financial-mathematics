@@ -96,7 +96,7 @@ public function explain_rate_in_form($f){
 			$return[2]['right'] =  $this->explain_format($this->get_rate_in_form($f));
 		}
 		else{
-			$return[0]['left'] = $f->get_label();
+			$return[0]['left'] = $f->label_interest_format();
 			$return[0]['right'] =  "m \\left\{ \\exp{ \\left( \\delta / m \\right) }  - 1 \\right\}";
 			$return[1]['right']['summary'] =  $f->m . " \\times \\left\{ \\exp{ \\left( " . $this->explain_format($this->delta) . " / ". $f->m ." \\right) }  - 1 \\right\}";
 			$return[1]['right']['detail'] =  $explain_delta;

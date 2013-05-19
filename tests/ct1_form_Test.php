@@ -31,13 +31,13 @@ class CT1_Form_Test extends PHPUnit_Framework_TestCase
             'm' => array
                 (
                     'name' => 'm',
-                    'label' => 'Frequency per year',
+                    'label' => 'Instalment frequency per year',
                 ),
 
             'advance' => array
                 (
                     'name' => 'advance',
-                    'label' => 'In advance',
+                    'label' => 'Paid in advance',
                 ),
 
             'delta' => array
