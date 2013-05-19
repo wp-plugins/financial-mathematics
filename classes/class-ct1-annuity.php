@@ -38,7 +38,24 @@ class CT1_Annuity extends CT1_Interest{
 	public function set_term($n){
 		$candidate = array('term'=>$n);
 		$valid = $this->get_validation($candidate);
-		if ($valid['term']) $this->term = $n;
+		if ($valid['term']){
+			if ( $this->is_valid_term_vs_frequency( $n ) ){ 
+				$this->term = $n;
+			} else {
+				throw new Exception("Attempt to set term where frquency * term = number of instalments isn't an integer.  Annuity payment frequency is " . $this->get_m() . ", attempted term is " . $n . ".");
+			}
+		}
+	}
+
+	private function is_valid_term_vs_frequency( $n ){
+		// valid if continuous or $n * m integer
+		if ( $this->is_continuous() ) 
+			return true;
+		$close_enough = 0.00001;
+		$trial = $n * $this->get_m();
+		if ( $close_enough > abs( intval( $trial ) - $trial ) ) 
+			return true;
+		return false;
 	}
 
 	public function get_term(){
