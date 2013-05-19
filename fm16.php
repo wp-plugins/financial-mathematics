@@ -27,11 +27,31 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // plugin provides shortcodes (only)
 add_shortcode( 'concept_mortgage', 'concept_mortgage_proc' ); 
-add_shortcode( 'annuityCertain', 'annuityCertain_proc' ); 
+add_shortcode( 'annuityCertain', 'concept_annuity_proc' ); 
+add_shortcode( 'convertInt', 'concept_interest_proc' ); 
+
 
 // what shortcodes do
-function annuityCertain_proc($attr){
-	return "<p>annuityCertain in FM16 </p>  ";
+function concept_interest_proc($attr){
+	try{
+		CT1_autoloader('CT1_Concept_Interest', 'class-ct1-concept-interest.php');
+		$m = new CT1_Concept_Interest();
+		return $m->get_controller($_GET);
+	}
+	catch (Exception $e){
+		return "Exception " . $e->getMessage();
+	}
+}
+
+function concept_annuity_proc($attr){
+	try{
+		CT1_autoloader('CT1_Concept_Annuity', 'class-ct1-concept-annuity.php');
+		$m = new CT1_Concept_Annuity();
+		return $m->get_controller($_GET);
+	}
+	catch (Exception $e){
+		return "Exception " . $e->getMessage();
+	}
 }
 
 function concept_mortgage_proc($attr){

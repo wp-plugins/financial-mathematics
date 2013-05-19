@@ -1,34 +1,34 @@
 <?php
 
-require_once 'class-ct1-mortgage.php';
+require_once 'class-ct1-interest.php';
 require_once 'class-ct1-form.php';
 require_once 'class-ct1-render.php';
 
-class CT1_Concept_Mortgage extends CT1_Form{
+class CT1_Concept_Interest extends CT1_Form{
 
 public function __construct(CT1_Object $obj=null){
-	if (null === $obj) $obj = new CT1_Mortgage();
+	if (null === $obj) $obj = new CT1_Interest();
 	parent::__construct($obj);
 }
 
 public function get_solution(){
-		$render = new CT1_Render();
-	$return = $render->get_render_latex($this->obj->explain_instalment());
+	$render = new CT1_Render();
+	$return = $render->get_render_latex( $this->obj->explain_rate_in_form( $this->obj ) );
 	return $return;
 }
 	
 public function get_calculator($parameters){
-	$p = array('exclude'=>$parameters,'request'=>'get_mortgage_instalment', 'submit'=>'Just show me the instalment amount', 'introduction' => 'Calculate the amount of each level mortgage instalment.');
+	$p = array('exclude'=>$parameters,'request'=>'get_interest', 'submit'=>'Just show me the rate', 'introduction' => 'Express an annual effective interest rate in an alternative, equivalent form.');
 	return parent::get_calculator($p);
 }
 
 public function get_controller($_INPUT ){
 	if (isset($_INPUT['request'])){
-		if ('get_mortgage_instalment' == $_INPUT['request']){
-			if ($this->set_mortgage($_INPUT))
+		if ('get_interest' == $_INPUT['request']){
+			if ($this->set_interest($_INPUT))
 				return $this->get_solution();
 			else
-				return "<p>Error setting mortgage from:<pre>" . print_r($_INPUT,1) .  "</pre>";
+				return "<p>Error setting interest from:<pre>" . print_r($_INPUT,1) .  "</pre>";
 		}
 	}
 	else{
@@ -37,7 +37,7 @@ public function get_controller($_INPUT ){
 	}
 }
 
-public function set_mortgage($_INPUT = array()){
+public function set_interest($_INPUT = array()){
 	$this->set_received_input($_INPUT);
 	return ($this->obj->set_from_input($_INPUT));
 }

@@ -102,6 +102,8 @@ public function explain_rate_in_form($f){
 			$return[1]['right']['detail'] =  $explain_delta;
 			$return[2]['right'] =  $this->explain_format($this->get_rate_in_form($f));
 		}
+	} else {
+		$return = $explain_delta;
 	}
 	return $return;
 }
