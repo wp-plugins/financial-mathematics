@@ -57,13 +57,16 @@ class CT1_Annuity extends CT1_Interest{
 
 	public function explain_annuity_certain(){
 		$return = array();
-		$return[0]['left'] = "\\delta";
-		$return[0]['right'] = $this->get_delta();
-		$return[1]['left'] = $this->label_annuity();
-		$return[1]['right'] =  "\\frac{ 1 - \\exp{ -\\delta n } }{ " . $this->label_interest_format() . " } ";
-		$return[2]['right']['summary'] =  "\\frac{ 1 - \\exp{ " . -$this->get_delta() . " \\times " . $this->get_term() . " } }{ " . $this->get_rate_in_form($this) . " } ";
-		$return[2]['right']['detail'] = $this->explain_rate_in_form($this);
-		$return[3]['right'] = $this->get_annuity_certain() ;
+		$return[0]['left'] = $this->label_annuity();
+		if (0==$this->get_delta()){
+			$return[0]['right'] =  "n";
+			$return[1]['right'] =  $this->get_term();
+		} else {
+			$return[0]['right'] =  "\\frac{ 1 - \\exp{( -\\delta n) } }{ " . $this->label_interest_format() . " } ";
+			$return[1]['right']['summary'] =  "\\frac{ 1 - \\exp{ (" . $this->explain_format( -$this->get_delta() ) . " \\times " . $this->get_term() . ") } }{ " . $this->explain_format( $this->get_rate_in_form( $this ) ) . " } ";
+			$return[1]['right']['detail'] = $this->explain_rate_in_form( $this );
+			$return[2]['right'] = $this->explain_format( $this->get_annuity_certain() ) ;
+		}
 		return $return;
 	}
 

@@ -53,10 +53,10 @@ public function get_instalment($rounding = 2){
 	public function explain_instalment($rounding = 2){
 		$return = array();
 		$return[0]['left'] = "\\mbox{Instalment amount }";
-		$return[0]['right'] = "\\frac{ \\mbox{Principal}}{ m " . $this->label_annuity() . "} ";
-		$return[1]['right']['summary'] = "\\frac{ " . $this->get_principal()  . "}{" . $this->get_m() . " \\times " . $this->get_annuity_certain() . "} ";
+		$return[0]['right'] = "\\frac{ \\mbox{Principal}}{ " . $this->get_m() . "  " . $this->label_annuity() . "} ";
+		$return[1]['right']['summary'] = "\\frac{ " . number_format( $this->get_principal(), $rounding )  . "}{" . $this->get_m() . " \\times " . $this->explain_format( $this->get_annuity_certain()) . "} ";
 		$return[1]['right']['detail'] = $this->explain_annuity_certain();
-		$return[2]['right'] = $this->get_instalment($rounding);
+		$return[2]['right'] = number_format( $this->get_instalment($rounding), $rounding);
 		return $return;
 	}
 

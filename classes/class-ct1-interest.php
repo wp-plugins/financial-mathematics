@@ -7,6 +7,10 @@ require_once 'class-ct1-interest-format.php';
 class CT1_Interest extends CT1_Interest_Format  {
 
 protected $delta = 0;
+protected $max_dp = 8;
+protected function explain_format($d){
+	return number_format($d, $this->max_dp);
+}
 
 public function get_valid_options(){ 
 	$r = parent::get_valid_options();
@@ -79,20 +83,24 @@ public function get_rate_in_form($f){
 
 public function explain_rate_in_form($f){
 	$return = array();
-	$return[0]['left'] = "\\delta";
-	$return[0]['right'] = $this->delta; 
+	$explain_delta[0]['left'] = "\\delta";
+	$explain_delta[0]['right'] = "\\log \\left( 1 + i \\right)";
+	$explain_delta[1]['right'] = "\\log \\left( 1 + " . $this->explain_format($this->get_i_effective()) . " \\right)";
+	$explain_delta[2]['right'] = $this->explain_format($this->delta); 
 	if (!$f->is_continuous()){ 
 		if ($f->get_advance()){
-			$return[1]['left'] = $f->label_interest_format();
-			$return[1]['right'] =  "m \\left\{ 1 - \\exp{ \\left( -\\delta / m \\right) } \\right\}";
-			$return[2]['right'] =  $f->m . " \\times \\left\{ 1 - \\exp{ \\left( " . -$this->delta . " / ". $f->m ." \\right) } \\right\}";
-			$return[3]['right'] =  $this->get_rate_in_form($f);
+			$return[0]['left'] = $f->label_interest_format();
+			$return[0]['right'] =  "m \\left[ 1 - \\exp{ \\left( -\\delta / m \\right) } \\right]";
+			$return[1]['right']['summary'] =  $f->m . " \\times \\left[ 1 - \\exp{ \\left( " . $this->explain_format(-$this->delta) . " / ". $f->m ." \\right) } \\right]";
+			$return[1]['right']['detail'] =  $explain_delta;
+			$return[2]['right'] =  $this->explain_format($this->get_rate_in_form($f));
 		}
 		else{
-			$return[1]['left'] = $f->get_label();
-			$return[1]['right'] =  "m \\left\{ \\exp{ \\left( \\delta / m \\right) }  - 1 \\right\}";
-			$return[2]['right'] =  $f->m . " \\times \\left\{ \\exp{ \\left( " . $this->delta . " / ". $f->m ." \\right) }  - 1 \\right\}";
-			$return[3]['right'] =  $this->get_rate_in_form($f);
+			$return[0]['left'] = $f->get_label();
+			$return[0]['right'] =  "m \\left\{ \\exp{ \\left( \\delta / m \\right) }  - 1 \\right\}";
+			$return[1]['right']['summary'] =  $f->m . " \\times \\left\{ \\exp{ \\left( " . $this->explain_format($this->delta) . " / ". $f->m ." \\right) }  - 1 \\right\}";
+			$return[1]['right']['detail'] =  $explain_delta;
+			$return[2]['right'] =  $this->explain_format($this->get_rate_in_form($f));
 		}
 	}
 	return $return;

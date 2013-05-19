@@ -100,6 +100,9 @@ class CT1_Interest_Format extends CT1_Object{
 	}
  
 	public function set_advance($b){
+		if ('on' == $b) $b = true;
+		if ('1' == $b) $b = true;
+		if (1 == $b) $b = true;
 		if (is_bool($b)) $this->advance = $b;
 	}
 
