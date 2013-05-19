@@ -163,8 +163,9 @@ class CT1_Interest_Format extends CT1_Object{
 } // end of class
 
 
-/*
-$ir = new CT1_Interest_Format();
-  $values = array('m'=>-1);
-	print_r(Validate::multiple($values, $ir->valid_options));
-*/
+//$ir = new CT1_Interest_Format();
+//$ir->set_advance(true);
+//$ir->set_advance(false);
+//	print_r( $ir->get_values() );
+//if(	$ir->get_advance() ) print_r( "true");
+//else print_r("false");

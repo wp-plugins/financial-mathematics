@@ -3,7 +3,7 @@ require_once 'class-ct1-annuity.php';
 
 class CT1_Annuity_Escalating extends CT1_Annuity{
 
-	protected $escalation_rate;
+	protected $escalation_delta;
 	protected $escalation_frequency;
 
 	public function get_valid_options(){ 
@@ -58,7 +58,8 @@ class CT1_Annuity_Escalating extends CT1_Annuity{
 	public function set_escalation_rate_effective( $r ){
 		$candidate = array( 'escalation_rate_effective'=>$r );
 		$valid = $this->get_validation( $candidate );
-		if ( $valid['escalation_rate_effective'] ) $this->escalation_rate_effective = $r;
+		if ( $valid['escalation_rate_effective'] ) 
+			$this->set_escalation_delta( log( 1 + $r) );
 	}
 
 	public function get_escalation_rate_effective(){
@@ -97,7 +98,7 @@ class CT1_Annuity_Escalating extends CT1_Annuity{
 
 	public function get_annuity_certain(){
 		$escalation_format = new CT1_Interest_Format( $this->get_escalation_frequency() );
-		if ( $escalation_format->is_continuous() || $this->get_escalation_frequency() > $this->get_m() ){ 
+		if ( $escalation_format->is_continuous() || $this->get_escalation_frequency() >= $this->get_m() ){ 
 			return $this->get_annuity_certain_escalation_continual();
 		} else {
 			return $this->get_annuity_certain_escalation_stepped();
@@ -105,11 +106,7 @@ class CT1_Annuity_Escalating extends CT1_Annuity{
 	}
 
 	private function get_annuity_certain_escalation_continual(){
-		$a = new CT1_annuity($this->get_m(), 
-				$this->get_advance(), 
-				$this->get_delta_net(), 
-				$this->get_term()
-				);
+		$a = new CT1_annuity($this->get_m(), $this->get_advance(), $this->get_delta_net(), $this->get_term());
 		$raw = $a->get_annuity_certain();
 		if ( $a->is_continuous() || $a->get_advance() ){
 			return $raw;
@@ -200,8 +197,8 @@ class CT1_Annuity_Escalating extends CT1_Annuity{
 }
 
 // example 
-$a = new CT1_Annuity_Escalating(998, true, 0.1, 13, 1, 0.1);
-print_r($a->get_values());
-print_r($a->get_annuity_certain());
+//$a = new CT1_Annuity_Escalating(998, true, 0.1, 13, 1, 0.1);
+//print_r($a->get_values());
+//print_r($a->get_annuity_certain());
 //print_r($a->explain_annuity_certain());
 
