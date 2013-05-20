@@ -117,7 +117,7 @@ class CT1_Annuity_Escalating extends CT1_Annuity{
 		$a_flat = $this->a_flat();
 		$a_inc = $this->a_inc();
 		$sub[0]['left'] = "\\mbox{Annuity value}";
-		$sub[0]['right']['summary'] = $a_flat->label_annuity() . " (i_{\\mbox{gross}})" . " \\times  m_{\\mbox{esc}} \\times " . $a_inc->label_annuity() . "(\\delta_{\\mbox{net}})";
+		$sub[0]['right']['summary'] = $a_flat->label_annuity() . " (i_{gross})" . " \\times  m_{esc} \\times " . $a_inc->label_annuity() . "(\\delta_{net})";
 		$sub[1]['right']['summary'] = $this->explain_format( $a_flat->get_annuity_certain() ) . " \\times " . $this->get_escalation_frequency() . " \\times " . $this->explain_format( $a_inc->get_annuity_certain() );
 		$sub[2]['right'] = $this->explain_format( $this->get_annuity_certain() );
 		$sub[1]['right']['detail'][0] = $a_flat->explain_annuity_certain();
