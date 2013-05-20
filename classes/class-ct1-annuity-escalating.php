@@ -217,19 +217,6 @@ class CT1_Annuity_Escalating extends CT1_Annuity{
 		return $this->label_annuity();
 	}
 
-	protected function label_annuity(){
-		$sub_n = "_{\\overline{" . $this->get_term() . "|}}";
-		if ($this->is_continuous()) $return = "\\overline{a}";
-		else{
-			if ($this->advance) $out="\\ddot{a}";
-			else $out="a";
-			if (1!=$this->m) $out.="^{(" . $this->m . ")}";
-			$return = $out;
-		}
-		$return .= $sub_n;
-		return $return;
-	}
-
 	public function get_labels(){
 		$labels = parent::get_labels();
 		$labels['CT1_Annuity'] = $this->label_annuity();

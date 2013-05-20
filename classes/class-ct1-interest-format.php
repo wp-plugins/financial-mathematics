@@ -99,6 +99,16 @@ class CT1_Interest_Format extends CT1_Object{
 		return $this->advance;
 	}
  
+	protected function my_bool($b){
+		if ('on' == $b) 
+			return true;
+		if ('1' == $b) 
+			return true;
+		if (1 == $b) 
+			return true;
+		return false;
+	}
+
 	public function set_advance($b){
 		if ('on' == $b) $b = true;
 		if ('1' == $b) $b = true;

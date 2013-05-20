@@ -107,16 +107,24 @@ class CT1_Annuity extends CT1_Interest{
 		return $this->label_annuity();
 	}
 
+	protected function top_corner($n){
+		return  "\\overline{" . $n . "|}";
+	}
+	
+	protected function sub_n(){
+		return "_{ " . $this->top_corner( $this->get_term() ) . "}";
+	}
+
+
 	protected function label_annuity(){
-		$sub_n = "_{\\overline{" . $this->get_term() . "|}}";
-		if ($this->is_continuous()) $return = "\\overline{a}";
+		if ($this->is_continuous()) $return = "\\bar{a}";
 		else{
 			if ($this->advance) $out="\\ddot{a}";
 			else $out="a";
 			if (1!=$this->m) $out.="^{(" . $this->m . ")}";
 			$return = $out;
 		}
-		$return .= $sub_n;
+		$return .= $this->sub_n();
 		return $return;
 	}
 
