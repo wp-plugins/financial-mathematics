@@ -24,16 +24,29 @@ private function get_render_latex_sentence( $equation_array, $label = '' ){
 				$out.= " & ";
 			}
 			if (array_key_exists('right', $e)){
-				if (array_key_exists('summary', $e['right'])){
-					$out.= " = " . $e['right']['summary'] ;
-					if (array_key_exists('detail', $e['right'])){
-						// refer forward to equation $c
-						$out .= " \\mbox{ by \\eqref{eq:" . $c . "}}";
-						$detail[] = array(
-								'equation' => $e['right']['detail'],
-								'label' => $c,
-								);
-//						echo "<pre>"; print_r($detail); echo "</pre>";
+				if ( is_array( $e['right'] ) ){
+					if (array_key_exists('summary', $e['right'])){
+						$out.= " = " . $e['right']['summary'] ;
+						if (array_key_exists('detail', $e['right'])){
+							// refer forward to equation $c
+							// count now may forward refs you need here ?????
+							if ( $this->is_sentence( $e['right']['detail'] ) ) {
+								$out .= " \\mbox{ by \\eqref{eq:" . $c . "}}";
+							} else {
+								$count_refs = count( $e['right']['detail'] );
+								$eqlist = "";
+								for ($subeq = 1; $subeq < $count_refs; $subeq++){
+									$eqlist.= "\\eqref{eq:" . $c . "." . $subeq . "}, ";
+								}
+								$eqlist.= "\\eqref{eq:" . $c . "." . $count_refs . "}";
+								$out .= " \\mbox{ by " . $eqlist . "}";
+							}
+							$detail[] = array(
+									'equation' => $e['right']['detail'],
+									'label' => $c,
+									);
+//							echo "<pre>"; print_r($detail); echo "</pre>";
+						}
 					}
 				}
 				else{
@@ -48,6 +61,21 @@ private function get_render_latex_sentence( $equation_array, $label = '' ){
 	return array('output'=>$out, 'detail'=>$detail);
 }
 
+private function is_sentence( $e ){
+	echo "is_sentence" . "\r\n";
+	print_r($e);
+	if ( is_array( $e ) ){
+		if ( count($e) > 0 ){
+			if ( is_array( $e[0] ) ){
+				if( isset( $e[0]['left'] ) || isset( $e[0]['right'] ) ){
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+
 public function get_render_latex( $equation_array ){
 	// would be better if this were just recursive but I don't know how
 	if (count($equation_array) > 0 ) {
@@ -59,10 +87,21 @@ public function get_render_latex( $equation_array ){
 		while ( $count_levels < CT1_maximum_levels_detail && isset( $output['detail'] ) ) {
 			$count_levels++;
 			if ( 0 < count( $output['detail'] ) ){
+				// CHECK HERE how many sets of details there are
 				foreach ($output['detail'] as $e) {
-					$output = $this->get_render_latex_sentence( $e['equation'], $e['label'] );
-					$out .= " \\\\" . "\r\n"; // close off the last line
-					$out .= $output['output'] . "\r\n";
+					if ( $this->is_sentence( $e['equation'] ) ) {
+						$output = $this->get_render_latex_sentence( $e['equation'], $e['label'] );
+						$out .= " \\\\" . "\r\n"; // close off the last line
+						$out .= $output['output'] . "\r\n";
+					} else {
+						$sub_count = 0;
+						foreach ($e['equation'] as $e_detail) {
+							$sub_count++;
+							$output = $this->get_render_latex_sentence( $e_detail, $e['label'] . "." . $sub_count );
+							$out .= " \\\\" . "\r\n"; // close off the last line
+							$out .= $output['output'] . "\r\n";
+						}
+					}
 				}
 			}
 		}
@@ -177,4 +216,31 @@ private function get_data_uri($string){
 
 }
 
+// example
+function _dummy_equation(){
 
+	$s = array();
+	$t = array();
+	$e = array();
+	$s[0]['left'] = "a";
+	$s[0]['right'] = "formual fro a";
+	$t[0]['left'] = "b";
+	$t[0]['right'] = "formual for b";
+	$u[0]['left'] = "c";
+	$u[0]['right'] = "formual for c";
+	$e[0]['left'] = "main result";
+	$e[0]['right']['summary'] = "main formula using a and b";
+	$e[0]['right']['detail'][0] = $s;
+	$e[0]['right']['detail'][1] = $t;
+	$e[0]['right']['detail'][2] = $u;
+//	$e[0]['right']['detail'] = $t;
+	
+	return $e;
+}
+
+
+//example
+//print_r( __FILE__ );
+//$r = new CT1_Render();
+//print_r( _dummy_equation()  );
+//print_r( $r->get_render_latex( _dummy_equation() ) );
