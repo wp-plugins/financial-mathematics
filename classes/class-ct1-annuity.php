@@ -115,6 +115,10 @@ class CT1_Annuity extends CT1_Interest{
 		return "_{ " . $this->top_corner( $this->get_term() ) . "}";
 	}
 
+	protected function sub_int(){
+		return "";
+		return "@ " . number_format( 100* $this->get_i_effective(), 2 ) . "\\%";
+	}
 
 	protected function label_annuity(){
 		if ($this->is_continuous()) $return = "\\bar{a}";
@@ -125,6 +129,7 @@ class CT1_Annuity extends CT1_Interest{
 			$return = $out;
 		}
 		$return .= $this->sub_n();
+		$return .= $this->sub_int();
 		return $return;
 	}
 

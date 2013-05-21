@@ -103,7 +103,7 @@ class CT1_Annuity_Increasing extends CT1_Annuity{
 
 	private function explain_annuity_certain_nil_interest(){
 		$n = $this->get_term();
-		$sub[0]['left'] = $this->label_annuity_increasing() . " = "  . $this->label_annuity_increasing();
+		$sub[0]['left'] = $this->label_annuity_increasing();
 		$sub[0]['right'] = "\\sum_{j = 1}^{n} j";
 		$sub[1]['right'] = "\\frac{n (n+1)}{2}";
 		$sub[2]['right'] = "\\frac{ " . $n  . "\\times " . ($n+1) . "}{2}";
