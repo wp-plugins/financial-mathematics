@@ -9,14 +9,14 @@ class CT1_Annuity_Increasing extends CT1_Annuity{
 
 	public function get_valid_options(){ 
 		$r = parent::get_valid_options();
-		$r['m']['decimal'] = false;  // allow only whole numbers of years term
+		$r['term']['decimal'] = false;  // allow only whole numbers of years term
 		$r['increasing'] = $r['advance'];
 		return $r; 
 	}
 
 	public function get_parameters(){ 
 		$r = parent::get_parameters();
-		$r['m']['label'] = '(Whole) number of years term';
+		$r['term']['label'] = '(Whole) number of years term';
 		$r['increasing'] = array(
 			'name'=>'increasing',
 			'label'=>'Annuity amount changes by 1 per year: increases?',
