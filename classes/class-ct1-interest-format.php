@@ -165,7 +165,7 @@ class CT1_Interest_Format extends CT1_Object{
 			return true;
 		}
 		catch( Exception $e ){ 
-			return false; 
+			throw new Exception( "Exception in " . __FILE__ . ": " . $e->getMessage() );
 		}
 	}
 

@@ -67,6 +67,7 @@ class CT1_Annuity_Escalating extends CT1_Annuity{
 	}
 
 	public function set_escalation_frequency( $r ){
+		if ( NULL == $r ) $r=1;
 		$candidate = array( 'escalation_frequency'=>$r );
 		$valid = $this->get_validation( $candidate );
 		if ( $valid['escalation_frequency'] && $this->is_valid_escalation_frequency( $r ) ) { 
@@ -209,7 +210,7 @@ class CT1_Annuity_Escalating extends CT1_Annuity{
 			}
 		}
 		catch( Exception $e ){ 
-			return false; 
+			throw new Exception( "Exception in " . __FILE__ . ": " . $e->getMessage() );
 		}
 	}
 

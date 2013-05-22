@@ -124,7 +124,7 @@ public function set_from_input($_INPUT = array(), $pre = ''){
 		}
 	}
 	catch( Exception $e ){ 
-		return false; 
+		throw new Exception( "Exception in " . __FILE__ . ": " . $e->getMessage() );
 	}
 }
 

@@ -158,6 +158,17 @@ class CT1_Annuity extends CT1_Interest{
 		return (1 - $vn) / $this->get_rate_in_form($this);
 	}
 
+	public function explain_interest_rate_for_value(){
+		$return = array();
+		$a_calc = new CT1_Annuity( $this->get_m(), $this->get_advance(), 0, $this->get_term() );
+		$a_calc->set_delta( $this->get_delta_for_value() );
+		$return[0]['left'] = "\\mbox{Through trial and interpolation}, i";
+		$return[0]['right']['summary'] = $this->explain_format( exp( $this->get_delta_for_value() ) - 1);
+		$return[0]['right']['detail'] = $a_calc->explain_annuity_certain();
+		return $return;
+	}
+
+
 	public function explain_annuity_certain(){
 		$return = array();
 		$return[0]['left'] = $this->label_annuity();
@@ -178,6 +189,7 @@ class CT1_Annuity extends CT1_Interest{
 		try{
 			if (parent::set_from_input($_INPUT, $pre)){
 				$this->set_term(	$_INPUT[$pre. 'term'] );
+				$this->set_value(	$_INPUT[$pre. 'value'] );
 				return true;
 			}
 			else{
@@ -185,7 +197,7 @@ class CT1_Annuity extends CT1_Interest{
 			}
 		}
 		catch( Exception $e ){ 
-			return false; 
+			throw new Exception( "Exception in " . __FILE__ . ": " . $e->getMessage() );
 		}
 	}
 
@@ -228,10 +240,10 @@ class CT1_Annuity extends CT1_Interest{
 }
 
 // example 
-//$a = new CT1_Annuity(12, true, 0.1, 2);
-//$a->set_value(1.234567890123456789);
+//$a = new CT1_Annuity(12, true, 0.1, 12);
+//$a->set_value(11.234567890123456789);
 //print_r($a->get_values());
 //print_r($a->get_delta_for_value());
 //$a->set_delta( $a->get_delta_for_value() );
-//print_r($a->explain_annuity_certain());
+//print_r($a->explain_interest_rate_for_value());
 

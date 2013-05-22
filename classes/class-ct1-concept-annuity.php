@@ -17,6 +17,12 @@ public function get_solution(){
 	return $return;
 }
 	
+public function get_interest_rate(){
+	$render = new CT1_Render();
+	$return = $render->get_render_latex($this->obj->explain_interest_rate_for_value());
+	return $return;
+}
+
 public function get_calculator($parameters){
 	$p = array('exclude'=>$parameters,'request'=>'get_annuity', 'submit'=>'Just show me the annuity value', 'introduction' => 'Calculate the present value of an annuity certain.');
 	return parent::get_calculator($p);
@@ -26,7 +32,12 @@ public function get_controller($_INPUT ){
 	if (isset($_INPUT['request'])){
 		if ('get_annuity' == $_INPUT['request']){
 			if ($this->set_annuity($_INPUT)){
-				return $this->get_solution();
+//				echo "<pre>" . print_r( $this->obj->get_values(), 1) . "</pre>";
+				if (!isset( $_INPUT['value'] ) ){
+					return $this->get_solution();
+				} else {
+					return $this->get_interest_rate();
+				}
 			} else {
 				return "<p>Error setting annuity from:<pre>" . print_r($_INPUT,1) .  "</pre>";
 			}
@@ -40,6 +51,7 @@ public function get_controller($_INPUT ){
 
 public function set_annuity($_INPUT = array()){
 	$this->set_received_input($_INPUT);
+//				echo "<pre> INPUT" . print_r( $_INPUT, 1) . "</pre>";
 	return ($this->obj->set_from_input($_INPUT));
 }
 

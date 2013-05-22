@@ -40,7 +40,7 @@ function concept_interest_proc($attr){
 		return $m->get_controller($_GET);
 	}
 	catch (Exception $e){
-		return "Exception " . $e->getMessage();
+		return "Exception in " . __FILE__ . ": " . $e->getMessage();
 	}
 }
 
@@ -51,7 +51,7 @@ function concept_annuity_increasing_proc($attr){
 		return $m->get_controller($_GET);
 	}
 	catch (Exception $e){
-		return "Exception " . $e->getMessage();
+		return "Exception in " . __FILE__ . ": " . $e->getMessage();
 	}
 }
 
@@ -62,7 +62,7 @@ function concept_annuity_proc($attr){
 		return $m->get_controller($_GET);
 	}
 	catch (Exception $e){
-		return "Exception " . $e->getMessage();
+		return "Exception in " . __FILE__ . ": " . $e->getMessage();
 	}
 }
 
@@ -73,7 +73,7 @@ function concept_mortgage_proc($attr){
 		return $m->get_controller($_GET);
 	}
 	catch (Exception $e){
-		return "Exception " . $e->getMessage();
+		return "Exception in " . __FILE__ . ": " . $e->getMessage();
 	}
 }
 

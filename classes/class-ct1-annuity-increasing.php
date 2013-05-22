@@ -169,7 +169,7 @@ class CT1_Annuity_Increasing extends CT1_Annuity{
 			}
 		}
 		catch( Exception $e ){ 
-			return false; 
+			throw new Exception( "Exception in " . __FILE__ . ": " . $e->getMessage() );
 		}
 	}
 
