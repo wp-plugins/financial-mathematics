@@ -93,6 +93,9 @@ private function is_sentence( $e ){
 }
 
 public function get_render_latex( $equation_array ){
+//echo "<pre>";
+//print_r( $equation_array );
+//echo "</pre>";
     // would be better if this were just recursive but I don't know how
     if (count($equation_array) > 0 ) {
         $out  = $this->get_mathjax_header() .  "\r\n";

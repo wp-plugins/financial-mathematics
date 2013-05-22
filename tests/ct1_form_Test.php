@@ -9,20 +9,14 @@ class CT1_Form_Test extends PHPUnit_Framework_TestCase
   private $form;
   private $calculator;
   private $obj;
+  private $expected;
   
   public function setup(){
     $this->obj = new CT1_Mortgage(12, true, log(1.06), 10, 1000000);
     $this->form = new CT1_Concept_Mortgage($this->obj);
 	$empty = array();
     $this->calculator = $this->form->get_calculator( $empty );
-  }
-  public function tearDown(){}
-  
-  public function test_form_mortgage()
-  {
-  
-  
-  $expected = array
+  $this->expected = array
 (
     'name' => 'CT1_calculator',
     'method' => 'GET',
@@ -56,6 +50,12 @@ class CT1_Form_Test extends PHPUnit_Framework_TestCase
                 (
                     'name' => 'term',
                     'label' => 'Term (years)',
+                ),
+
+            'value' => array
+                (
+                    'name' => 'value',
+                    'label' => 'Present value',
                 ),
 
             'principal' => array
@@ -100,6 +100,12 @@ class CT1_Form_Test extends PHPUnit_Framework_TestCase
                     'min' => '0',
                 ),
 
+            'value' => array
+                (
+                    'type' => 'number',
+                    'decimal' => '.',
+                ),
+
             'principal' => array
                 (
                     'type' => 'number',
@@ -110,12 +116,13 @@ class CT1_Form_Test extends PHPUnit_Framework_TestCase
 
     'values' => array
         (
-            'm' => '12',
-            'advance' => '1',
-            'delta' => '0.058268908123976',
-            'i_effective' => '0.06',
-            'term' => '10',
-            'principal' => '1000000',
+            'm' => 12,
+            'advance' => true,
+            'delta' => 0.058268908123976,
+            'i_effective' => 0.06,
+            'term' => 10,
+            'value' => 1000000,
+            'principal' => 1000000,
         ),
 
     'request' => 'get_mortgage_instalment',
@@ -130,8 +137,14 @@ class CT1_Form_Test extends PHPUnit_Framework_TestCase
     'render' => 'HTML',
     'introduction' => 'Calculate the amount of each level mortgage instalment.',
 );
+  }
 
-	  $this->assertEquals( $expected, $this->calculator ) ;
+  public function tearDown(){}
+  
+  public function test_form_mortgage()
+  {
+  
+	  $this->assertEquals( $this->expected['values'], $this->calculator['values'] ) ;
   }  
 
   

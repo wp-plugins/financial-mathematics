@@ -4,6 +4,7 @@ require_once 'class-ct1-interest.php';
 class CT1_Annuity extends CT1_Interest{
 
 	protected $term;
+	protected $value;
 
 	public function get_valid_options(){ 
 		$r = parent::get_valid_options();
@@ -11,6 +12,11 @@ class CT1_Annuity extends CT1_Interest{
 						'type'=>'number',
 						'decimal'=>'.',
 						'min'=>0,
+					);
+		$r['value'] = array(
+						'type'=>'number',
+						'decimal'=>'.',
+						'min'=>0.000001,
 					);
 		return $r; 
 	}
@@ -21,12 +27,17 @@ class CT1_Annuity extends CT1_Interest{
 			'name'=>'term',
 			'label'=>'Term (years)',
 			);
+		$r['value'] = array(
+			'name'=>'value',
+			'label'=>'Present value',
+			);
 		return $r; 
 	}
 
 	public function get_values(){ 
 		$r = parent::get_values();
 		$r['term'] = $this->get_term();
+		$r['value'] = $this->get_value();
 		return $r; 
 	}
 
@@ -47,6 +58,14 @@ class CT1_Annuity extends CT1_Interest{
 		}
 	}
 
+	public function set_value($n){
+		$candidate = array('value'=>$n);
+		$valid = $this->get_validation($candidate);
+		if ($valid['value']){
+			$this->value = $n;
+		}
+	}
+
 	private function is_valid_term_vs_frequency( $n ){
 		// valid if continuous or $n * m integer
 		if ( $this->is_continuous() ) 
@@ -62,8 +81,75 @@ class CT1_Annuity extends CT1_Interest{
 		return $this->term;
 	}
 
+	public function get_value(){
+		if ( isset( $this->value ) )
+			return $this->value;
+		else
+			return $this->get_annuity_certain();
+	}
+
 	public function get_annuity_certain_approx(){
 		return $this->term / (1.0 + 0.5 * $this->term * (exp($this->delta)-1) );
+	}
+
+	public function get_delta_for_value(){
+		if ( !isset( $this->value ) ){
+			return $this->get_delta();
+		} else {
+			return $this->get_interpolated_delta_for_value();
+		}
+	}
+
+	private function get_interpolated_value( $guesses ){
+		// return linear interpolation for f(x) = 0
+		$x0 = $guesses[0]['x'];
+		$f0 = $guesses[0]['f'];
+		$x1 = $guesses[1]['x'];
+		$f1 = $guesses[1]['f'];
+		if ($f1 == $f0 ) {
+			return $x0;
+		} else {
+			return $x0 - $f0 * ($x1 - $x0 ) / ( $f1 - $f0 );
+		}
+	}
+ 
+	private function get_interpolated_delta_for_value(){
+		$a_calc = new CT1_Annuity( $this->get_m(), $this->get_advance(), 0, $this->get_term() );
+		$max_loop = 100;
+		$min_diff_x = 0.0000000000001;
+		$start_diff = 0.001; // anything more than min_diff_x
+		$diff_x = 99999;
+		$loop_count = 0;
+		$x0 = $this->get_approx_yield();
+		$x1 = $x0 + $start_diff;
+		while ( $loop_count < $max_loop && $diff_x > $min_diff_x ) {
+			$g[0]['x'] = $x0;
+			$g[1]['x'] = $x1;
+			$a_calc->set_delta( $x0 );
+			$g[0]['f'] = $a_calc->get_annuity_certain() - $this->get_value();
+			$a_calc->set_delta( $x1 );
+			$g[1]['f'] = $a_calc->get_annuity_certain() - $this->get_value();
+			$x2 = $this->get_interpolated_value( $g );
+			$x0 = $x1;
+			$x1 = $x2;
+			$loop_count++;
+			$diff_x = abs( $x0 - $x1 );
+//		echo "\r\n" . $loop_count . "\r\n";
+//		print_r( $g );
+//		echo "\r\n" ;
+		}
+		return $x1;
+	}
+		
+	private function get_approx_yield(){
+//		$approx_value = n v^(n/2) = n exp(-delta n/2);
+		if ( $this->get_value() > 0 && $this->get_term() > 0 ){
+			$n = $this->get_term();
+			$d = $this->get_delta();
+			$V = $this->get_value();
+			return -2 / $n * log( $V / $n );
+		}
+		return false;
 	}
  
 	public function get_annuity_certain(){
@@ -142,7 +228,10 @@ class CT1_Annuity extends CT1_Interest{
 }
 
 // example 
-//$a = new CT1_Annuity(2, true, 0.1, 13);
-//print_r($a->get_labels());
+//$a = new CT1_Annuity(12, true, 0.1, 2);
+//$a->set_value(1.234567890123456789);
+//print_r($a->get_values());
+//print_r($a->get_delta_for_value());
+//$a->set_delta( $a->get_delta_for_value() );
 //print_r($a->explain_annuity_certain());
 

@@ -117,11 +117,11 @@ class CT1_Annuity_Escalating extends CT1_Annuity{
 		$a_flat = $this->a_flat();
 		$a_inc = $this->a_inc();
 		$sub[0]['left'] = "\\mbox{Annuity value}";
-		$sub[0]['right']['summary'] = $a_flat->label_annuity() . " (i_{gross})" . " \\times  m_{esc} \\times " . $a_inc->label_annuity() . "(\\delta_{net})";
+		$sub[0]['right'] = $a_flat->label_annuity() . " (i_{gross})" . " \\times  m_{esc} \\times " . $a_inc->label_annuity() . "(\\delta_{net})";
 		$sub[1]['right']['summary'] = $this->explain_format( $a_flat->get_annuity_certain() ) . " \\times " . $this->get_escalation_frequency() . " \\times " . $this->explain_format( $a_inc->get_annuity_certain() );
 		$sub[2]['right'] = $this->explain_format( $this->get_annuity_certain() );
-		$sub[1]['right']['detail'][0] = $a_flat->explain_annuity_certain();
-		$sub[1]['right']['detail'][1] = $a_inc->explain_annuity_certain();
+		$sub[1]['right']['detail'][] = $a_flat->explain_annuity_certain();
+		$sub[1]['right']['detail'][] = $a_inc->explain_annuity_certain();
 		return array_merge( $sub, $this->explain_net_interest_rate() );
 	}
 
@@ -138,8 +138,8 @@ class CT1_Annuity_Escalating extends CT1_Annuity{
 			$sub[0]['left'] = "\\mbox{Annuity value}";
 			$sub[0]['right']['summary'] = "\\exp \\left( - \\delta_{\mbox{esc}} / m \\right) \\times " . $this->label_annuity();
 			$sub[1]['right']['summary'] = "\\exp \\left( - " . $this->explain_format( $this->get_escalation_delta() ) . " / " . $this->get_m() . " \\right) \\times " . $this->explain_format( $a->get_annuity_certain() );
-			$sub[0]['right']['detail'][0] = $del_esc;
-			$sub[1]['right']['detail'][1] = $a->explain_annuity_certain();
+			$sub[0]['right']['detail'][] = $del_esc;
+			$sub[1]['right']['detail'][] = $a->explain_annuity_certain();
 			$sub[2]['right'] = $this->explain_format( $this->get_annuity_certain() );
 			return array_merge( $sub, $this->explain_net_interest_rate() );
 		}

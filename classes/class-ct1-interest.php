@@ -85,7 +85,7 @@ public function explain_rate_in_form($f){
 	$return = array();
 	$explain_delta[0]['left'] = "\\delta";
 	$explain_delta[0]['right'] = "\\log \\left( 1 + i \\right)";
-	$explain_delta[1]['right'] = "\\log \\left( 1 + " . $this->explain_format($this->get_i_effective()) . " \\right)";
+	$explain_delta[1]['right'] = "\\log \\left( " . $this->explain_format( 1 + $this->get_i_effective() ) . " \\right)";
 	$explain_delta[2]['right'] = $this->explain_format($this->delta); 
 	if (!$f->is_continuous()){ 
 		if ($f->get_advance()){

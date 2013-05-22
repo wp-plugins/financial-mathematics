@@ -105,4 +105,27 @@ class CT1_Annuity_Test extends PHPUnit_Framework_TestCase
     // source of numbers: Formulae and tables 6% p.58   delta
   }  
 
+  public function test_setValue()
+  {
+    $this->acalc->set_value( 8.1109 );
+  	$this->acalc->set_m(1);
+  	$this->acalc->set_advance( false );
+  	$this->acalc->set_term( 10 );
+    if ( $this->debug ) $this->assertEquals( $this->acalc->get_delta_for_value(), log(1.04) ) ;
+    $this->assertTrue( abs($this->acalc->get_delta_for_value() - log(1.04)) < 0.00001 );
+    // source of numbers: Formulae and tables 4% p.56  
+  }  
+
+  public function test_setValueComplex()
+  {
+    $this->acalc->set_value( (8.1109 * 1.021537) );
+  	$this->acalc->set_m(12);
+  	$this->acalc->set_advance( true );
+  	$this->acalc->set_term( 10 );
+    if ( $this->debug ) $this->assertEquals( $this->acalc->get_delta_for_value(), log(1.04) ) ;
+    $this->assertTrue( abs($this->acalc->get_delta_for_value() - log(1.04)) < 0.00001 );
+    // source of numbers: Formulae and tables 4% p.56 a10 and i/d(12)  
+  }  
+
+
 }

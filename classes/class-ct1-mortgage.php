@@ -12,6 +12,7 @@ public function get_valid_options(){
 					'type'=>'number',
 					'decimal'=>'.',
 					);
+	$r['value'] = $r['principal'];
 	return $r; 
 }
 
@@ -58,6 +59,13 @@ public function get_instalment($rounding = 2){
 		$return[1]['right']['detail'] = $this->explain_annuity_certain();
 		$return[2]['right'] = number_format( $this->get_instalment($rounding), $rounding);
 		return $return;
+	}
+
+	public function get_value(){
+		if ( isset( $this->value ) )
+			return $this->value;
+		else
+			return round( $this->get_annuity_certain() * $this->instalment_per_year(), 2 );
 	}
 
 

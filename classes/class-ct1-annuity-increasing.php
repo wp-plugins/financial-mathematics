@@ -81,8 +81,8 @@ class CT1_Annuity_Increasing extends CT1_Annuity{
 		$sub[0]['left'] = $this->label_annuity_increasing();
 		$sub[0]['right'] = "$a_flat  \\times \\frac{ $a_n_due  -  $n $vn }{ $i}";
 		$sub[1]['right']['summary'] = $this->explain_a_flat_numbers() . "  \\times \\frac{ " . $this->explain_format( $this->a_n_due()->get_annuity_certain() ) . " - " . $this->get_term() . " \\times " . $this->explain_format( 1+$this->get_i_effective() ) . "^{-" . $this->get_term() . "}}{" . $this->explain_format( $this->get_i_effective()) . "}";
-		$sub[1]['right']['detail'][0] = $this->explain_rate_in_form( $this->i_flat() );
-		$sub[1]['right']['detail'][1] = $this->a_n_due()->explain_annuity_certain();
+		$sub[1]['right']['detail'][] = $this->explain_rate_in_form( $this->i_flat() );
+		$sub[1]['right']['detail'][] = $this->a_n_due()->explain_annuity_certain();
 		$sub[2]['right'] = $this->explain_format( $this->get_annuity_certain() );
 		return $sub;
 	}
@@ -95,8 +95,8 @@ class CT1_Annuity_Increasing extends CT1_Annuity{
 		$sub[0]['left'] = $this->label_annuity_increasing();
 		$sub[0]['right'] = "$a_flat  \\times \\frac{ $n - $a_n }{ $i}";
 		$sub[1]['right']['summary'] = $this->explain_a_flat_numbers() . "  \\times \\frac{ " . $this->get_term() . " - " . $this->explain_format( $this->a_n()->get_annuity_certain() ) . "}{" . $this->explain_format( $this->get_i_effective()) . "}";
-		$sub[1]['right']['detail'][0] = $this->explain_rate_in_form( $this->i_flat() );
-		$sub[1]['right']['detail'][1] = $this->a_n()->explain_annuity_certain();
+		$sub[1]['right']['detail'][] = $this->explain_rate_in_form( $this->i_flat() );
+		$sub[1]['right']['detail'][] = $this->a_n()->explain_annuity_certain();
 		$sub[2]['right'] = $this->explain_format( $this->get_annuity_certain() );
 		return $sub;
 	}
