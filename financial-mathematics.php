@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // plugin provides shortcodes (only)
 add_shortcode( 'concept_mortgage', 'concept_mortgage_proc' ); 
+add_shortcode( 'mortgage', 'concept_mortgage_proc' ); 
 add_shortcode( 'annuityCertain', 'concept_annuity_proc' ); 
 add_shortcode( 'convertInt', 'concept_interest_proc' ); 
 add_shortcode( 'annuity_increasing', 'concept_annuity_increasing_proc' ); 
