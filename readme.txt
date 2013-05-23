@@ -31,10 +31,6 @@ explains the solution.
 
 == Frequently Asked Questions ==
 
-= How do I get the MathJax rendered? =
-
-Install and activate a Wordpress plugin like Simple Mathjax
-
 = Where is the plugin running? = 
 
 It's running at [Financial mathematics](http://bdmfst.com/ct1/ "Financial mathematics") 
@@ -53,9 +49,9 @@ shortcode.
 
 
 == Changelog ==
+
 = 1.7 =
-* Given values (e.g. mortgage instalments), calculate effective interest rate.
-* Escalating and increasing annuities.
+* Classes and tests placed in own folders.  MathJax loaded remotely (no need to extra plugin).
 
 = 1.6 =
 * Renamed files to conform better to Wordpress PHP coding standards.
@@ -85,7 +81,7 @@ shortcode.
 == Upgrade Notice ==
 
 = 1.7 =
-Level, escalating, increasing annuities can be calculated (based on yield) or if you input their value you can get the yield.
+Input values to get yields (or yields to get values). Escalating and increasing annuities.
 
 = 1.5 =
 * Bug fix. Annuity "Just show me the answer" button redirects to correct page.
