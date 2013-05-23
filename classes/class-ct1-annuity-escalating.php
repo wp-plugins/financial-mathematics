@@ -45,6 +45,11 @@ class CT1_Annuity_Escalating extends CT1_Annuity{
 		$this->set_escalation_frequency( $escalation_frequency );
 	}
 
+	protected function get_clone_this(){
+		$a_calc = new CT1_Annuity_Escalating( $this->get_m(), $this->get_advance(), $this->get_delta(), $this->get_term(), $this->get_escalation_frequency(), $this->get_escalation_delta() );
+		return $a_calc;
+	}
+
 	public function set_escalation_delta( $r ){
 		$candidate = array( 'escalation_delta'=>$r );
 		$valid = $this->get_validation( $candidate );

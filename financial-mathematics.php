@@ -1,6 +1,6 @@
 <?php 
 /* 
-Plugin Name: FM16
+Plugin Name: Financial Mathematics
 Plugin URI: http://bdmfst.com/ct1
 Description: Draft online quizes in financial mathematics for actuarial students
 Author: O.Kellie-Smith

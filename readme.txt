@@ -4,7 +4,7 @@ Donate link: http://bdmfst.com/
 Tags: actuarial, actuary, financial mathematics, financial, mathematics, CT1
 Requires at least: 3.5.1
 Tested up to: 3.5.1
-Stable tag: 1.5
+Stable tag: 1.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,6 +53,9 @@ shortcode.
 
 
 == Changelog ==
+= 1.7 =
+* Given values (e.g. mortgage instalments), calculate effective interest rate.
+* Escalating and increasing annuities.
 
 = 1.6 =
 * Renamed files to conform better to Wordpress PHP coding standards.
@@ -80,6 +83,9 @@ shortcode.
 
 
 == Upgrade Notice ==
+
+= 1.7 =
+Level, escalating, increasing annuities can be calculated (based on yield) or if you input their value you can get the yield.
 
 = 1.5 =
 * Bug fix. Annuity "Just show me the answer" button redirects to correct page.

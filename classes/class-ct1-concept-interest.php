@@ -18,7 +18,7 @@ public function get_solution(){
 }
 	
 public function get_calculator($parameters){
-	$p = array('exclude'=>$parameters,'request'=>'get_interest', 'submit'=>'Just show me the rate', 'introduction' => 'Express an annual effective interest rate in an alternative, equivalent form.');
+	$p = array('exclude'=>$parameters,'request'=>'get_interest', 'submit'=>'Calculate', 'introduction' => 'Express an annual effective interest rate in an alternative, equivalent form.');
 	return parent::get_calculator($p);
 }
 

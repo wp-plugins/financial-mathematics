@@ -5,6 +5,7 @@ require_once 'class-ct1-annuity.php';
 class CT1_Mortgage extends CT1_Annuity{
 
 protected $principal;
+protected $instalment;
 
 public function get_valid_options(){ 
 	$r = parent::get_valid_options();
@@ -12,7 +13,7 @@ public function get_valid_options(){
 					'type'=>'number',
 					'decimal'=>'.',
 					);
-	$r['value'] = $r['principal'];
+	$r['instalment'] = $r['principal'];
 	return $r; 
 }
 
@@ -22,12 +23,17 @@ public function get_parameters(){
 			'name'=>'principal',
 			'label'=>'Principal',
 			);
+	$r['instalment'] = array(
+			'name'=>'instalment',
+			'label'=>'Amount per (initial) instalment',
+			);
 	return $r; 
 }
 
 public function get_values(){ 
 	$r = parent::get_values();
 	$r['principal'] = $this->get_principal();
+	$r['instalment'] = $this->get_instalment();
 	return $r; 
 }
 
@@ -36,10 +42,21 @@ public function __construct( $m = 1, $advance = false, $delta = 0, $term = 1, $p
 	$this->set_principal($principal);
 }
 
+	protected function get_clone_this(){
+		$a_calc = new CT1_Mortgage( $this->get_m(), $this->get_advance(), $this->get_delta(), $this->get_term(), $this->get_principal() );
+		return $a_calc;
+	}
+
 public function set_principal($p){
   $candidate = array('principal'=>$p);
   $valid = $this->get_validation($candidate);
 	if ($valid['principal']) $this->principal = $p;
+}
+
+public function set_instalment($i){
+  $candidate = array('instalment'=>$i);
+  $valid = $this->get_validation($candidate);
+	if ($valid['instalment']) $this->instalment = $i;
 }
 
 public function get_principal(){
@@ -47,8 +64,25 @@ public function get_principal(){
 }
 
 public function get_instalment($rounding = 2){
-	return $this->instalment($rounding);
+	if ( !empty( $this->instalment ) ){
+		return round( $this->instalment , $rounding );
+	} else {
+		return $this->instalment($rounding);
+	}
 }
+
+	public function explain_interest_rate_for_instalment(){
+		$return = array();
+		$a_calc = $this->get_clone_this();
+		$val = $this->get_principal() / ( $this->get_m() * $this->get_instalment() ) ;
+// echo "<pre> val" . print_r($val,1) . "</pre>";
+		$this->set_value( $this->get_principal() / ( $this->get_m() * $this->get_instalment() ) );
+// echo "<pre>" . print_r($this->get_values(),1) . "</pre>";
+		$a_calc->set_delta( $this->get_delta_for_value() );
+		$return[0]['left'] = "i";
+		$return[0]['right'] = $this->explain_format( exp( $this->get_delta_for_value() ) - 1) . "." . "\\ \\mbox{ Verification:}";
+		return array_merge( $return, $a_calc->explain_instalment() );
+	}
 
 
 	public function explain_instalment($rounding = 2){
@@ -110,6 +144,7 @@ public function set_from_input($_INPUT = array(), $pre = ''){
 	try{
 		if (parent::set_from_input($_INPUT, $pre)){
 			$this->set_principal( $_INPUT[$pre. 'principal']);	
+			$this->set_instalment( $_INPUT[$pre. 'instalment']);	
 			return true;
 		}
 		else return false;

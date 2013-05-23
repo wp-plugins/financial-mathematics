@@ -35,6 +35,15 @@ class CT1_Annuity_Increasing extends CT1_Annuity{
 		$this->set_increasing( $increasing );
 	}
 
+	protected function get_clone_this(){
+		$a = new CT1_Annuity_Increasing( $this->get_m(),
+			$this->get_advance(),
+			$this->get_delta(),
+			$this->get_term(),
+			$this->get_increasing() );
+		return $a;
+	}
+
 	public function set_increasing( $b ){
 		$this->increasing = $this->my_bool($b);
 	}

@@ -1,5 +1,5 @@
 <?php
-
+/*
 // load helper functions (autoloader)
 require_once 'functions.php';
 $path_to_class = dirname( __FILE__ ) . "/classes";
@@ -15,3 +15,4 @@ $IN = array( 'request'=> 'get_annuity' );
 $form = new CT1_Concept_Annuity();
 print_r($form->get_controller( $IN ) );
 
+*/

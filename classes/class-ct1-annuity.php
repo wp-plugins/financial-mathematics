@@ -100,7 +100,7 @@ class CT1_Annuity extends CT1_Interest{
 		}
 	}
 
-	private function get_interpolated_value( $guesses ){
+	protected function get_interpolated_value( $guesses ){
 		// return linear interpolation for f(x) = 0
 		$x0 = $guesses[0]['x'];
 		$f0 = $guesses[0]['f'];
@@ -113,10 +113,15 @@ class CT1_Annuity extends CT1_Interest{
 		}
 	}
  
-	private function get_interpolated_delta_for_value(){
-		$a_calc = new CT1_Annuity( $this->get_m(), $this->get_advance(), 0, $this->get_term() );
+	protected function get_clone_this(){
+		$a_calc = new CT1_Annuity( $this->get_m(), $this->get_advance(), $this->get_delta(), $this->get_term() );
+		return $a_calc;
+	}
+
+	protected function get_interpolated_delta_for_value(){
+		$a_calc = $this->get_clone_this();
 		$max_loop = 100;
-		$min_diff_x = 0.0000000000001;
+		$min_diff_x = 0.00000000000001;
 		$start_diff = 0.001; // anything more than min_diff_x
 		$diff_x = 99999;
 		$loop_count = 0;
@@ -160,12 +165,13 @@ class CT1_Annuity extends CT1_Interest{
 
 	public function explain_interest_rate_for_value(){
 		$return = array();
-		$a_calc = new CT1_Annuity( $this->get_m(), $this->get_advance(), 0, $this->get_term() );
+		$a_calc = $this->get_clone_this();
 		$a_calc->set_delta( $this->get_delta_for_value() );
-		$return[0]['left'] = "\\mbox{Through trial and interpolation}, i";
-		$return[0]['right']['summary'] = $this->explain_format( exp( $this->get_delta_for_value() ) - 1);
-		$return[0]['right']['detail'] = $a_calc->explain_annuity_certain();
-		return $return;
+		$return[0]['left'] = "i";
+//		$return[0]['right']['summary'] = $this->explain_format( exp( $this->get_delta_for_value() ) - 1);
+//		$return[0]['right']['detail'] = $a_calc->explain_annuity_certain();
+		$return[0]['right'] = $this->explain_format( exp( $this->get_delta_for_value() ) - 1) . "." . "\\ \\mbox{ Verification:}";
+		return array_merge( $return, $a_calc->explain_annuity_certain() );
 	}
 
 
