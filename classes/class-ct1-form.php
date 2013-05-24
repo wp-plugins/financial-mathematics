@@ -7,6 +7,7 @@ require_once 'interface-ct1-concept.php';
 abstract class CT1_Form implements CT1_Concept {
 
 protected $obj;
+protected $request;
 
 public function __construct(CT1_Object $obj){
 	$this->set_obj($obj);
@@ -20,12 +21,20 @@ public function get_solution(){
 	return;
 }
 
+public function get_request(){
+	return $this->request;
+}
+
+protected function set_request($s){
+	$this->request = $s;
+}
+
+
 public function get_calculator( $parameters) {
 		// returns associative array which can be passed to a form renderer e.g. QuickForm2
 	$p = $parameters;
 	$this->get_form_parameters($p);
 	$return = array();
-	$return['name'] = 'CT1_calculator';
 	$return['method'] = $p['method'];
 	$return['parameters'] = $this->obj->get_parameters();
 	$return['valid_options'] = $this->obj->get_valid_options();
@@ -64,7 +73,7 @@ protected function get_form_parameters(&$_parameters = array()){
 
 protected function get_form_parameters_default(){
 	return array( 'exclude' =>array(), 
-		'request'=>'',
+		'request'=> '',
 		'submit'=>"Submit",
 		'type'=>'', 
 		'special_input'=>'',

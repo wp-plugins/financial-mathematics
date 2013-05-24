@@ -9,6 +9,7 @@ class CT1_Concept_Annuity extends CT1_Form{
 public function __construct(CT1_Object $obj=null){
 	if (null === $obj) $obj = new CT1_Annuity_Escalating();
 	parent::__construct($obj);
+	$this->set_request( 'get_annuity_escalating' );
 }
 
 public function get_solution(){
@@ -24,7 +25,7 @@ public function get_interest_rate(){
 }
 
 public function get_calculator($parameters){
-	$p = array('exclude'=>$parameters,'request'=>'get_annuity', 'submit'=>'Calculate', 'introduction' => 'Calculate an annuity certain.  Ether enter a rate of return (to get the value) or enter a value (and get the rate of return).');
+	$p = array('exclude'=>$parameters,'request'=> $this->get_request(), 'submit'=>'Calculate', 'introduction' => 'Calculate an annuity certain.  Enter enter a rate of return (to get the value) or enter a value (and get the rate of return).');
 	$c = parent::get_calculator($p);
 	$c['values']['value'] = NULL;
 	return $c;
@@ -32,7 +33,7 @@ public function get_calculator($parameters){
 
 public function get_controller($_INPUT ){
 	if (isset($_INPUT['request'])){
-		if ('get_annuity' == $_INPUT['request']){
+		if ($this->get_request() == $_INPUT['request']){
 			if ($this->set_annuity($_INPUT)){
 //				echo "<pre>" . print_r( $this->obj->get_values(), 1) . "</pre>";
 				if (empty( $_INPUT['value'] ) ){

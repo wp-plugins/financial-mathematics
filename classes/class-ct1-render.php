@@ -203,6 +203,19 @@ private function get_form_plain( $return ){
     return print_r($return, 1);
 }
 
+public function get_select_form( $return ){
+	$form = new HTML_QuickForm2($return['name'],$return['method'], $return['action']);
+	$fieldset = $form->addElement('fieldset');
+	$calculator = $fieldset->addSelect( $return['select-name'] )
+				->setLabel( $return['select-name'] )
+				->loadOptions( $return['select-options']);
+	$fieldset->addElement('hidden', 'page_id')->setValue($_GET['page_id']);
+	$fieldset->addElement('submit', null, array('value' => $return['submit']));
+	$out = "<p>" . $return['introduction'] . "</p>" . "\r\n";
+	$out.= $form;
+	return $out;
+}
+
 private function get_form_html( $return ){
         // returns html based on form parameters in $return
     $form = new HTML_QuickForm2($return['name'],$return['method'], $return['action']);

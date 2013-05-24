@@ -9,6 +9,7 @@ class CT1_Concept_Interest extends CT1_Form{
 public function __construct(CT1_Object $obj=null){
 	if (null === $obj) $obj = new CT1_Interest();
 	parent::__construct($obj);
+	$this->set_request( 'get_interest' );
 }
 
 public function get_solution(){
@@ -18,13 +19,13 @@ public function get_solution(){
 }
 	
 public function get_calculator($parameters){
-	$p = array('exclude'=>$parameters,'request'=>'get_interest', 'submit'=>'Calculate', 'introduction' => 'Express an annual effective interest rate in an alternative, equivalent form.');
+	$p = array('exclude'=>$parameters,'request'=>$this->get_request(), 'submit'=>'Calculate', 'introduction' => 'Express an annual effective interest rate in an alternative, equivalent form.');
 	return parent::get_calculator($p);
 }
 
 public function get_controller($_INPUT ){
 	if (isset($_INPUT['request'])){
-		if ('get_interest' == $_INPUT['request']){
+		if ($this->get_request() == $_INPUT['request']){
 			if ($this->set_interest($_INPUT))
 				return $this->get_solution();
 			else

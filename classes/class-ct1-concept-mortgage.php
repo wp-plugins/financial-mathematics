@@ -9,6 +9,7 @@ class CT1_Concept_Mortgage extends CT1_Form{
 public function __construct(CT1_Object $obj=null){
 	if (null === $obj) $obj = new CT1_Mortgage();
 	parent::__construct($obj);
+	$this->set_request( 'get_mortgage_instalment' );
 }
 
 public function get_solution(){
@@ -25,7 +26,7 @@ public function get_interest_rate(){
 
 	
 public function get_calculator($parameters){
-	$p = array('exclude'=>$parameters,'request'=>'get_mortgage_instalment', 'submit'=>'Calculate', 'introduction' => 'Calculate  a level mortgage.  Either enter the interest rate (to calculate the amount of each instalment) or enter the instalment amount (to get the effective interest rate).');
+	$p = array('exclude'=>$parameters,'request'=>$this->get_request(), 'submit'=>'Calculate', 'introduction' => 'Calculate  a level mortgage.  Either enter the interest rate (to calculate the amount of each instalment) or enter the instalment amount (to get the effective interest rate).');
 	$c = parent::get_calculator($p);
 	$c['values']['instalment'] = NULL;
 	return $c;
@@ -33,7 +34,7 @@ public function get_calculator($parameters){
 
 public function get_controller($_INPUT ){
 	if (isset($_INPUT['request'])){
-		if ('get_mortgage_instalment' == $_INPUT['request']){
+		if ($this->get_request() == $_INPUT['request']){
 			if ($this->set_mortgage($_INPUT))
 				if (empty( $_INPUT['instalment'] ) ){
 					return $this->get_solution();
