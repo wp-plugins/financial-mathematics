@@ -26,7 +26,9 @@ public function get_interest_rate(){
 	
 public function get_calculator($parameters){
 	$p = array('exclude'=>$parameters,'request'=>'get_mortgage_instalment', 'submit'=>'Calculate', 'introduction' => 'Calculate  a level mortgage.  Either enter the interest rate (to calculate the amount of each instalment) or enter the instalment amount (to get the effective interest rate).');
-	return parent::get_calculator($p);
+	$c = parent::get_calculator($p);
+	$c['values']['instalment'] = NULL;
+	return $c;
 }
 
 public function get_controller($_INPUT ){

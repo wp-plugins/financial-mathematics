@@ -123,7 +123,7 @@ class CT1_Form_Test extends PHPUnit_Framework_TestCase
             'term' => 10,
             'value' => 1000000,
             'principal' => 1000000,
-            'instalment' => 10969.01,
+            'instalment' => null,
         ),
 
     'request' => 'get_mortgage_instalment',

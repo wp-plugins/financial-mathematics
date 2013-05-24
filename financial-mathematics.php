@@ -4,7 +4,7 @@ Plugin Name: Financial Mathematics
 Plugin URI: http://bdmfst.com/ct1
 Description: Draft online quizes in financial mathematics for actuarial students
 Author: O.Kellie-Smith
-Version: 1.7 
+Version: 1.8 
 Author URI: http://www.bdmfst.com
 Licence: GPL2
 */  

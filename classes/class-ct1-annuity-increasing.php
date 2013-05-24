@@ -171,6 +171,8 @@ class CT1_Annuity_Increasing extends CT1_Annuity{
 			if (parent::set_from_input($_INPUT, $pre)){
 				if ( isset( $_INPUT[$pre. 'increasing'] ) )
 					$this->set_increasing(	$_INPUT[$pre. 'increasing'] );
+				else
+					$this->set_increasing(	false  );
 				return true;
 			}
 			else{

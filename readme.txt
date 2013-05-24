@@ -4,7 +4,7 @@ Donate link: http://bdmfst.com/
 Tags: actuarial, actuary, financial mathematics, financial, mathematics, CT1
 Requires at least: 3.5.1
 Tested up to: 3.5.1
-Stable tag: 1.7
+Stable tag: 1.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -50,6 +50,9 @@ shortcode.
 
 == Changelog ==
 
+= 1.8 = 
+* Bug fix. Decreasing annuity can be entered.
+
 = 1.7 =
 * Classes and tests placed in own folders.  MathJax loaded remotely (no need to extra plugin).
 
@@ -79,6 +82,9 @@ shortcode.
 
 
 == Upgrade Notice ==
+
+= 1.8 =
+* Bug fix. Decreasing annuity can be entered.
 
 = 1.7 =
 Input values to get yields (or yields to get values). Escalating and increasing annuities.

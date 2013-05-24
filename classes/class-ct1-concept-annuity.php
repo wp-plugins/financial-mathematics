@@ -25,7 +25,9 @@ public function get_interest_rate(){
 
 public function get_calculator($parameters){
 	$p = array('exclude'=>$parameters,'request'=>'get_annuity', 'submit'=>'Calculate', 'introduction' => 'Calculate an annuity certain.  Ether enter a rate of return (to get the value) or enter a value (and get the rate of return).');
-	return parent::get_calculator($p);
+	$c = parent::get_calculator($p);
+	$c['values']['value'] = NULL;
+	return $c;
 }
 
 public function get_controller($_INPUT ){
@@ -51,7 +53,9 @@ public function get_controller($_INPUT ){
 
 public function set_annuity($_INPUT = array()){
 	$this->set_received_input($_INPUT);
-//				echo "<pre> INPUT" . print_r( $_INPUT, 1) . "</pre>";
+	$this->obj->set_from_input($_INPUT);
+				echo "<pre> INPUT" . print_r( $_INPUT, 1) . "</pre>";
+				echo "<pre> object" . print_r( $this->obj->get_values(), 1) . "</pre>";
 	return ($this->obj->set_from_input($_INPUT));
 }
 

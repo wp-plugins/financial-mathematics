@@ -39,6 +39,19 @@ class CT1_Annuity_Increasing_Test extends PHPUnit_Framework_TestCase
     // source of numbers -- yellow book
   }  
 
+  public function test_decreasing_annuity()
+  {
+  	$this->acalc->set_increasing(false);
+  	$this->acalc->set_advance(false);
+  	$this->acalc->set_m(1);
+  	$this->acalc->set_delta(log(1.06));
+  	$this->acalc->set_term(10);
+	$val = 43.9985;
+    if ($this->debug) $this->assertEquals( $this->aval() , $val);
+    $this->assertTrue( abs($this->aval() - $val ) < 0.0001 );
+    // source of numbers -- yellow book
+  }  
+
   public function test_simple_arrears()
   {
   	$this->acalc->set_advance(false);
