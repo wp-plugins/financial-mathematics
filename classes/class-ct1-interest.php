@@ -8,7 +8,7 @@ class CT1_Interest extends CT1_Interest_Format  {
 
 protected $delta = 0;
 protected $max_dp = 8;
-protected function explain_format($d){
+public function explain_format($d){
 	return number_format($d, $this->max_dp);
 }
 

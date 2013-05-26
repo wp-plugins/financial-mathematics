@@ -4,6 +4,7 @@ require_once 'class-ct1-concept-mortgage.php';
 require_once 'class-ct1-concept-annuity.php';
 require_once 'class-ct1-concept-annuity-increasing.php';
 require_once 'class-ct1-concept-interest.php';
+require_once 'class-ct1-concept-cashflows.php';
 
 class CT1_Concept_All {
 
@@ -19,6 +20,7 @@ private function set_concepts(){
 				'concept_mortgage'=>new CT1_Concept_Mortgage(), 
 				'concept_annuity_increasing'=>new CT1_Concept_Annuity_Increasing(), 
 				'concept_interest'=>new CT1_Concept_Interest(),
+				'concept_cashflows'=>new CT1_Concept_Cashflows(),
 				 );
 }
 
@@ -28,6 +30,7 @@ private function get_concept_labels(){
 				'concept_annuity'=>'Annuity (escalating or level)', 
 				'concept_mortgage'=>'Mortgage (level)', 
 				'concept_annuity_increasing'=> 'Annuity (increasing or decreasing)', 
+				'concept_cashflows'=> 'Multiple cashflows', 
 				 );
 }
 
@@ -46,6 +49,11 @@ public function get_controller($_INPUT ){
 	if (isset($_INPUT['request'])){
 		foreach( $this->concepts AS $c ){
 			if ($c->get_request() == $_INPUT['request']){
+				return $c->get_controller( $_INPUT );
+			}
+		}
+		foreach( $this->concepts AS $c ){
+			if ( in_array( $_INPUT['request'], $c->get_possible_requests() ) ){
 				return $c->get_controller( $_INPUT );
 			}
 		}

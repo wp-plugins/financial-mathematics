@@ -25,6 +25,10 @@ public function get_request(){
 	return $this->request;
 }
 
+public function get_possible_requests(){
+	return array( $this->request );
+}
+
 protected function set_request($s){
 	$this->request = $s;
 }

@@ -7,15 +7,70 @@ define("CT1_maximum_levels_detail", 10);
 
 class CT1_Render  {
 
+private $eqref = 0;
+
+private function add_hidden_fields_to_fieldset( &$fieldset, $hidden ){
+	if ( count( $hidden ) > 0 ) {
+		foreach ($hidden as $h ){
+			$fieldset->addElement('hidden', $h['name'] )->setValue( $h['value'] );
+		}
+	}
+}
+
+public function get_hidden_fields( CT1_Cashflows $cf ){
+	$hidden = array();
+	if ( count( $cf->get_values() ) > 0 ) {
+		$i = 0;
+		foreach ($cf->get_values() as $v ){
+			if ( is_array( $v ) ){
+				foreach (array_keys( $v ) as $key){
+					$name = "cashflows[" . $i . "][" . $key . "]";
+					$value = $v[ $key ];
+					$hidden[] = array( 'name'=>$name, 'value' => $value );
+				}
+				$i++;
+			}
+		}
+	}
+	return $hidden;
+	
+}
+
+
+
+public function add_hidden_fields( &$fieldset, CT1_Cashflows $cf ){
+	$hidden = $this->get_hidden_fields( $cf );
+	$this->add_hidden_fields_to_fieldset( $fieldset, $hidden );
+	
+}
+
+public function get_form_cashflow( CT1_Cashflows $cf, $submit = 'Submit', $intro = "" ){
+//echo __FILE__ . "\r\n" . print_r($cf, 1);
+//echo __FILE__ . "\r\n" . print_r($cf->get_values(), 1);
+    $form = new HTML_QuickForm2($return['name'],'GET', '');
+    $form->addDataSource(new HTML_QuickForm2_DataSource_Array() );
+    $fieldset = $form->addElement('fieldset');
+    $this->add_hidden_fields( $fieldset, $cf );
+    // add page_id
+    $fieldset->addElement('hidden', 'request')->setValue('view_cashflows');
+    $fieldset->addElement('hidden', 'page_id')->setValue($_GET['page_id']);
+    $fieldset->addElement('submit', null, array('value' => $submit));
+	$out = "";
+    if ( !empty( $intro ) )
+	$out.= "<p>" . $intro . "</p>" . "\r\n";
+    $out.= $form;
+    return $out;
+}
+
+			
 private function get_render_latex_sentence( $equation_array, $label = '' ){
 //    echo "\r\n <pre> get_render_latex eq_array " . print_r( $equation_array, 1 ) . "</pre> \r\n";
+//    labelling is a bit of a mess.  subcounts don't seem to work but it doesn't seem to matter.
 
-    $c = 1;
     $out = "";
     $detail = array();
     if ( !empty($label) ){
         $out.= "\\label{eq:" . $label . "} ";
-        $c = $label;
     }
         $d = 1;
         foreach ($equation_array as $e) {
@@ -33,25 +88,25 @@ private function get_render_latex_sentence( $equation_array, $label = '' ){
                             // refer forward to equation $c
                             // count now may forward refs you need here ?????
                             if ( $this->is_sentence( $e['right']['detail'] ) ) {
-                                $out .= " \\mbox{ by \\eqref{eq:" . $c . "}}";
+                                $out .= " \\mbox{ by \\eqref{eq:" . $this->eqref . "}}";
                                 $detail[] = array(
                                     'equation' => $e['right']['detail'],
-                                    'label' => $c,
+                                    'label' => $this->eqref,
                                     );
                             } else {
                                 $count_refs = count( $e['right']['detail'] );
                                 $eqlist = "";
                                 for ($subeq = 0; $subeq < ($count_refs - 1); $subeq++){
-                                    $eqlist.= "\\eqref{eq:" . $c . "." . $subeq . "}, ";
+                                    $eqlist.= "\\eqref{eq:" . $this->eqref . "." . $subeq . "}, ";
                                     $detail[] = array(
                                     'equation' => $e['right']['detail'][$subeq],
-                                    'label' => $c . "." . $subeq,
+                                    'label' => $this->eqref . "." . $subeq,
                                     );
                                 }
-                                $eqlist.= "\\eqref{eq:" . $c . "." . ($count_refs-1) . "}";
+                                $eqlist.= "\\eqref{eq:" . $this->eqref . "." . ($count_refs-1) . "}";
                                 $detail[] = array(
                                     'equation' => $e['right']['detail'][$count_refs-1],
-                                    'label' => $c . "." . ($count_refs-1),
+                                    'label' => $this->eqref . "." . ($count_refs-1),
                                     );
                                 $out .= " \\mbox{ by " . $eqlist . "}";
                             }
@@ -66,7 +121,7 @@ private function get_render_latex_sentence( $equation_array, $label = '' ){
             if ($d < count($equation_array)) $out.= " \\\\ " . "\r\n";
             if ($d ==count($equation_array)) $out.= ". \\\\ \r\n \\nonumber " ;
             $d++;
-            $c++;
+		$this->eqref++;
         }
 //    echo "\r\n <pre> get_render_latex detail " . print_r( $detail, 1 ) . "</pre> \r\n";
 //    echo "\r\n <pre> get_render_latex out " . print_r( $out, 1 ) . "</pre> \r\n";
@@ -191,6 +246,7 @@ private function get_popup_latex($string){
 */
 
 public function get_render_form( $form ){
+//echo "<pre>" . __FILE__ . print_r($form,1) . "</pre>";
     if ('HTML'==$form['render'] ){
         return $this->get_form_html( $form );
     }
@@ -236,6 +292,13 @@ private function get_form_html( $return ){
                 $fieldset->addElement($input_type, $key)->setLabel($parameter['label']);
             }
         }
+    }
+    if (count($return['hidden']) > 0){
+        $fieldset_hidden = $form->addElement('fieldset');
+        foreach(array_keys( $return['hidden']) as $key ){
+		$value = $return['hidden'][$key];
+    		$fieldset_hidden->addElement('hidden', $key)->setValue( $value );
+	}
     }
     // add page_id
     $fieldset->addElement('hidden', 'request')->setValue($return['request']);

@@ -4,7 +4,7 @@ Plugin Name: Financial Mathematics
 Plugin URI: http://bdmfst.com/ct1
 Description: Draft online quizes in financial mathematics for actuarial students
 Author: O.Kellie-Smith
-Version: 1.9 
+Version: 1.10 
 Author URI: http://www.bdmfst.com
 Licence: GPL2
 */  
@@ -26,7 +26,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
 // plugin provides shortcodes (only)
-add_shortcode( 'fin-math', 'concept_all_proc' ); 
+add_shortcode( 'fin-math', 'concept_all_proc' );  // this is the only one you need
+
+// these shortcodes are for backwards compatibility only
+add_shortcode( 'concept_cashflows', 'concept_cashflows_proc' ); 
 add_shortcode( 'concept_mortgage', 'concept_mortgage_proc' ); 
 add_shortcode( 'mortgage', 'concept_mortgage_proc' ); 
 add_shortcode( 'annuityCertain', 'concept_annuity_proc' ); 
@@ -45,6 +48,18 @@ function concept_all_proc($attr){
 		return "Exception in " . __FILE__ . ": " . $e->getMessage();
 	}
 }
+
+function concept_cashflows_proc($attr){
+	try{
+		CT1_autoloader('CT1_Concept_Cashflows', 'class-ct1-concept-cashflows.php');
+		$m = new CT1_Concept_Cashflows();
+		return $m->get_controller($_GET);
+	}
+	catch (Exception $e){
+		return "Exception in " . __FILE__ . ": " . $e->getMessage();
+	}
+}
+
 
 function concept_interest_proc($attr){
 	try{
