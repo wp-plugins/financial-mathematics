@@ -52,6 +52,7 @@ public function get_form_cashflow( CT1_Cashflows $cf, $submit = 'Submit', $intro
     $fieldset = $form->addElement('fieldset');
     $this->add_hidden_fields( $fieldset, $cf );
     // add page_id
+    $fieldset->addElement('hidden', 'request')->setValue('view_cashflows');
     $fieldset->addElement('hidden', 'page_id')->setValue($_GET['page_id']);
     $fieldset->addElement('submit', null, array('value' => $submit));
 	$out = "";

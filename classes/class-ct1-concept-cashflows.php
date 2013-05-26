@@ -194,7 +194,7 @@ public function get_calculator($parameters){
 	$form['valid_options'] = $valid_options;
 	$form['request'] = $this->get_request();
 	$form['render'] = 'HTML';
-	$form['introduction'] = 'Value cashflows.  Enter an effective annual rate of return (to get a presnt value) or a present value (to get an implicit rate of return, if one exists.)';
+	$form['introduction'] = 'Value cashflows.  Enter an effective annual rate of return (to get a present value) or a present value (to get an implicit rate of return, if one exists.)';
 	$form['submit'] = 'Calculate';
 	$form['exclude'] = array();
 	$form['values'] = $values;
@@ -209,10 +209,20 @@ public function get_request(){
 
 public function get_possible_requests(){
 	return array( 
+		'view_cashflows',
 		'add_cashflow',
 		$this->get_request(),
 		);
 }
+
+private function ignore_value( $_INPUT ){
+	if (!isset( $_INPUT['value'] ) )
+		return true;
+	if (!is_numeric( $_INPUT['value'] ) )
+		return true;
+	return false;
+}
+
 
 public function get_controller($_INPUT ){
 //echo "<pre> GET" . __FILE__ . print_r($_GET,1) . "</pre>";
@@ -229,7 +239,7 @@ public function get_controller($_INPUT ){
 			$this->add_cashflow_from_input( $_INPUT );
 		}
 		if ($this->get_request() == $_INPUT['request']){
-			if (empty( $_INPUT['value'] ) ){
+			if ( $this->ignore_value( $_INPUT ) ){
 				if (isset( $_INPUT['i_effective'] ) ){
 					return $this->get_solution( $_INPUT['i_effective'] ) .  $this->get_form_valuation() . $this->get_delete_buttons() .  $this->get_form_add_cashflow()  ;
 				} else {
