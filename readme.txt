@@ -4,7 +4,7 @@ Donate link: http://bdmfst.com/
 Tags: actuarial, actuary, financial mathematics, financial, mathematics, CT1
 Requires at least: 3.5.1
 Tested up to: 3.5.1
-Stable tag: 1.9
+Stable tag: 1.10
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -42,6 +42,9 @@ shortcode.
 
 == Changelog ==
 
+= 1.10 = 
+Multiple cashflows (mixtures of annuities) enabled in [fin-math].
+
 = 1.9 =
 * All forms loadable with single shortcode [fin-math].
 
@@ -77,6 +80,9 @@ shortcode.
 
 
 == Upgrade Notice ==
+
+= 1.10 = 
+Multiple cashflows (mixtures of annuities) enabled in [fin-math].
 
 = 1.9 =
 All forms loadable with single shortcode [fin-math].
