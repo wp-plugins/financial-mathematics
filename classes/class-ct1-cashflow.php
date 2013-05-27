@@ -102,11 +102,11 @@ class CT1_Cashflow extends CT1_Object {
 		if ( $this->is_single_payment() ) 
 			$ann_label = "";
 		else
-			$ann_label = "\\times " . $this->get_annuity()->get_annuity_certain();
+			$ann_label = "\\times " . $this->get_annuity()->explain_format( $this->get_annuity()->get_annuity_certain() );
 		if ( 0 == $this->get_effective_time() )
 			$time_label = "";
 		else
-			$time_label = " \\times " . (1 + $this->get_annuity()->get_i_effective() ) . "^{ - " . $this->get_effective_time() . " }";
+			$time_label = " \\times " . (1 + $this->get_annuity()->explain_format( $this->get_annuity()->get_i_effective() ) ) . "^{ - " . $this->get_effective_time() . " }";
 		$rate_label = $this->rate_format( abs( $this->get_rate_per_year()) );
 		return $rate_label . $time_label . $ann_label;
 	}
