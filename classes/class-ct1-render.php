@@ -83,7 +83,11 @@ private function get_render_latex_sentence( $equation_array, $label = '' ){
             if (array_key_exists('right', $e)){
                 if ( is_array( $e['right'] ) ){
                     if (array_key_exists('summary', $e['right'])){
-                        $out.= " = " . $e['right']['summary'] ;
+                        if (array_key_exists('relation', $e['right']) ){
+				$out.= " " . $e['right']['relation'] . " " . $e['right']['summary'] ;
+			} else {
+				$out.= " = " . $e['right']['summary'] ;
+			}
                         if (array_key_exists('detail', $e['right'])){
                             // refer forward to equation $c
                             // count now may forward refs you need here ?????

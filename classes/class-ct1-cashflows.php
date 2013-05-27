@@ -216,12 +216,13 @@ class CT1_Cashflows extends CT1_Object {
 					if ( 0 != $i ){
 						$sub = $this->get_sign( $c->get_rate_per_year() ) . " ";
 						$sub_split = $sub;
+						$detail['right']['relation'] = ''; //default is '='
 					}
 					$sub .= $this->cashflow_format(abs( $c->get_value() ) );
 					$sub_split .=  $c->get_abs_label_with_annuity_evaluated() ;
 					$detail['right']['summary'] = $sub_split;
 					if ( $with_detail ){
-						$detail['right']['detail'] = $c->get_annuity()->explain_annuity_certain();
+						$detail['right']['detail'] = $c->get_annuity()->explain_annuity_certain() ;
 						$det[] = $detail;
 					}
 					$top_line .= $sub;
