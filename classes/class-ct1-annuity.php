@@ -58,6 +58,10 @@ class CT1_Annuity extends CT1_Interest{
 		}
 	}
 
+	public function unset_value(){
+		unset( $this->value );
+	}
+
 	public function set_value($n){
 		$candidate = array('value'=>$n);
 		$valid = $this->get_validation($candidate);

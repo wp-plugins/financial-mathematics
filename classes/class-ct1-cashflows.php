@@ -76,6 +76,7 @@ class CT1_Cashflows extends CT1_Object {
 			$g[0]['x'] = $x0;
 			$g[1]['x'] = $x1;
 			$a_calc->set_delta( $x0 );
+			$a_calc->unset_value();	
 //	echo "\r\n x0: " . $x0  . "\r\n";
 //	echo "\r\n loop: " . $loop_count  . "\r\n";
 //	echo "\r\n acalc-disc: " . $a_calc->get_discounted_value()  . "\r\n";
@@ -122,17 +123,21 @@ class CT1_Cashflows extends CT1_Object {
 	}
 
 	public function set_i_effective( $i ){
+// echo "<pre>" . __FILE__ . "set_i" . $i;
+//print_r($this->get_cashflows());
 		$c_new = array();
 		$c_old = $this->get_cashflows();
 		if (count( $c_old ) > 0 ){
 			foreach ( $c_old as $c ){
 				$a = $c->get_annuity();
 				$a->set_i_effective( $i );
+				$a->unset_value();
 				$c->set_annuity( $a );
 				$c_new[] = $c;
 			}
 			$this->set_cashflows( $c_new );
 		}
+//print_r($this->get_cashflows());
 	}
 
 		
