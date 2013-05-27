@@ -42,9 +42,8 @@ shortcode.
 
 == Changelog ==
 
-= 1.10 =
-Mixed cashflows enabled. E.g. mixture of single payment, continuous annuity
-etc.
+= 1.10 = 
+Multiple cashflows (mixtures of annuities) enabled in [fin-math].
 
 = 1.9 =
 * All forms loadable with single shortcode [fin-math].
@@ -82,8 +81,8 @@ etc.
 
 == Upgrade Notice ==
 
-= 1.10 =
-Value or yield on mixed cashflows enabled (combination of simple annuities).
+= 1.10 = 
+Multiple cashflows (mixtures of annuities) enabled in [fin-math].
 
 = 1.9 =
 All forms loadable with single shortcode [fin-math].
