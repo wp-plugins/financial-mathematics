@@ -137,6 +137,7 @@ class CT1_Cashflow extends CT1_Object {
     }
 
     private function rate_format( $d, $dps = 2 ){
+        return $d;
         return number_format( $d, $dps );
     }
 
