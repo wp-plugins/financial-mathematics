@@ -1,44 +1,27 @@
 <?php   
-require_once 'class-ct1-spot-delta.php';
-require_once 'class-ct1-object.php';
+require_once 'class-ct1-spot-rate.php';
+require_once 'class-ct1-collection.php';
 
-class CT1_Spot_Rates extends CT1_Object {
+class CT1_Spot_Rates extends CT1_Collection {
 
-	private $spot_deltas;
-
- 
-	public function get_clone_this(){
-		$a_calc = new CT1_Spot_Rates();
-		$a_calc->set_spot_deltas( $this->get_spot_deltas() );
-		return $a_calc;
-	}
-
-	public function get_spot_deltas(){
-		return $this->spot_deltas;
+	protected function is_acceptable_class( $c ){
+		if ( 'CT1_Spot_Rate' == get_class( $c ) )
+			return true;
+		return false;
 	}
 
 	public function __toString()
 	{
 		$return = array();
-		if ( count( $this->get_spot_deltas() ) > 0 ) {
-			foreach ( $this->get_spot_deltas() as $s ){
-				$return[ $s->get_effective_time() ] = exp( $s->get_delta() ) - 1 ;
+		if ( $this->get_count() > 0 ) {
+			$o = $this->get_objects();
+			foreach ( array_keys( $o ) as $key ){
+				$return[ $key ] = print_r( $o[ $key ], 1 );
 			}
 		}
 		return print_r( $return, 1);
 	}
-			
-	private function set_spot_deltas( $spot_delta_array ){
-		$this->spot_deltas = $spot_delta_array;
-	}
 
-	public function add_spot_delta( CT1_Spot_Delta $c ){
-		$this->spot_deltas[ $c->get_effective_time() ] = $c;
-	}
-
-	public function remove_spot_delta( CT1_Spor_Delta $c ){
-		unset( $this->spot_deltas[ $c->get_effective_time() ] );
-	}
 
 	public function get_one_year_forward_rates(){
 		$r = array();
@@ -60,6 +43,8 @@ class CT1_Spot_Rates extends CT1_Object {
 		}
 		return $f;
 	}
+
+			
 	
 	private function get_spot_delta( $i ){
 		$r = $this->get_spot($i );
@@ -70,8 +55,8 @@ class CT1_Spot_Rates extends CT1_Object {
 	}
 
 	private function get_spot( $i ){
-		if ( 0 < count( $this->get_spot_deltas() ) ){
-			foreach ($this->get_spot_deltas() as $c ) {
+		if ( 0 < $this->get_count() ){
+			foreach ($this->get_objects() as $c ) {
 				if ( $i == $c->get_effective_time()  )
 					return $c;
 			}
@@ -89,15 +74,14 @@ class CT1_Spot_Rates extends CT1_Object {
 	}
 	
 	private function term_is_set( $i ){
-		if ( 0 < count( $this->get_spot_deltas() ) ){
-			foreach ($this->get_spot_deltas() as $c ) {
+		if ( 0 < $this->get_count() ){
+			foreach ($this->get_objects() as $c ) {
 				if ( $i == $c->get_effective_time() )
 					return true;
 			}
 		}
 		return false;
 	}
-
 
 }
 
