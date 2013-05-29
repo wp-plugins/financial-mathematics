@@ -238,13 +238,10 @@ class CT1_Cashflows extends CT1_Object {
 		$return	 = array_merge( $return, $det );
 		$next_to_last['right'] = $top_line;
 		$last['right'] = $this->cashflow_format( $this->get_discounted_value());
-		$return[] = $next_to_last;
-		$return[] = $last;
-/*
-		$return[1]['right']['summary'] = $top_line;
-		$return[1]['right']['detail'] = $sub_top;
-		$return[2]['right'] = $this->get_discounted_value();
-*/
+		if ( $with_detail ){
+			$return[] = $next_to_last;
+			$return[] = $last;
+		}
 		return $return;
 	}
 

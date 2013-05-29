@@ -154,7 +154,7 @@ public function get_add_cashflow(){
 	$form['render'] = 'HTML';
 	$form['introduction'] = 'Add a cashflow.';
 	$form['submit'] = 'Add';
-	$form['exclude'] = array();
+	$form['exclude'] = array( "i_effective" );
 	$form['values'] = $values;
 	$form['hidden'] = $this->get_hidden_cashflow_fields( $this->obj );
 //echo "<pre>" . __FILE__ . print_r($form,1) . "</pre>";
