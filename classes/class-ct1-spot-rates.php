@@ -22,6 +22,13 @@ protected $explanation_par_yields;
 		return $terms;
 	}
 
+	public function explain_par_yield( CT1_Par_Yield $f ){
+		if ( !$this->get_par_yields()->is_in_collection( $f ) ){
+			throw new Exception( __FILE__ . " Can't explain par yield " . $f . " as it is not in collection." );
+		}
+		return $this->explanation_par_yields[ $f->get_term() ];
+	}
+
 	public function explain_forward_rate( CT1_Forward_Rate $f ){
 		if ( !$this->get_forward_rates()->is_in_collection( $f ) ){
 			throw new Exception( __FILE__ . " Can't explain forward rate " . $f . " as it is not in collection." );
@@ -74,8 +81,33 @@ protected $explanation_par_yields;
 			$c = (1 - $spot_rates[ $end ]->get_vn() ) / $this->annuity_value( $end );
 			$p = new CT1_Par_Yield( $c, $end );
 			$ps->add_object( $p );
+			$exp[0]['left'] = $p->get_label();
+			$exp_ann = $this->explain_par_yield_annuity_value( $p->get_term() );
+			$exp[0]['right'] = "\\frac{1 - (1 + i_{" . $p->get_term() . "}^{-" . $p->get_term() . "}}{" . $exp_ann['algebra'] . "}";
+			$exp[1]['right'] = "\\frac{1 - (" . (1 + $spot_rates[ $end ]->get_i_effective()) . "^{-" . $p->get_term() . "}}{" . $exp_ann['numbers'] . "}";
+
+			$exp[2]['right'] = $p->get_coupon();
+			$this->explanation_par_yields[ $p->get_term() ] = $exp;
 		}
 		return $ps;
+	}
+
+	private function explain_par_yield_annuity_value( $term ){
+		// returns sum for discounted value of 1 payable at terms 1, 2, .. $term
+		// provided spot rates exist for terms 1, 2, ... $term
+		if ( $term > $this->maximum_contiguous_term() ){
+			throw new Exception ( __FILE__ . " explain_annuity_value sought for term " . $term . " though maximum_contiguous_term is " . $this->maximum_contiguous_term()  );
+		}
+		$spot_rates = $this->get_objects();
+		$terms = $this->get_sorted_terms();
+		$result = array();
+		$algebra = "(1 + i_1)^{-1}";
+		$numbers = (1 + $spot_rates[ $terms[0] ]->get_i_effective()) . "^{-1}";
+		for ($i = 2, $ii = $term; $i <= $ii; $i++){
+			$algebra .= " + (1 + i_" . $i . ")^{-" . $i . "}";
+			$numbers .= " + " . (1 + $spot_rates[ $terms[$i - 1] ]->get_i_effective()) . "^{-" . $terms[ $i - 1] . "}";
+		}
+		return array( 'algebra' => $algebra, 'numbers' => $numbers );
 	}
 
 	private function annuity_value( $term ){
