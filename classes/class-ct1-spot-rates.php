@@ -6,6 +6,10 @@ require_once 'class-ct1-collection.php';
 
 class CT1_Spot_Rates extends CT1_Collection {
 
+protected $explanation_forward_rates;
+protected $explanation_par_yields;
+
+
 	protected function is_acceptable_class( $c ){
 		if ( 'CT1_Spot_Rate' == get_class( $c ) )
 			return true;
@@ -18,6 +22,13 @@ class CT1_Spot_Rates extends CT1_Collection {
 		return $terms;
 	}
 
+	public function explain_forward_rate( CT1_Forward_Rate $f ){
+		if ( !$this->get_forward_rates()->is_in_collection( $f ) ){
+			throw new Exception( __FILE__ . " Can't explain forward rate " . $f . " as it is not in collection." );
+		}
+		return $this->explanation_forward_rates[ $f->get_end_time() ];
+	}
+
 	public function get_forward_rates(){
 		$spot_rates = $this->get_objects();
 		$terms = $this->get_sorted_terms();
@@ -27,12 +38,28 @@ class CT1_Spot_Rates extends CT1_Collection {
 			if ( 0 == $i ){
 				$start = 0; $i = $spot_rates[ $end ]->get_i_effective();	
 				$f = new CT1_Forward_Rate( $i, $start, $end );
+				$explanation_algebra = $spot_rates[ $end ]->get_label();
+				$exp[0]['right'] = $explanation_algebra;
+				$exp[1]['right'] = $f->get_i_effective();
 			} else {
 				$start = $terms[ $i - 1 ]; 
 				$phi = $spot_rates[ $end ]->get_delta() * $end - $spot_rates[ $start ]->get_delta() * $start;	
 				$phi = $phi / ( $end - $start );
 				$f = new CT1_Forward_Rate( exp( $phi ) - 1, $start, $end );
+				$explanation_top = "\\left( 1 + " . $spot_rates[ $end ]->get_label() .  " \\right)^{" . $end . "}";
+				$explanation_top_n = (1 + $spot_rates[ $end ]->get_i_effective() ) . "^{" . $end . "}";
+				$explanation_bot = "\\left( 1 + " . $spot_rates[ $start ]->get_label() . " \\right)^{" . $start . "}";
+				$explanation_bot_n = (1 + $spot_rates[ $start ]->get_i_effective()) . "^{" . $start . "}";
+				$explanation = "\\frac{ " . $explanation_top . "}{" . $explanation_bot . "}";
+				$explanation_n = "\\frac{ " . $explanation_top_n . "}{" . $explanation_bot_n . "}";
+				$explanation_algebra = "\\left[ " . $explanation . "\\right]^{\\frac{1}{" . $end . "-" . $start . "}} - 1";
+				$explanation_numbers = "\\left[ " . $explanation_n . "\\right]^{\\frac{1}{" . $end . "-" . $start . "}} - 1";
+				$exp[0]['right'] = $explanation_algebra;
+				$exp[1]['right'] = $explanation_numbers;
+				$exp[2]['right'] = $f->get_i_effective();
 			}
+			$exp[0]['left'] = $f->get_label();
+			$this->explanation_forward_rates[ $f->get_end_time() ] = $exp;
 			$fs->add_object( $f );
 		}
 		return $fs;

@@ -11,9 +11,13 @@ $sdb = new CT1_Spot_Rate( 0.05, 2);
 $sdc = new CT1_Spot_Rate( 0.02, 1);
 $sr = new CT1_Spot_Rates();
 $sr->add_object( $sda );
-$sr->add_object( $sdb );
+//$sr->add_object( $sdb );
 $sr->add_object( $sdc );
-print_r( "\r\n" . $sr . "\r\n" );
-print_r( "\r\n" . print_r($sr->get_forward_rates(), 1) . "\r\n" );
-print_r( "\r\n" . print_r($sr->get_par_yields(), 1) . "\r\n" );
+//print_r( "\r\n" . $sr . "\r\n" );
+//print_r( "\r\n" . print_r($sr->get_forward_rates(), 1) . "\r\n" );
+foreach ($sr->get_forward_rates()->get_objects() as $f){
+//	print_r( $f->get_end_time()); 
+	print_r( $sr->explain_forward_rate( $f ) ); 
+}
+//print_r( "\r\n" . print_r($sr->get_par_yields(), 1) . "\r\n" );
 ?>

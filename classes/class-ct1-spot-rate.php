@@ -95,11 +95,11 @@ class CT1_Spot_Rate extends CT1_Object {
     }
             
     public function get_label(){
-        return "i" . "_{" . $this->get_effective_time();
+        return "i" . "_{" . $this->get_effective_time() . "}";
     }
 
     public function get_label_delta(){
-        return "\\delta" . "_{" . $this->get_effective_time();
+        return "\\delta" . "_{" . $this->get_effective_time() . "}";
     }
 
     public function get_labels(){

@@ -10,6 +10,17 @@ abstract class CT1_Collection extends CT1_Object {
 		return true;
 	}
 
+	public function is_in_collection( $candidate ){
+		if ( $this->get_count() > 0) {
+			foreach ( $this->get_objects() as $obj ){
+				if ( $obj == $candidate )
+					return true;
+			}
+		}
+		return false;
+	}
+
+
 	public function __toString()
 	{
 		$return = array();
