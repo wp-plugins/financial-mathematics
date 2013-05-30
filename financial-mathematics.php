@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 add_shortcode( 'fin-math', 'concept_all_proc' );  // this is the only one you need
 
 // these shortcodes are for backwards compatibility only
+add_shortcode( 'concept_spot_rates', 'concept_spot_rates_proc' ); 
 add_shortcode( 'concept_cashflows', 'concept_cashflows_proc' ); 
 add_shortcode( 'concept_mortgage', 'concept_mortgage_proc' ); 
 add_shortcode( 'mortgage', 'concept_mortgage_proc' ); 
@@ -42,6 +43,17 @@ function concept_all_proc($attr){
 	try{
 		CT1_autoloader('CT1_Concept_All', 'class-ct1-concept-all.php');
 		$m = new CT1_Concept_All();
+		return $m->get_controller($_GET);
+	}
+	catch (Exception $e){
+		return "Exception in " . __FILE__ . ": " . $e->getMessage();
+	}
+}
+
+function concept_spot_rates_proc($attr){
+	try{
+		CT1_autoloader('CT1_Concept_Spot_Rates', 'class-ct1-concept-spot-rates.php');
+		$m = new CT1_Concept_Spot_Rates();
 		return $m->get_controller($_GET);
 	}
 	catch (Exception $e){
