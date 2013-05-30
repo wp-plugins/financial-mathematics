@@ -1,5 +1,7 @@
 <?php   
 require_once 'class-ct1-spot-rate.php';
+require_once 'class-ct1-forward-rates.php';
+require_once 'class-ct1-par-yields.php';
 require_once 'class-ct1-collection.php';
 
 class CT1_Spot_Rates extends CT1_Collection {
@@ -10,60 +12,61 @@ class CT1_Spot_Rates extends CT1_Collection {
 		return false;
 	}
 
-	public function __toString()
-	{
-		$return = array();
-		if ( $this->get_count() > 0 ) {
-			$o = $this->get_objects();
-			foreach ( array_keys( $o ) as $key ){
-				$return[ $key ] = print_r( $o[ $key ], 1 );
-			}
-		}
-		return print_r( $return, 1);
+	private function get_sorted_terms(){
+		$terms = array_keys( $this->get_objects() );
+		sort( $terms );
+		return $terms;
 	}
 
-
-	public function get_one_year_forward_rates(){
-		$r = array();
-		$d = $this->get_one_year_forward_deltas();
-		for ($i = 1, $ii = count( $d ); $i <= $ii; $i++){
-			$r[ $i ] = exp( $d[ $i ] ) -1;
-		}
-		return $r;
-	}
-	
-	public function get_one_year_forward_deltas(){
-		$f = array();
-		for ($i = 1, $ii = $this->maximum_contiguous_term(); $i <= $ii; $i++){
-			if ( 1 == $i ){
-				$f[1] = $this->get_spot_delta(1);
+	public function get_forward_rates(){
+		$spot_rates = $this->get_objects();
+		$terms = $this->get_sorted_terms();
+		$fs = new CT1_Forward_Rates();
+		for ($i = 0, $ii = $this->get_count(); $i < $ii; $i++){
+			$end = $terms[ $i ]; 	
+			if ( 0 == $i ){
+				$start = 0; $i = $spot_rates[ $end ]->get_i_effective();	
+				$f = new CT1_Forward_Rate( $i, $start, $end );
 			} else {
-				$f[ $i ] = $i * $this->get_spot_delta( $i ) - ( $i - 1 ) * $this->get_spot_delta( $i -1 );
+				$start = $terms[ $i - 1 ]; 
+				$phi = $spot_rates[ $end ]->get_delta() * $end - $spot_rates[ $start ]->get_delta() * $start;	
+				$phi = $phi / ( $end - $start );
+				$f = new CT1_Forward_Rate( exp( $phi ) - 1, $start, $end );
 			}
+			$fs->add_object( $f );
 		}
-		return $f;
+		return $fs;
 	}
 
-			
-	
-	private function get_spot_delta( $i ){
-		$r = $this->get_spot($i );
-		if (!is_null( $r ) ){
-			return $r->get_delta();
+	public function get_par_yields(){
+		$spot_rates = $this->get_objects();
+		$terms = $this->get_sorted_terms();
+		$ps = new CT1_Par_Yields();
+		for ($i = 0, $ii = $this->maximum_contiguous_term(); $i < $ii; $i++){
+			$end = $terms[ $i ]; 	
+			$c = (1 - $spot_rates[ $end ]->get_vn() ) / $this->annuity_value( $end );
+			$p = new CT1_Par_Yield( $c, $end );
+			$ps->add_object( $p );
 		}
-		return;
+		return $ps;
 	}
 
-	private function get_spot( $i ){
-		if ( 0 < $this->get_count() ){
-			foreach ($this->get_objects() as $c ) {
-				if ( $i == $c->get_effective_time()  )
-					return $c;
-			}
+	private function annuity_value( $term ){
+		// returns discounted value of 1 payable at terms 1, 2, .. $term
+		// provided spot rates exist for terms 1, 2, ... $term
+		if ( $term > $this->maximum_contiguous_term() ){
+			throw new Exception ( __FILE__ . " annuity_value sought for term " . $term . " though maximum_contiguous_term is " . $this->maximum_contiguous_term()  );
 		}
-		return;
+		$spot_rates = $this->get_objects();
+		$terms = $this->get_sorted_terms();
+		$value = 0;
+		for ($i = 1, $ii = $term; $i <= $ii; $i++){
+			$value += $spot_rates[ $terms[ $i-1 ] ]->get_vn();
+		}
+		return $value;
 	}
 
+		
 	private function maximum_contiguous_term(){
 		$i = 1;
 		while ($this->term_is_set( $i )){
@@ -82,6 +85,7 @@ class CT1_Spot_Rates extends CT1_Collection {
 		}
 		return false;
 	}
+			
 
 }
 

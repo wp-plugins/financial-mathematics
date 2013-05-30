@@ -58,6 +58,10 @@ class CT1_Spot_Rate extends CT1_Object {
         return $this->delta ;
 	}
 
+	public function get_vn(){
+		return exp( -$this->get_delta() * $this->get_effective_time() );
+	}
+
     public function set_delta($n){
         $candidate = array('delta'=>$n);
         $valid = $this->get_validation($candidate);

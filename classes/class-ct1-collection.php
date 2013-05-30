@@ -10,6 +10,18 @@ abstract class CT1_Collection extends CT1_Object {
 		return true;
 	}
 
+	public function __toString()
+	{
+		$return = array();
+		if ( $this->get_count() > 0 ) {
+			$o = $this->get_objects();
+			foreach ( array_keys( $o ) as $key ){
+				$return[ $key ] = print_r( $o[ $key ], 1 );
+			}
+		}
+		return print_r( $return, 1);
+	}
+
 	public function get_values(){ 
 		$r = array();
 		$o = $this->get_objects;
