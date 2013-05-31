@@ -2,6 +2,7 @@
 
 //require_once 'functions.php';
 CT1_autoloader('HTML_QuickForm2','HTML/QuickForm2.php');
+CT1_autoloader('HTML_Table','HTML/Table.php');
 
 define("CT1_maximum_levels_detail", 10);
 
@@ -263,6 +264,33 @@ private function get_form_plain( $return ){
     return print_r($return, 1);
 }
 
+public function get_table( $row_data, $column_headers ){
+	// see http://pear.php.net/manual/en/package.html.html-table.intro.php
+
+	$table = new HTML_Table();
+	$table->setAutoGrow(true);
+	$table->setAutoFill('n/a');
+	for ( $nr = 0, $maxr = count( $row_data ); $nr < $maxr; $nr++ ){
+		$table->setHeaderContents( $nr + 1, 0, (string)$nr );
+		for ($i =0, $ii = count( $column_headers ); $i < $ii; $i++ ){
+			if ('' != $row_data[$nr][$i] ){
+				$table->setCellContents( $nr+1, $i+1, $row_data[$nr][$i] );
+			}
+		}
+	}
+	$table->setHeaderContents(0, 0, '');
+	for ($i =0, $ii = count( $column_headers ); $i < $ii; $i++ ){
+		$table->setHeaderContents(0, $i + 1, $column_headers[ $i ]);
+	}
+	$header_attribute = array( 'class' => 'header' );
+	$table->setRowAttributes(0, $header_attribute, true);
+	$table->setColAttributes(0, $header_attribute);
+	$altRow = array( 'class' => 'alt_row' );
+	$table->altRowAttributes( 1, null, $altRow );
+	return $table->toHtml();
+}
+
+	
 public function get_select_form( $return ){
 	$form = new HTML_QuickForm2($return['name'],$return['method'], $return['action']);
 	$fieldset = $form->addElement('fieldset');

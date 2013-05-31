@@ -36,6 +36,37 @@ protected $explanation_par_yields;
 		return $this->explanation_forward_rates[ $f->get_end_time() ];
 	}
 
+	public function get_all_rates(){
+	// returns array of rates that could be rendered in table
+		$out = array();
+		$out[ 'header' ] = array('spot term','spot rate','forward period','forward rate','par term','par yield');
+		$spots = $this->get_objects();
+		$forwards = $this->get_forward_rates()->get_objects();
+		$pars = $this->get_par_yields()->get_objects();
+		$key_spot = array_keys( $spots );
+		$key_forward = array_keys( $forwards );
+		$key_par = array_keys( $pars );
+		for ($i = 0, $ii = $this->get_count(); $i < $ii; $i++) {
+			$row = array();
+			$s = $spots[ $key_spot[ $i ] ];
+			$row[0] = $s->get_label();
+			$row[1] = $s->get_i_effective();
+			if ( count( $forwards ) > $i ){
+				$f = $forwards[ $key_forward[ $i ]];
+				$row[2] = $f->get_label();
+				$row[3] = $f->get_i_effective();
+			}
+			if ( count( $pars ) > $i ){
+				$p = $pars[ $key_par[ $i ]];
+				$row[4] = $p->get_label();
+				$row[5] = $p->get_coupon();
+			}
+			$out['data'][] = $row;
+		}
+		return $out;
+	}
+
+
 	public function get_forward_rates(){
 		$spot_rates = $this->get_objects();
 		$terms = $this->get_sorted_terms();

@@ -12,6 +12,23 @@ public function __construct(CT1_Object $obj=null){
 	$this->set_request( 'get_spotrates' );
 }
 
+public function get_solution_no_detail(){
+echo "<pre> get_solution_no_detail" . __FILE__ .  "</pre>";
+	$render = new CT1_Render();
+	$rates = $this->obj->get_all_rates();
+	return $render->get_table( $rates );
+}
+
+public function get_solution(){
+echo "<pre> get_solution" . __FILE__ .  "</pre>";
+	return;
+}
+
+public function get_delete_buttons(){
+echo "<pre> get_delete_buttons" . __FILE__ .  "</pre>";
+	return;
+}
+
 private function add_spot_rate_from_input( $IN ){
 	$i_effective = 0; $effective_time = 0;
 	if ( isset( $IN['effective_time'] ) )
@@ -25,6 +42,7 @@ private function add_spot_rate_from_input( $IN ){
 
 private function get_form_add_spot_rate(){
 	$render = new CT1_Render();
+//echo "<pre> get_form_add_spot_rate" . __FILE__ .  "</pre>";
 	return $render->get_render_form( $this->get_add_spot_rate() );
 }
 	
@@ -35,7 +53,7 @@ public function get_add_spot_rate(){
 	$form = array();
 	$form['method'] = 'GET';
 	$form['parameters'] = $sr->get_parameters();
-	$form['valid_options'] = $sr->valid_options;
+	$form['valid_options'] = $sr->get_valid_options();
 	$form['request'] = 'add_spot_rate';
 	$form['render'] = 'HTML';
 	$form['introduction'] = 'Add a spot_rate.';
@@ -47,29 +65,16 @@ public function get_add_spot_rate(){
 	return $form;
 }
 
-public function get_request(){
-	return "value_spotrates";
-}
-
 public function get_possible_requests(){
 	return array( 
 		'view_spotrates',
 		'add_spot_rate',
-		$this->get_request(),
 		);
-}
-
-private function ignore_value( $_INPUT ){
-	if (!isset( $_INPUT['value'] ) )
-		return true;
-	if (!is_numeric( $_INPUT['value'] ) )
-		return true;
-	return false;
 }
 
 
 public function get_controller($_INPUT ){
-//echo "<pre> GET" . __FILE__ . print_r($_GET,1) . "</pre>";
+echo "<pre> GET" . __FILE__ . print_r($_GET,1) . "</pre>";
 	try{
 	$render = new CT1_Render();
 	if (isset($_INPUT['request'])){
@@ -86,15 +91,15 @@ public function get_controller($_INPUT ){
 		if ($this->get_request() == $_INPUT['request']){
 			if ( $this->ignore_value( $_INPUT ) ){
 				if (isset( $_INPUT['i_effective'] ) ){
-					return $this->get_solution( $_INPUT['i_effective'] ) .  $this->get_form_valuation() . $this->get_delete_buttons() .  $this->get_form_add_spot_rate()  ;
+					return $this->get_solution( $_INPUT['i_effective'] ) . $this->get_delete_buttons() .  $this->get_form_add_spot_rate()  ;
 				} else {
-					return $this->get_solution() .  $this->get_form_valuation() . $this->get_delete_buttons() .  $this->get_form_add_spot_rate()  ;
+					return $this->get_solution()  . $this->get_delete_buttons() .  $this->get_form_add_spot_rate()  ;
 				}
 			} else {
-				return $this->get_interest_rate_for_value( $_INPUT['value'] ) .  $this->get_form_valuation() . $this->get_delete_buttons() .  $this->get_form_add_spot_rate()  ;
+				return $this->get_interest_rate_for_value( $_INPUT['value'] ) . $this->get_delete_buttons() .  $this->get_form_add_spot_rate()  ;
 			}
 		} else {
-			$out = $this->get_solution_no_detail() .  $this->get_form_valuation() . $this->get_delete_buttons() . $this->get_form_add_spot_rate()  ;
+			$out = $this->get_solution_no_detail() . $this->get_delete_buttons() . $this->get_form_add_spot_rate()  ;
 			return $out;
 		}
 	}
@@ -106,7 +111,7 @@ public function get_controller($_INPUT ){
 				return "<p>Error setting spotrates from:<pre>" . print_r($_INPUT,1) .  "</pre>";
 			}
 			$hidden = $render->get_form_spot_rate( $this->obj );
-			$out = $this->get_solution_no_detail() .  $this->get_form_valuation() . $this->get_delete_buttons() .  $this->get_form_add_spot_rate()  ;
+			$out = $this->get_solution_no_detail()  . $this->get_delete_buttons() .  $this->get_form_add_spot_rate()  ;
 			return $out;
 		}
 		return $this->get_form_add_spot_rate()  ;
