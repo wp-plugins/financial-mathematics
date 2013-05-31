@@ -146,5 +146,25 @@ protected $explanation_par_yields;
 	}
 			
 
+	public function set_from_input($_INPUT = array(), $pre = ''){
+		try{
+			$c_new = new CT1_Spot_Rates();
+			if ( count($_INPUT) > 0 ){
+				foreach ($_INPUT as $i){
+					if( is_array($i) ){
+						$c = new CT1_Spot_Rate( $i['i_effective'] , $i['effective_time'] );
+						$c_new->add_object( $c );
+					}
+				}
+				$this->set_objects( $c_new );
+				return true;
+			} else {
+				return false;
+			}
+		}
+		catch( Exception $e ){ 
+			throw new Exception( "Exception in " . __FILE__ . ": " . $e->getMessage() );
+		}
+	}
 }
 
