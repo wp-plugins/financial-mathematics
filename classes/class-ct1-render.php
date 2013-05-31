@@ -346,6 +346,7 @@ private function get_form_html( $return ){
     $fieldset->addElement('submit', null, array('value' => $return['submit']));
     $out = "<p>" . $return['introduction'] . "</p>" . "\r\n";
     $out.= $form;
+//echo "<pre>" . __FILE__ . "get_form_html" . htmlentities(print_r($out, 1)) . "</pre>";
     return $out;
 }
 

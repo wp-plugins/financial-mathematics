@@ -39,6 +39,8 @@ private function add_spot_rate_from_input( $IN ){
 	if ( isset( $IN['i_effective'] ) )
 		$i_effective = (float)$IN['i_effective'];
 	$sr = new CT1_Spot_Rate( $i_effective, $effective_time );
+//echo "<pre> " . print_r( $this->obj, 1 ) .  "</pre>";
+//echo "<pre> " . print_r( $sr, 1 ) .  "</pre>";
 	$this->obj->add_object( $sr );
 	return;
 }
@@ -63,8 +65,12 @@ public function get_add_spot_rate(){
 	$form['submit'] = 'Add';
 	$form['exclude'] = array();
 	$form['values'] = $values;
-//	$form['hidden'] = $this->get_hidden_spot_rate_fields( $this->obj );
+	$form['hidden'] = $this->obj->get_values_as_array('spotrates');
 //echo "<pre>" . __FILE__ . print_r($form,1) . "</pre>";
+/*
+echo "<pre>" . __FILE__ . print_r($this->obj,1) . "</pre>";
+echo "<pre> value" . __FILE__ . print_r($this->obj->get_values(),1) . "</pre>";
+*/
 	return $form;
 }
 
@@ -77,7 +83,7 @@ public function get_possible_requests(){
 
 
 public function get_controller($_INPUT ){
-echo "<pre> GET" . __FILE__ . print_r($_GET,1) . "</pre>";
+//echo "<pre> GET" . __FILE__ . print_r($_GET,1) . "</pre>";
 	try{
 	$render = new CT1_Render();
 	if (isset($_INPUT['request'])){
@@ -125,8 +131,12 @@ echo "<pre> GET" . __FILE__ . print_r($_GET,1) . "</pre>";
 }
 
 private function set_spotrates( $_INPUT = array() ){
-//	$this->obj->set_from_input($_INPUT);
-	return ($this->obj->set_from_input($_INPUT));
+	try{
+		$this->obj->set_from_input($_INPUT);
+		return true;
+	} catch( Exception $e ){
+		return false;
+	}
 }
 
 } // end of class

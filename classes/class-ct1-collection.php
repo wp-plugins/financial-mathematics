@@ -33,9 +33,27 @@ abstract class CT1_Collection extends CT1_Object {
 		return print_r( $return, 1);
 	}
 
+	public function get_values_as_array( $name_label = "CT1_collection" ){
+		$hidden = array();
+		if ( count( $this->get_values() ) > 0 ) {
+			$i = 0;
+			foreach ($this->get_values() as $v ){
+				if ( is_array( $v ) ){
+					foreach (array_keys( $v ) as $key){
+						$name =  $name_label . "[" . $i . "][" . $key . "]";
+						$value = $v[ $key ];
+						$hidden[ $name ] = $value;
+					}
+					$i++;
+				}
+			}
+		}
+		return $hidden;
+	}
+
 	public function get_values(){ 
 		$r = array();
-		$o = $this->get_objects;
+		$o = $this->get_objects();
 		if ( 0 < $this->get_count() ){
 			foreach ( array_keys( $o ) as $key ){
 				$r[ $key ] = $o[ $key ]->get_values();
@@ -45,6 +63,7 @@ abstract class CT1_Collection extends CT1_Object {
 	}
 	
 	public function get_count(){
+//echo "<pre>" .  __FILE__ . " get_count() . " . print_r( $this, 1 ) . "</pre>";
 		return count( $this->get_objects() );
 	}
 
@@ -57,6 +76,8 @@ abstract class CT1_Collection extends CT1_Object {
 	}
 
 	public function add_object( CT1_Object $c, $duplicates_allowed = false ){
+//echo "<pre>" .  __FILE__ . " add_object() . " . print_r( get_class($c), 1 ) . "</pre>";
+//echo "<pre>" .  __FILE__ . " add_object() . " . print_r( $c, 1 ) . "</pre>";
 		if( !$this->is_acceptable_class( $c ) ){
 			throw new Exception( __FILE__ . "Object of class " . get_class( $c ) . " can't be added to collection of class" .  get_class( $this ) );
 		}
@@ -74,6 +95,7 @@ abstract class CT1_Collection extends CT1_Object {
 		} else {
 			$this->objects[] = $c;
 		}
+//echo "<pre>" .  __FILE__ . " add_object this . " . print_r( $this, 1 ) . "</pre>";
 	}
 
 	public function remove_object( CT1_Object $c, $remove_all = false ){

@@ -225,7 +225,7 @@ private function ignore_value( $_INPUT ){
 
 
 public function get_controller($_INPUT ){
-//echo "<pre> GET" . __FILE__ . print_r($_GET,1) . "</pre>";
+// echo "<pre> GET" . __FILE__ . print_r($_GET,1) . "</pre>";
 	$render = new CT1_Render();
 	if (isset($_INPUT['request'])){
 		if (isset($_INPUT['cashflows'])){
