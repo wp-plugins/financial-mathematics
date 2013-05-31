@@ -13,10 +13,12 @@ public function __construct(CT1_Object $obj=null){
 }
 
 public function get_solution_no_detail(){
-echo "<pre> get_solution_no_detail" . __FILE__ .  "</pre>";
+//echo "<pre> get_solution_no_detail" . __FILE__ .  "</pre>";
 	$render = new CT1_Render();
 	$rates = $this->obj->get_all_rates();
-	return $render->get_table( $rates );
+//echo "<pre> get_solution_no_detail this obj " . print_r( $this->obj, 1) .  "</pre>";
+//echo "<pre> get_solution_no_detail rates " . print_r( $rates, 1) .  "</pre>";
+	return $render->get_table( $rates['data'], $rates['header'] );
 }
 
 public function get_solution(){
@@ -30,11 +32,12 @@ echo "<pre> get_delete_buttons" . __FILE__ .  "</pre>";
 }
 
 private function add_spot_rate_from_input( $IN ){
+//echo "<pre> add_spot_rate_from_input" . __FILE__ .  "</pre>";
 	$i_effective = 0; $effective_time = 0;
 	if ( isset( $IN['effective_time'] ) )
-		$effective_time = $IN['effective_time'];
+		$effective_time = (float)$IN['effective_time'];
 	if ( isset( $IN['i_effective'] ) )
-		$i_effective = $IN['i_effective'];
+		$i_effective = (float)$IN['i_effective'];
 	$sr = new CT1_Spot_Rate( $i_effective, $effective_time );
 	$this->obj->add_object( $sr );
 	return;

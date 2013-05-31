@@ -266,6 +266,14 @@ private function get_form_plain( $return ){
 
 public function get_table( $row_data, $column_headers ){
 	// see http://pear.php.net/manual/en/package.html.html-table.intro.php
+/*
+echo "<pre>";
+print_r(  __FILE__ . "get_table row_date");
+print_r(  $row_data );
+print_r(  __FILE__ . "get_table col_headers");
+print_r(  $column_headers );
+echo "</pre>";
+*/
 
 	$table = new HTML_Table();
 	$table->setAutoGrow(true);
