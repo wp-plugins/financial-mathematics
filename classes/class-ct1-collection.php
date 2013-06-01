@@ -74,7 +74,7 @@ abstract class CT1_Collection extends CT1_Object {
 		$this->objects = $array;
 	}
 
-	public function add_object( CT1_Object $c, $duplicates_allowed = false ){
+	public function add_object( CT1_Object $c, $duplicates_allowed = false, $re_sort = false ){
 //echo "<pre>" .  __FILE__ . " add_object() . " . print_r( get_class($c), 1 ) . "</pre>";
 //echo "<pre>" .  __FILE__ . " add_object() . " . print_r( $c, 1 ) . "</pre>";
 		if( !$this->is_acceptable_class( $c ) ){
@@ -90,13 +90,32 @@ abstract class CT1_Collection extends CT1_Object {
 			$this->remove_object( $c );
 		}
 		if ( method_exists( $c, 'get_index' ) ){
+//echo "<pre>" .  __FILE__ . " get_index() . " . print_r( $c->get_index(), 1 ) . "</pre>";
 			$this->objects[ $c->get_index() ] = $c;
+//echo "<pre>" .  __FILE__ . " POST get_index() print objects . " . print_r( $this->objects, 1 ) . "</pre>";
 		} else {
 			$this->objects[] = $c;
 		}
-		sort( $this->objects );
-//echo "<pre>" .  __FILE__ . " add_object this . " . print_r( $this, 1 ) . "</pre>";
+		if ( $re_sort )
+			$this->sort_objects();
+//echo "<pre>" .  __FILE__ . " add_object objects just before end . " . print_r( $this->objects, 1 ) . "</pre>";
 	}
+
+	public function sort_objects(){
+		$old_objects = $this->get_objects();
+		$sorted_keys = array_keys( $old_objects );
+		sort( $sorted_keys );
+		if ( count( $sorted_keys ) > 0 ){
+			foreach ( $old_objects as $o ){
+				$this->remove_object( $o );
+			}
+			foreach ( $sorted_keys as $key ){
+				$this->add_object( $old_objects[ $key ] );
+			}
+		return;
+		}
+	}
+
 
 	public function remove_object( CT1_Object $c, $remove_all = false ){
 		if ( 0 < $this->get_count() ){

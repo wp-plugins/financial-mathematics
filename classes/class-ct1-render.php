@@ -10,6 +10,15 @@ class CT1_Render  {
 
 private $eqref = 0;
 
+public function get_link( $hidden ){
+	$out = "";
+        foreach(array_keys( $hidden) as $key ){
+		$value = $hidden[$key];
+		$out .= "&" . $key . "=" . $value;
+	}
+	return $out;
+}
+
 private function add_hidden_fields_to_fieldset( &$fieldset, $hidden ){
         foreach(array_keys( $hidden) as $key ){
 		$value = $hidden[$key];
@@ -267,13 +276,13 @@ echo "</pre>";
 		$table->setHeaderContents( $nr + 1, 0, (string)$nr );
 		for ($i =0, $ii = count( $column_headers ); $i < $ii; $i++ ){
 			if ('' != $row_data[$nr][$i] ){
-				$table->setCellContents( $nr+1, $i+1, $row_data[$nr][$i] );
+				$table->setCellContents( $nr+1, $i, $row_data[$nr][$i] );
 			}
 		}
 	}
 	$table->setHeaderContents(0, 0, '');
 	for ($i =0, $ii = count( $column_headers ); $i < $ii; $i++ ){
-		$table->setHeaderContents(0, $i + 1, $column_headers[ $i ]);
+		$table->setHeaderContents(0, $i , $column_headers[ $i ]);
 	}
 	$header_attribute = array( 'class' => 'header' );
 	$table->setRowAttributes(0, $header_attribute, true);

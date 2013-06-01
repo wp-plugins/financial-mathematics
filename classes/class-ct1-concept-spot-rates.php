@@ -12,18 +12,64 @@ public function __construct(CT1_Object $obj=null){
 	$this->set_request( 'get_spotrates' );
 }
 
+private function get_explanation_par( $_INPUT ){
+	if ( isset($_INPUT['par_term'])  ){
+		$pys = $this->obj->get_par_yields();
+		// find par yield
+		if ( $pys->get_count()  > 0 ) {
+			foreach ( $pys->get_objects() as $p ){
+				if ($p->get_term() == $_INPUT['par_term'] ){
+					$render = new CT1_Render();
+					return $render->get_render_latex( $this->obj->explain_par_yield( $p ) ) . $this->get_solution_no_detail();
+				}
+			}
+		}
+	}
+	return $this->get_solution_no_detail();
+}
+
+private function get_explanation_forward( $_INPUT ){
+	if ( isset($_INPUT['forward_start_time']) && isset( $_INPUT['forward_end_time'])  ){
+		$frs = $this->obj->get_forward_rates();
+		// find forward rate
+		if ( $frs->get_count()  > 0 ) {
+			foreach ( $frs->get_objects() as $f ){
+				if ($f->get_start_time() == $_INPUT['forward_start_time'] && $f->get_end_time() ==  $_INPUT['forward_end_time']){
+					$render = new CT1_Render();
+					return $render->get_render_latex( $this->obj->explain_forward_rate( $f ) ) . $this->get_solution_no_detail();
+				}
+			}
+		}
+	}
+	return $this->get_solution_no_detail();
+}
+
+
 public function get_solution_no_detail(){
 //echo "<pre> get_solution_no_detail" . __FILE__ .  "</pre>";
 	$render = new CT1_Render();
 	$rates = $this->obj->get_all_rates();
-//echo "<pre> get_solution_no_detail this obj " . print_r( $this->obj, 1) .  "</pre>";
+	$hidden = $this->obj->get_values_as_array( get_class($this->obj) );
+	$link = "?page_id=" . $_GET['page_id'] . $render->get_link($hidden);
+//echo "<pre> get_solution_no_detail hidden " . print_r( $render->get_link($hidden), 1) .  "</pre>";
+	for ( $i = 0, $ii = count( $rates['data'] ); $i < $ii; $i++ ){
+		$f = $rates['objects'][$i]['CT1_Forward_Rate'];
+		$flink = "";
+		$p = $rates['objects'][$i]['CT1_Par_Yield'];
+		$plink = "";
+		if ( is_object( $f ) ){
+			$rates['data'][$i][3]  = "<a href='" . $link . "&request=explain_forward&forward_start_time=" . $f->get_start_time() . "&forward_end_time=" . $f->get_end_time() . "'>" . $rates['data'][$i][3] . "</a>";
+		}
+		if ( is_object( $p ) ){
+			$rates['data'][$i][5]  = "<a href='" . $link . "&request=explain_par&par_term=" . $p->get_term() . "'>" . $rates['data'][$i][5] . "</a>";
+		}
+	}
 //echo "<pre> get_solution_no_detail rates " . print_r( $rates, 1) .  "</pre>";
 	return $render->get_table( $rates['data'], $rates['header'] );
 }
 
 public function get_solution(){
-echo "<pre> get_solution" . __FILE__ .  "</pre>";
-	return;
+	throw new Exception("get_solution called in " . __FILE__ );
 }
 
 public function get_delete_buttons(){
@@ -41,7 +87,7 @@ private function add_spot_rate_from_input( $IN ){
 	$sr = new CT1_Spot_Rate( $i_effective, $effective_time );
 //echo "<pre> " . print_r( $this->obj, 1 ) .  "</pre>";
 //echo "<pre> " . print_r( $sr, 1 ) .  "</pre>";
-	$this->obj->add_object( $sr );
+	$this->obj->add_object( $sr, false, true );
 	return;
 }
 
@@ -77,6 +123,8 @@ echo "<pre> value" . __FILE__ . print_r($this->obj->get_values(),1) . "</pre>";
 
 public function get_possible_requests(){
 	return array( 
+		'explain_forward',
+		'explain_par',
 		'view_spotrates',
 		'add_spot_rate',
 		);
@@ -98,20 +146,16 @@ public function get_controller($_INPUT ){
 		if ('add_spot_rate' == $_INPUT['request']){
 			$this->add_spot_rate_from_input( $_INPUT );
 		}
-		if ($this->get_request() == $_INPUT['request']){
-			if ( $this->ignore_value( $_INPUT ) ){
-				if (isset( $_INPUT['i_effective'] ) ){
-					return $this->get_solution( $_INPUT['i_effective'] ) . $this->get_delete_buttons() .  $this->get_form_add_spot_rate()  ;
-				} else {
-					return $this->get_solution()  . $this->get_delete_buttons() .  $this->get_form_add_spot_rate()  ;
-				}
-			} else {
-				return $this->get_interest_rate_for_value( $_INPUT['value'] ) . $this->get_delete_buttons() .  $this->get_form_add_spot_rate()  ;
-			}
+		if ('explain_forward' == $_INPUT['request'] ){
+			$out = $this->get_explanation_forward( $_INPUT ) . $this->get_delete_buttons() . $this->get_form_add_spot_rate()  ;
 		} else {
-			$out = $this->get_solution_no_detail() . $this->get_delete_buttons() . $this->get_form_add_spot_rate()  ;
-			return $out;
+			if ( 'explain_par' == $_INPUT['request'] ){
+				$out = $this->get_explanation_par( $_INPUT ) . $this->get_delete_buttons() . $this->get_form_add_spot_rate()  ;
+			} else {
+				$out = $this->get_solution_no_detail() . $this->get_delete_buttons() . $this->get_form_add_spot_rate()  ;
+			}
 		}
+		return $out;
 	}
 	else{
 		if (isset($_INPUT[get_class( $this->obj )])){

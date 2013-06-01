@@ -23,6 +23,7 @@ protected $explanation_par_yields;
 	}
 
 	private function get_sorted_terms(){
+//echo "<pre> get_sorted_terms " . print_r( $this->get_objects() , 1) . "</pre>";
 		$terms = array_keys( $this->get_objects() );
 		sort( $terms );
 		return $terms;
@@ -57,17 +58,21 @@ protected $explanation_par_yields;
 			$s = $spots[ $key_spot[ $i ] ];
 			$row[0] = $s->get_label();
 			$row[1] = $s->get_i_effective();
+			$objects[get_class($s)] = $s;
 			if ( count( $forwards ) > $i ){
 				$f = $forwards[ $key_forward[ $i ]];
-				$row[2] = $f->get_label();
+				$row[2] = $f->get_label() ;
 				$row[3] = $f->get_i_effective();
+				$objects[get_class($f)] = $f;
 			}
 			if ( count( $pars ) > $i ){
 				$p = $pars[ $key_par[ $i ]];
 				$row[4] = $p->get_label();
 				$row[5] = $p->get_coupon();
+				$objects[get_class($p)] = $p;
 			}
 			$out['data'][] = $row;
+			$out['objects'][] = $objects;
 		}
 		return $out;
 	}
@@ -75,7 +80,9 @@ protected $explanation_par_yields;
 
 	public function get_forward_rates(){
 		$spot_rates = $this->get_objects();
+//echo "<pre> get_forward_rates " . __FILE__ . print_r( $spot_rates, 1) . "</pre>";
 		$terms = $this->get_sorted_terms();
+//echo "<pre> get_forward_rates terms " . __FILE__ . print_r( $terms, 1) . "</pre>";
 		$fs = new CT1_Forward_Rates();
 		for ($i = 0, $ii = $this->get_count(); $i < $ii; $i++){
 			$end = $terms[ $i ]; 	
@@ -120,8 +127,8 @@ protected $explanation_par_yields;
 			$ps->add_object( $p );
 			$exp[0]['left'] = $p->get_label();
 			$exp_ann = $this->explain_par_yield_annuity_value( $p->get_term() );
-			$exp[0]['right'] = "\\frac{1 - (1 + i_{" . $p->get_term() . "}^{-" . $p->get_term() . "}}{" . $exp_ann['algebra'] . "}";
-			$exp[1]['right'] = "\\frac{1 - (" . (1 + $spot_rates[ $end ]->get_i_effective()) . "^{-" . $p->get_term() . "}}{" . $exp_ann['numbers'] . "}";
+			$exp[0]['right'] = "\\frac{1 - (1 + i_{" . $p->get_term() . "})^{-" . $p->get_term() . "}}{" . $exp_ann['algebra'] . "}";
+			$exp[1]['right'] = "\\frac{1 - " . (1 + $spot_rates[ $end ]->get_i_effective()) . "^{-" . $p->get_term() . "}}{" . $exp_ann['numbers'] . "}";
 
 			$exp[2]['right'] = $p->get_coupon();
 			$this->explanation_par_yields[ $p->get_term() ] = $exp;
@@ -154,6 +161,7 @@ protected $explanation_par_yields;
 			throw new Exception ( __FILE__ . " annuity_value sought for term " . $term . " though maximum_contiguous_term is " . $this->maximum_contiguous_term()  );
 		}
 		$spot_rates = $this->get_objects();
+//echo "<pre>" . __FILE__ . print_r($spot_rates, 1) . "</pre>";
 		$terms = $this->get_sorted_terms();
 		$value = 0;
 		for ($i = 1, $ii = $term; $i <= $ii; $i++){

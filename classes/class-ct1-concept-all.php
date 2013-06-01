@@ -5,6 +5,7 @@ require_once 'class-ct1-concept-annuity.php';
 require_once 'class-ct1-concept-annuity-increasing.php';
 require_once 'class-ct1-concept-interest.php';
 require_once 'class-ct1-concept-cashflows.php';
+require_once 'class-ct1-concept-spot-rates.php';
 
 class CT1_Concept_All {
 
@@ -21,6 +22,7 @@ private function set_concepts(){
 				'concept_annuity_increasing'=>new CT1_Concept_Annuity_Increasing(), 
 				'concept_interest'=>new CT1_Concept_Interest(),
 				'concept_cashflows'=>new CT1_Concept_Cashflows(),
+				'concept_spot_rates'=>new CT1_Concept_Spot_Rates(),
 				 );
 }
 
@@ -31,6 +33,7 @@ private function get_concept_labels(){
 				'concept_mortgage'=>'Mortgage (level)', 
 				'concept_annuity_increasing'=> 'Annuity (increasing or decreasing)', 
 				'concept_cashflows'=> 'Multiple cashflows', 
+				'concept_spot_rates'=> 'Spot rates to foward rates and par yields', 
 				 );
 }
 
