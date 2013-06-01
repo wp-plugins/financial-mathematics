@@ -42,6 +42,9 @@ shortcode.
 
 == Changelog ==
 
+= 1.11 =
+Spot rates added to [fin-math] and [concept_spot_rates] shortcodes.
+
 = 1.10 = 
 Multiple cashflows (mixtures of annuities) enabled in [fin-math].
 
