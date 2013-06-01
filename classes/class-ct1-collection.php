@@ -20,7 +20,6 @@ abstract class CT1_Collection extends CT1_Object {
 		return false;
 	}
 
-
 	public function __toString()
 	{
 		$return = array();
@@ -95,19 +94,19 @@ abstract class CT1_Collection extends CT1_Object {
 		} else {
 			$this->objects[] = $c;
 		}
+		sort( $this->objects );
 //echo "<pre>" .  __FILE__ . " add_object this . " . print_r( $this, 1 ) . "</pre>";
 	}
 
 	public function remove_object( CT1_Object $c, $remove_all = false ){
 		if ( 0 < $this->get_count() ){
-			$i = 0;
-			foreach ( $this->get_objects() as $g ){
-				if ( $c == $g ){
-					unset( $this->objects[ $i ] );
+			$this_objects = $this->get_objects();
+			foreach ( array_keys($this_objects) as $key ){
+				if ( $c == $this_objects[ $key ] ){
+					unset( $this->objects[ $key ] );
 					if ( !$remove_all )
 						return;
 				}
-				$i++;
 			}
 		}
 	}

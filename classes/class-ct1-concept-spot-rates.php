@@ -27,8 +27,8 @@ echo "<pre> get_solution" . __FILE__ .  "</pre>";
 }
 
 public function get_delete_buttons(){
-echo "<pre> get_delete_buttons" . __FILE__ .  "</pre>";
-	return;
+//echo "<pre> get_delete_buttons" . __FILE__ .  "</pre>";
+	return parent::get_delete_buttons('view_spotrates');
 }
 
 private function add_spot_rate_from_input( $IN ){
@@ -61,11 +61,12 @@ public function get_add_spot_rate(){
 	$form['valid_options'] = $sr->get_valid_options();
 	$form['request'] = 'add_spot_rate';
 	$form['render'] = 'HTML';
-	$form['introduction'] = 'Add a spot_rate.';
+//	$form['introduction'] = 'Add a spot_rate.';
+	$form['introduction'] = '';
 	$form['submit'] = 'Add';
 	$form['exclude'] = array();
 	$form['values'] = $values;
-	$form['hidden'] = $this->obj->get_values_as_array('spotrates');
+	$form['hidden'] = $this->obj->get_values_as_array( get_class($this->obj) );
 //echo "<pre>" . __FILE__ . print_r($form,1) . "</pre>";
 /*
 echo "<pre>" . __FILE__ . print_r($this->obj,1) . "</pre>";
@@ -87,8 +88,8 @@ public function get_controller($_INPUT ){
 	try{
 	$render = new CT1_Render();
 	if (isset($_INPUT['request'])){
-		if (isset($_INPUT['spotrates'])){
-			if ( $this->set_spotrates( $_INPUT['spotrates'] ) ) {
+		if (isset($_INPUT[get_class( $this->obj )])){
+			if ( $this->set_spotrates( $_INPUT[ get_class( $this->obj )] ) ) {
 				;
 			} else {
 				return "<p>Error setting spotrates from:<pre>" . print_r($_INPUT,1) .  "</pre>";
@@ -113,8 +114,8 @@ public function get_controller($_INPUT ){
 		}
 	}
 	else{
-		if (isset($_INPUT['spotrates'])){
-			if ( $this->set_spotrates( $_INPUT['spotrates'] ) ) {
+		if (isset($_INPUT[get_class( $this->obj )])){
+			if ( $this->set_spotrates( $_INPUT[ get_class( $this->obj )] ) ) {
 				;
 			} else {
 				return "<p>Error setting spotrates from:<pre>" . print_r($_INPUT,1) .  "</pre>";
@@ -133,6 +134,7 @@ public function get_controller($_INPUT ){
 private function set_spotrates( $_INPUT = array() ){
 	try{
 		$this->obj->set_from_input($_INPUT);
+		sort( $this->obj );
 		return true;
 	} catch( Exception $e ){
 		return false;

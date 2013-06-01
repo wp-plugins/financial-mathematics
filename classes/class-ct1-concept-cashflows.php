@@ -25,7 +25,7 @@ public function get_solution( $new_i_effective = 0 ){
 	return $return;
 }
 	
-private function get_delete_buttons(){
+public function get_delete_buttons(){
 	$out = "";
 	if ( count( $this->obj->get_cashflow_indices() ) > 0 ){
 		$render = new CT1_Render();

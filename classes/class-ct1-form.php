@@ -9,6 +9,30 @@ abstract class CT1_Form implements CT1_Concept {
 protected $obj;
 protected $request;
 
+
+public function get_delete_buttons( $request = ""){
+//echo "<pre>" . __FILE__ . "get_delete_buttons" ;
+	$out = "";
+	if ( $this->obj instanceof CT1_Collection ){
+		if ( $this->obj->get_count() > 0 ){
+			$render = new CT1_Render();
+			$cfs = $this->obj->get_objects();
+			foreach ( $this->obj->get_objects() as $o ) {
+				$clone = $this->obj->get_clone_this();
+//				$label = $o->get_label() ;
+				$label = "";
+				$clone->remove_object($o);
+				$button = $render->get_form_collection( $clone, 'Delete '.  $o->get_label() ,'', $request );
+				$out .= $label . $button;
+			}
+		}
+	}
+	return $out;
+}
+
+
+
+
 public function __construct(CT1_Object $obj){
 	$this->set_obj($obj);
 }

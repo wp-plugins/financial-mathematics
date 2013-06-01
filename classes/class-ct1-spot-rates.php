@@ -9,6 +9,12 @@ class CT1_Spot_Rates extends CT1_Collection {
 protected $explanation_forward_rates;
 protected $explanation_par_yields;
 
+	public function get_clone_this(){
+		$a_calc = new CT1_Spot_Rates();
+		$a_calc->set_objects( $this->get_objects() );
+		return $a_calc;
+	}
+
 
 	protected function is_acceptable_class( $c ){
 		if ( 'CT1_Spot_Rate' == get_class( $c ) )

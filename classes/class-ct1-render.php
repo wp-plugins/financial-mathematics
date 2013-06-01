@@ -11,49 +11,29 @@ class CT1_Render  {
 private $eqref = 0;
 
 private function add_hidden_fields_to_fieldset( &$fieldset, $hidden ){
-	if ( count( $hidden ) > 0 ) {
-		foreach ($hidden as $h ){
-			$fieldset->addElement('hidden', $h['name'] )->setValue( $h['value'] );
-		}
+        foreach(array_keys( $hidden) as $key ){
+		$value = $hidden[$key];
+    		$fieldset->addElement('hidden', $key)->setValue( $value );
 	}
 }
 
-public function get_hidden_fields( CT1_Cashflows $cf ){
-	$hidden = array();
-	if ( count( $cf->get_values() ) > 0 ) {
-		$i = 0;
-		foreach ($cf->get_values() as $v ){
-			if ( is_array( $v ) ){
-				foreach (array_keys( $v ) as $key){
-					$name = "cashflows[" . $i . "][" . $key . "]";
-					$value = $v[ $key ];
-					$hidden[] = array( 'name'=>$name, 'value' => $value );
-				}
-				$i++;
-			}
-		}
-	}
-	return $hidden;
-	
-}
-
-
-
-public function add_hidden_fields( &$fieldset, CT1_Cashflows $cf ){
-	$hidden = $this->get_hidden_fields( $cf );
+public function add_hidden_fields( &$fieldset, CT1_Collection $cf ){
+	$collection_name = get_class( $cf );
+	$hidden = $cf->get_values_as_array(  $collection_name );
+//echo "<pre>" . __FILE__ . " add_hidden_fileds\r\n" . print_r($hidden, 1) . "</pre>";
 	$this->add_hidden_fields_to_fieldset( $fieldset, $hidden );
 	
 }
 
-public function get_form_cashflow( CT1_Cashflows $cf, $submit = 'Submit', $intro = "" ){
+public function get_form_collection( CT1_Collection $cf, $submit = 'Submit', $intro = "" , $request = ""){
 //echo __FILE__ . "\r\n" . print_r($cf, 1);
-//echo __FILE__ . "\r\n" . print_r($cf->get_values(), 1);
+//echo "<pre>" . __FILE__ . " get_form_collection\r\n" . print_r($cf->get_values(), 1) . "</pre>";
     $form = new HTML_QuickForm2($return['name'],'GET', '');
     $form->addDataSource(new HTML_QuickForm2_DataSource_Array() );
     $fieldset = $form->addElement('fieldset');
     $this->add_hidden_fields( $fieldset, $cf );
     // add page_id
-    $fieldset->addElement('hidden', 'request')->setValue('view_cashflows');
+    $fieldset->addElement('hidden', 'request')->setValue( $request );
     $fieldset->addElement('hidden', 'page_id')->setValue($_GET['page_id']);
     $fieldset->addElement('submit', null, array('value' => $submit));
 	$out = "";
@@ -61,6 +41,11 @@ public function get_form_cashflow( CT1_Cashflows $cf, $submit = 'Submit', $intro
 	$out.= "<p>" . $intro . "</p>" . "\r\n";
     $out.= $form;
     return $out;
+}
+
+
+public function get_form_cashflow( CT1_Cashflows $cf, $submit = 'Submit', $intro = "" ){
+	return $this->get_form_collection( $cf, $submit, $intro, 'view_cashflows');
 }
 
 			
