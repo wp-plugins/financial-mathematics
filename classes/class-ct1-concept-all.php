@@ -33,7 +33,7 @@ private function get_concept_labels(){
 				'concept_mortgage'=>'Mortgage (level)', 
 				'concept_annuity_increasing'=> 'Annuity (increasing or decreasing)', 
 				'concept_cashflows'=> 'Multiple cashflows', 
-				'concept_spot_rates'=> 'Spot rates to foward rates and par yields', 
+				'concept_spot_rates'=> 'Spot rates to forward rates and par yields', 
 				 );
 }
 
