@@ -11,6 +11,46 @@ public function __construct(CT1_Object $obj=null){
 	parent::__construct($obj);
 	$this->set_request( 'get_cashflows' );
 }
+	/**
+	 * Get string to render as HTML after new page GET request
+	 *
+	 * @param array $_INPUT  Probably $_GET
+	 * @return string
+	 *
+	 * @access public
+	 */
+	public function get_controller($_INPUT ){
+//echo "<pre> GET" . __FILE__ . print_r($_GET,1) . "</pre>";
+		try{
+			if (isset($_INPUT[ get_class( $this->obj ) ])){
+				if (!$this->set_cashflows( $_INPUT[ get_class( $this->obj ) ] ) ) 
+					return "<p>Error setting cashflows from:<pre>" . print_r($_INPUT,1) .  "</pre>";
+			}
+			if (isset($_INPUT['request'])){
+				if ('add_cashflow' == $_INPUT['request']){
+					$this->add_cashflow_from_input( $_INPUT );
+					return $this->get_solution_no_detail() .  $this->get_val_delete_add()  ;
+				}
+				if ($this->get_request() == $_INPUT['request']){
+					if ( $this->ignore_value( $_INPUT ) ){
+						if (isset( $_INPUT['i_effective'] ) )
+							return $this->get_solution( $_INPUT['i_effective'] ) .  $this->get_val_delete_add()  ;
+					} else {
+						return $this->get_interest_rate_for_value( $_INPUT['value'] ) .  $this->get_val_delete_add()  ;
+					}
+				}
+			}
+			if (isset($_INPUT[ get_class( $this->obj ) ]))
+				return $this->get_solution_no_detail() .  $this->get_val_delete_add()  ;
+			return $this->get_form_add_cashflow()  ;
+		} catch( Exception $e ){
+			return "Exception in " . __FILE__ . print_r($e->getMessage(),1) ;
+		}
+	}
+
+	private function get_val_delete_add(){
+		return  $this->get_form_valuation() . $this->get_delete_buttons() .  $this->get_form_add_cashflow()  ;
+	}
 
 public function get_render_form_cashflow( CT1_Cashflows $cf, $submit = 'Submit', $intro = "" ){
 	$render = new CT1_Render();
@@ -29,24 +69,10 @@ public function get_solution( $new_i_effective = 0 ){
 	$return = $render->get_render_latex($this->obj->explain_discounted_value());
 	return $return;
 }
-	
-public function get_delete_buttons(){
-	$out = "";
-	if ( count( $this->obj->get_cashflow_indices() ) > 0 ){
-		$render = new CT1_Render();
-		$cfs = $this->obj->get_cashflows();
-		foreach ( $this->obj->get_cashflow_indices() as $i ) {
-			$clone = $this->obj->get_clone_this();
-			$cf = $cfs[$i];
-			$rate = $cf->get_rate_per_year();
-			$label = "\\begin{equation*}" . $cf->get_label() . "\\end{equation*}";
-			$clone->remove_cashflow_index($i);
-			$button = $this->get_render_form_cashflow( $clone, 'Delete ' . $rate );
-			$out .= $label . $button;
-		}
+	public function get_delete_buttons(){
+		return parent::get_delete_buttons('view_cashflows');
 	}
-	return $out;
-}
+	
 
 private function get_interest_rate_for_value( $v = 0 ){
 	$render = new CT1_Render();
@@ -113,7 +139,7 @@ private function get_hidden_cashflow_fields( CT1_Cashflows $cf ){
 			if ( is_array( $v ) ){
 //echo "<pre> v in get_hidden_cashflow_fiels" . __FILE__ . print_r($v,1) . "</pre>";
 				foreach (array_keys( $v ) as $key){
-					$name = "cashflows[" . $i . "][" . $key . "]";
+					$name = get_class( $this->obj ) . "[" . $i . "][" . $key . "]";
 					$value = $v[ $key ];
 					$hidden[ $name ] = $value;
 				}
@@ -228,50 +254,6 @@ private function ignore_value( $_INPUT ){
 	return false;
 }
 
-
-public function get_controller($_INPUT ){
-// echo "<pre> GET" . __FILE__ . print_r($_GET,1) . "</pre>";
-	$render = new CT1_Render();
-	if (isset($_INPUT['request'])){
-		if (isset($_INPUT['cashflows'])){
-			if ( $this->set_cashflows( $_INPUT['cashflows'] ) ) {
-				;
-			} else {
-				return "<p>Error setting cashflows from:<pre>" . print_r($_INPUT,1) .  "</pre>";
-			}
-		}
-		if ('add_cashflow' == $_INPUT['request']){
-			$this->add_cashflow_from_input( $_INPUT );
-		}
-		if ($this->get_request() == $_INPUT['request']){
-			if ( $this->ignore_value( $_INPUT ) ){
-				if (isset( $_INPUT['i_effective'] ) ){
-					return $this->get_solution( $_INPUT['i_effective'] ) .  $this->get_form_valuation() . $this->get_delete_buttons() .  $this->get_form_add_cashflow()  ;
-				} else {
-					return $this->get_solution() .  $this->get_form_valuation() . $this->get_delete_buttons() .  $this->get_form_add_cashflow()  ;
-				}
-			} else {
-				return $this->get_interest_rate_for_value( $_INPUT['value'] ) .  $this->get_form_valuation() . $this->get_delete_buttons() .  $this->get_form_add_cashflow()  ;
-			}
-		} else {
-			$out = $this->get_solution_no_detail() .  $this->get_form_valuation() . $this->get_delete_buttons() . $this->get_form_add_cashflow()  ;
-			return $out;
-		}
-	}
-	else{
-		if (isset($_INPUT['cashflows'])){
-			if ( $this->set_cashflows( $_INPUT['cashflows'] ) ) {
-				;
-			} else {
-				return "<p>Error setting cashflows from:<pre>" . print_r($_INPUT,1) .  "</pre>";
-			}
-			$hidden = $this->get_render_form_cashflow( $this->obj );
-			$out = $this->get_solution_no_detail() .  $this->get_form_valuation() . $this->get_delete_buttons() .  $this->get_form_add_cashflow()  ;
-			return $out;
-		}
-		return $this->get_form_add_cashflow()  ;
-	}
-}
 
 private function set_cashflows( $_INPUT = array() ){
 //	$this->obj->set_from_input($_INPUT);

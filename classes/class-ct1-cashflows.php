@@ -4,7 +4,6 @@ require_once 'class-ct1-collection.php';
 
 class CT1_Cashflows extends CT1_Collection {
 
-	private $cashflows;
 	private $value;
 	protected $max_dp = 2;
 
@@ -150,10 +149,10 @@ class CT1_Cashflows extends CT1_Collection {
 		}
 		return new CT1_Annuity();
 	}
-		
+
 	public function set_from_input($_INPUT = array(), $pre = ''){
 		try{
-			$c_new = array();
+			$c_new = new CT1_Cashflows();
 			if ( count($_INPUT) > 0 ){
 				foreach ($_INPUT as $i){
 					if( is_array($i) ){
@@ -163,10 +162,11 @@ class CT1_Cashflows extends CT1_Collection {
 						$c->set_annuity( $a );
 						$c->set_rate_per_year( $i['rate_per_year'] );
 						$c->set_effective_time( $i['effective_time'] );
-						$c_new[] = $c;
+						$c_new->add_object( $c );
 					}
 				}
-				$this->set_cashflows( $c_new );
+				$this->set_objects( $c_new->get_objects() );
+				$this->class = $c_new->class;
 				return true;
 			} else {
 				return false;
@@ -253,19 +253,19 @@ class CT1_Cashflows extends CT1_Collection {
 
 	public function get_cashflows(){
 // echo "\r\n get_cashflows \r\n " . __FILE__ . "\r\n";
-		return $this->cashflows;
+		return $this->get_objects();
 	}
 
 	private function set_cashflows( $cashflow_array ){
-		$this->cashflows = $cashflow_array;
+		$this->set_objects( $cashflow_array );
 	}
 
 	public function add_cashflow( CT1_Cashflow $c ){
-		$this->cashflows[] = $c;
+		$this->add_object( $c );
 	}
 
-	public function remove_cashflow_index( $i ){
-		unset( $this->cashflows[ $i ] );
+	public function remove_cashflow( CT1_Cashflow $c ){
+		$this->remove_object( $c );
 	}
 	
 	private function get_sign( $d ){

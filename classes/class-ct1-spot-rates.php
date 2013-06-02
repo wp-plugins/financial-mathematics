@@ -192,7 +192,6 @@ protected $explanation_par_yields;
 			
 
 	public function set_from_input($_INPUT = array(), $pre = ''){
-//echo "<pre>" . __FILE__ . "setfrominput " . print_r($_INPUT, 1) . "</pre>";
 		try{
 			$c_new = new CT1_Spot_Rates();
 			if ( count($_INPUT) > 0 ){
@@ -202,10 +201,8 @@ protected $explanation_par_yields;
 						$c_new->add_object( $c );
 					}
 				}
-//echo "<pre>" . __FILE__ . "setfrominput cnew " . print_r($c_new, 1) . "</pre>";
 				$this->set_objects( $c_new->get_objects() );
 				$this->class = $c_new->class;
-//echo "<pre>" . __FILE__ . "setfrominput this " . print_r($this, 1) . "</pre>";
 				return true;
 			} else {
 				return false;

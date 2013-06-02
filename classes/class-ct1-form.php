@@ -11,13 +11,14 @@ protected $request;
 
 
 public function get_delete_buttons( $request = ""){
-//echo "<pre>" . __FILE__ . "get_delete_buttons" ;
 	$out = "";
 	if ( $this->obj instanceof CT1_Collection ){
 		if ( $this->obj->get_count() > 0 ){
 			$render = new CT1_Render();
 			$cfs = $this->obj->get_objects();
 			foreach ( $this->obj->get_objects() as $o ) {
+				if (!method_exists( $this->obj, 'get_clone_this' ))
+					throw new Exception('get_clone_this method not defined for ' . get_class( $this->obj ) . " in " . __FILE__ );
 				$clone = $this->obj->get_clone_this();
 //				$label = $o->get_label() ;
 				$label = "";
