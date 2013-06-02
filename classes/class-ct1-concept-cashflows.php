@@ -12,6 +12,11 @@ public function __construct(CT1_Object $obj=null){
 	$this->set_request( 'get_cashflows' );
 }
 
+public function get_render_form_cashflow( CT1_Cashflows $cf, $submit = 'Submit', $intro = "" ){
+	$render = new CT1_Render();
+	return $render->get_form_collection( $cf, $submit, $intro, 'view_cashflows');
+}
+
 private function get_solution_no_detail(){
 	$render = new CT1_Render();
 	$return = $render->get_render_latex($this->obj->explain_discounted_value(false));
@@ -36,7 +41,7 @@ public function get_delete_buttons(){
 			$rate = $cf->get_rate_per_year();
 			$label = "\\begin{equation*}" . $cf->get_label() . "\\end{equation*}";
 			$clone->remove_cashflow_index($i);
-			$button = $render->get_form_cashflow( $clone, 'Delete ' . $rate );
+			$button = $this->get_render_form_cashflow( $clone, 'Delete ' . $rate );
 			$out .= $label . $button;
 		}
 	}
@@ -260,7 +265,7 @@ public function get_controller($_INPUT ){
 			} else {
 				return "<p>Error setting cashflows from:<pre>" . print_r($_INPUT,1) .  "</pre>";
 			}
-			$hidden = $render->get_form_cashflow( $this->obj );
+			$hidden = $this->get_render_form_cashflow( $this->obj );
 			$out = $this->get_solution_no_detail() .  $this->get_form_valuation() . $this->get_delete_buttons() .  $this->get_form_add_cashflow()  ;
 			return $out;
 		}
