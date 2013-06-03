@@ -8,6 +8,47 @@ class CT1_Cashflow extends CT1_Object {
     private $rate_per_year;
     private $effective_time;
 
+	/**
+	 * Set cashflow from input
+	 *
+	 * @param array $IN new cashflow features
+	 * @param string $pre possible prefix
+	 * @return boolean
+	 *
+	 * @access public
+	 */
+	public function set_from_input( $IN = array(), $pre = '' ){
+	try{
+		$rate_per_year = 0; $effective_time = 0;
+		if ( isset( $IN[$pre . 'rate_per_year'] ) )
+			$rate_per_year = $IN[$pre . 'rate_per_year'];
+		if ( isset( $IN[$pre . 'effective_time'] ) )
+			$effective_time = $IN[$pre . 'effective_time'];
+		if ( isset( $IN[$pre . 'single_payment'] ) ){
+			$a = new CT1_Annuity(1, true, 0, 1);
+		} else {
+			if ( isset( $IN['consider_increasing'] ) ){
+				$a = new CT1_Annuity_Increasing();
+				$a->set_increasing( $increasing );
+			} else {
+				$a = new CT1_Annuity_Escalating();
+				$a->set_escalation_rate_effective( $escalation_rate_effective );
+				$a->set_escalation_frequency( $escalation_frequency );
+			}
+		}
+		if ($a->set_from_input( $IN ) ){
+        		$this->set_rate_per_year( $rate_per_year );
+			$this->set_effective_time( $effective_time );
+			$this->set_annuity( $a );
+			return true;
+		} else {
+			return false;
+		}
+	 } catch( Exception $e ){ 
+		throw new Exception( "Exception in " . __FILE__ . ": " . $e->getMessage() );
+	 }
+	}
+
     public function get_valid_options(){ 
         $r = $this->annuity->get_valid_options();
         $r['rate_per_year'] = array(
