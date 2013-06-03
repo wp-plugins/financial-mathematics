@@ -58,10 +58,3 @@ public function set_mortgage($_INPUT = array()){
 
 } // end of class
 
-/*
-// test case
-$obj = new CT1_Mortgage(12, true, log(1.06), 10, 1000000);
-$form = new CT1_Concept_Mortgage($obj);
-print_r($form->get_calculator(array()));
-*/
-

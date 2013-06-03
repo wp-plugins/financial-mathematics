@@ -2,9 +2,9 @@
 /* 
 Plugin Name: Financial Mathematics
 Plugin URI: http://bdmfst.com/ct1
-Description: Draft online quizes in financial mathematics for actuarial students
+Description: Online calculator of basic financial arithmetic for actuarial students
 Author: O.Kellie-Smith
-Version: 1.10 
+Version: 1.12 
 Author URI: http://www.bdmfst.com
 Licence: GPL2
 */  

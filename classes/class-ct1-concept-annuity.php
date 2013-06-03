@@ -35,7 +35,6 @@ public function get_controller($_INPUT ){
 	if (isset($_INPUT['request'])){
 		if ($this->get_request() == $_INPUT['request']){
 			if ($this->set_annuity($_INPUT)){
-//				echo "<pre>" . print_r( $this->obj->get_values(), 1) . "</pre>";
 				if (empty( $_INPUT['value'] ) ){
 					return $this->get_solution();
 				} else {
@@ -55,17 +54,9 @@ public function get_controller($_INPUT ){
 public function set_annuity($_INPUT = array()){
 	$this->set_received_input($_INPUT);
 	$this->obj->set_from_input($_INPUT);
-//				echo "<pre> INPUT" . print_r( $_INPUT, 1) . "</pre>";
-//				echo "<pre> object" . print_r( $this->obj->get_values(), 1) . "</pre>";
 	return ($this->obj->set_from_input($_INPUT));
 }
 
 } // end of class
 
-/*
-// test case
-$obj = new CT1_Mortgage(12, true, log(1.06), 10, 1000000);
-$form = new CT1_Concept_Mortgage($obj);
-print_r($form->get_calculator(array()));
-*/
 

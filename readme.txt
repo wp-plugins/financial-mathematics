@@ -4,11 +4,11 @@ Donate link: http://bdmfst.com/
 Tags: actuarial, actuary, financial mathematics, financial, mathematics, CT1
 Requires at least: 3.5.1
 Tested up to: 3.5.1
-Stable tag: 1.10
+Stable tag: 1.12
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Practice financial mathematics questions for the actuarial exams. Define and calculate interest rates, annuity certain, mortgage repayment schedule.
+Practice financial mathematics questions for the actuarial exams. Define and calculate interest rates, annuity certain, mortgage repayment, project valuation, spot/forward/par yields.
 
 == Description ==
 
@@ -34,13 +34,15 @@ $phpunit
 
 == Screenshots ==
 
-1. Input form rendered the first time [mortgage] shortcode is rendered.
+1. Input form rendered after mortgage selected from a form rendered with the [fin-math] shortcode is rendered.
 
-2. Feedback once a user has submitted a form to a page with [mortgage]
-shortcode.
+2. Feedback once a user has submitted mortgage parameters to a page with [fin-math] shortcode.
 
 
 == Changelog ==
+
+= 1.12 =
+Concept classes (input/output forms) refactored and docuemented.
 
 = 1.11 =
 Spot rates added to [fin-math] and [concept_spot_rates] shortcodes.
@@ -83,6 +85,10 @@ Multiple cashflows (mixtures of annuities) enabled in [fin-math].
 
 
 == Upgrade Notice ==
+
+= 1.12 =
+* New functionality: spot rates added to [fin-math] and [concept_spot_rates] shortcodes.
+* Readability of code: Concept classes (input/output forms) refactored and documented.
 
 = 1.10 = 
 Multiple cashflows (mixtures of annuities) enabled in [fin-math].
