@@ -4,7 +4,7 @@ Donate link: http://bdmfst.com/
 Tags: actuarial, actuary, financial mathematics, financial, mathematics, CT1
 Requires at least: 3.5.1
 Tested up to: 3.5.1
-Stable tag: 1.12
+Stable tag: 1.13
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,6 +40,10 @@ $phpunit
 
 
 == Changelog ==
+
+= 1.13 =
+* Bug fix. Par yields not shown for irrelevant terms.
+* Presentation. Actuarial symbol used for annuity certain.
 
 = 1.12 =
 Concept classes (input/output forms) refactored and docuemented.

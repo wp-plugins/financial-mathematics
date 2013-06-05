@@ -54,7 +54,7 @@ protected $explanation_par_yields;
 		$key_forward = array_keys( $forwards );
 		$key_par = array_keys( $pars );
 		for ($i = 0, $ii = $this->get_count(); $i < $ii; $i++) {
-			$row = array();
+			$row = array(); $objects = array();
 			$s = $spots[ $key_spot[ $i ] ];
 			$row[0] = $s->get_label();
 			$row[1] = $s->get_i_effective();

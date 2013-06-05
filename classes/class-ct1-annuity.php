@@ -221,7 +221,7 @@ class CT1_Annuity extends CT1_Interest{
 	}
 
 	protected function top_corner($n){
-		return  "\\overline{" . $n . "|}";
+		return "\\require{enclose}{\\enclose{actuarial}{" . $n . "}}";
 	}
 	
 	protected function sub_n(){
