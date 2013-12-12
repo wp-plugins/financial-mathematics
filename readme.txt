@@ -1,6 +1,6 @@
 === Plugin Name ===
 Contributors: owenks
-Donate link: http://bdmfst.com/
+Donate link:           
 Tags: actuarial, actuary, financial mathematics, financial, mathematics, CT1
 Requires at least: 3.5.1
 Tested up to: 3.8
@@ -41,6 +41,10 @@ $phpunit
 
 
 == Changelog ==
+
+= 1.14 =
+* Tested it works with Wordpress 3.8.
+* Added comment about needing to install PEAR.
 
 = 1.13 =
 * Bug fix. Par yields not shown for irrelevant terms.
