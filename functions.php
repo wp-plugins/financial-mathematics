@@ -1,7 +1,7 @@
 <?php   
 
 
-$path_to_pear = '/big/dom/xbdmfst/owenks/pear/share/pear/';
+$path_to_pear = '/your/path/to/local/pear/';
 set_include_path(get_include_path() . PATH_SEPARATOR . $path_to_pear);
 
 function CT1_autoloader($class, $file){

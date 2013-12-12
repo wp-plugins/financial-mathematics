@@ -3,7 +3,7 @@ Contributors: owenks
 Donate link: http://bdmfst.com/
 Tags: actuarial, actuary, financial mathematics, financial, mathematics, CT1
 Requires at least: 3.5.1
-Tested up to: 3.5.1
+Tested up to: 3.8
 Stable tag: 1.13
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -19,6 +19,7 @@ This plugin provides a shortcode which render forms that calculate and explain a
 
 1. Download, unzip and upload to your WordPress plugins directory  
 1. Activate the plugin through the 'Plugins' menu in WordPress
+1. Make sure your host has PEAR packages installed (Validate, HTML_Quickform2, HTML_Table).
 1. Add the shortcode [fin-math] to a page (not a post)
 
 == Frequently Asked Questions ==
