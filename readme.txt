@@ -42,6 +42,10 @@ $phpunit
 
 == Changelog ==
 
+= 1.14 =
+* Tested it works with Wordpress 3.8.
+* Added comment about needing to install PEAR.
+
 = 1.13 =
 * Bug fix. Par yields not shown for irrelevant terms.
 * Presentation. Actuarial symbol used for annuity certain.
