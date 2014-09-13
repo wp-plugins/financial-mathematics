@@ -3,7 +3,7 @@ Contributors: owenks
 Donate link:           
 Tags: actuarial, actuary, financial mathematics, financial, mathematics, CT1
 Requires at least: 3.5.1
-Tested up to: 3.8
+Tested up to: 4.0
 Stable tag: 1.14
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -26,7 +26,7 @@ This plugin provides a shortcode which render forms that calculate and explain a
 
 = Where is the plugin running? = 
 
-It's running on Wordpress 3.8 at [Financial mathematics](https://php-treaties.rhcloud.com/wordpress/ "Financial mathematics") 
+It's running on Wordpress 4.0 at [Financial mathematics](https://php-treaties.rhcloud.com/wordpress/ "Financial mathematics") 
 
 = How do I run the unit tests? =
 
