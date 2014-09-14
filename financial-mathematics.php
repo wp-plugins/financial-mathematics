@@ -1,11 +1,9 @@
 <?php 
 /* 
 Plugin Name: Financial Mathematics
-Plugin URI: http://bdmfst.com/ct1
 Description: Online calculator of basic financial arithmetic for actuarial students
 Author: O.Kellie-Smith
-Version: 1.13 
-Author URI: http://www.bdmfst.com
+Version: 1.14 
 Licence: GPL2
 */  
 
