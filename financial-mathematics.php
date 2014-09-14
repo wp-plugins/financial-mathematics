@@ -3,7 +3,7 @@
 Plugin Name: Financial Mathematics
 Description: Online calculator of basic financial arithmetic for actuarial students
 Author: O.Kellie-Smith
-Version: 1.13 
+Version: 1.14 
 Licence: GPL2
 */  
 
