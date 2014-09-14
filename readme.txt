@@ -17,11 +17,11 @@ This plugin provides a shortcode which render forms that calculate and explain a
 
 == Installation ==
 
-1. Download, unzip and upload to your WordPress plugins directory  
-1. Activate the plugin through the 'Plugins' menu in WordPress
+1. Download, unzip and upload to your WordPress plugins directory.  
+1. Activate the plugin through the 'Plugins' menu in WordPress.
 1. Make sure your host has PEAR packages installed (Validate, HTML_Quickform2, HTML_Table).
-1. Add the shortcode [fin-math] to a page (not a post)
-1. Ensure the page can be read with http (as Mathjax won't word with https)
+1. Add the shortcode [fin-math] to a page (not a post).
+1. Ensure the page can be read with http (as Mathjax won't word with https).
 
 
 == Frequently Asked Questions ==
