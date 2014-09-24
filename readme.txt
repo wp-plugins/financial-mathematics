@@ -3,7 +3,7 @@ Contributors: owenks
 Donate link:           
 Tags: actuarial, actuary, financial mathematics, financial, mathematics, CT1
 Requires at least: 3.5.1
-Tested up to: 3.8
+Tested up to: 4.0
 Stable tag: 1.14
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -17,16 +17,18 @@ This plugin provides a shortcode which render forms that calculate and explain a
 
 == Installation ==
 
-1. Download, unzip and upload to your WordPress plugins directory  
-1. Activate the plugin through the 'Plugins' menu in WordPress
+1. Download, unzip and upload to your WordPress plugins directory.  
+1. Activate the plugin through the 'Plugins' menu in WordPress.
 1. Make sure your host has PEAR packages installed (Validate, HTML_Quickform2, HTML_Table).
-1. Add the shortcode [fin-math] to a page (not a post)
+1. Add the shortcode [fin-math] to a page (not a post).
+1. Ensure the page can be read with http (as Mathjax won't word with https).
+
 
 == Frequently Asked Questions ==
 
 = Where is the plugin running? = 
 
-It's running on Wordpress 3.8 at [Financial mathematics](https://php-treaties.rhcloud.com/wordpress/ "Financial mathematics") 
+It's running on Wordpress 4.0 at [Financial mathematics](https://php-treaties.rhcloud.com/wordpress/ "Financial mathematics") 
 
 = How do I run the unit tests? =
 
