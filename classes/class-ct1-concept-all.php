@@ -11,7 +11,7 @@ require_once 'class-ct1-concept-spot-rates.php';
  * CT1_Concept_All class
  *
  * @package    CT1
- * @author     Owen Kellie-Smith owen@bdmfst.com
+ * @author     Owen Kellie-Smith
  */
 class CT1_Concept_All {
 

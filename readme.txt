@@ -3,8 +3,8 @@ Contributors: owenks
 Donate link:           
 Tags: actuarial, actuary, financial mathematics, financial, mathematics, CT1
 Requires at least: 3.5.1
-Tested up to: 4.0
-Stable tag: 1.14
+Tested up to: 4.1
+Stable tag: 1.17
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,9 +19,7 @@ This plugin provides a shortcode which render forms that calculate and explain a
 
 1. Download, unzip and upload to your WordPress plugins directory.  
 1. Activate the plugin through the 'Plugins' menu in WordPress.
-1. Make sure your host has PEAR packages installed (Validate, HTML_Quickform2, HTML_Table).
 1. Add the shortcode [fin-math] to a page (not a post).
-1. Ensure the page can be read with http (as Mathjax won't word with https).
 
 
 == Frequently Asked Questions ==
@@ -43,6 +41,17 @@ $phpunit
 
 
 == Changelog ==
+
+= 1.17 =
+* Removed dud references to bdmfst (an old defunct domain).
+
+= 1.16 =
+* Gets mathjax for either http or https.
+
+= 1.15 =
+* Tested it works with Wordpress 4.1.
+* Included necessary PEAR files.
+* Bug fix: removed a call-by-reference
 
 = 1.14 =
 * Tested it works with Wordpress 3.8.
@@ -96,6 +105,13 @@ Multiple cashflows (mixtures of annuities) enabled in [fin-math].
 
 
 == Upgrade Notice ==
+
+= 1.16 =
+* Mathjax works with https.
+
+= 1.15 =
+* PEAR files now included with plugin.
+* Works with Wordpress 4.1.
 
 = 1.12 =
 * New functionality: spot rates added to [fin-math] and [concept_spot_rates] shortcodes.

@@ -9,7 +9,7 @@ define("CT1_maximum_levels_detail", 10);
  * CT1_Render class
  *
  * @package    CT1
- * @author     Owen Kellie-Smith owen@bdmfst.com
+ * @author     Owen Kellie-Smith
  */
 class CT1_Render  {
 
@@ -173,7 +173,7 @@ class CT1_Render  {
 	 *
 	 * @access private
 	 */
-	private function get_render_latex_sentence( $equation_array, $label = '' ){
+	private function get_render_latex_sentence( $equation_array, &$label = '' ){
 		$out = "";
 		$detail = array();
 		if ( !empty($label) ){
@@ -181,7 +181,7 @@ class CT1_Render  {
 		}
 		$d = 1;
 		foreach ($equation_array as $e) {
-			$out .= $this->get_render_latex_sentence_line( $e, &$detail );
+			$out .= $this->get_render_latex_sentence_line( $e, $detail );
 			if ($d < count($equation_array)) 
 				$out.= " \\\\ " . "\r\n";
 			if ($d ==count($equation_array)) 
@@ -333,7 +333,7 @@ class CT1_Render  {
 		<script type='text/x-mathjax-config'>
 			MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: 'all'} } });
 		</script>
-		<script type='text/javascript' src='http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&#038;ver=3.5.1'>
+		<script type='text/javascript' src='//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'>
 		</script>
 		";
 	}
