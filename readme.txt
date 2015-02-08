@@ -26,7 +26,7 @@ This plugin provides a shortcode which render forms that calculate and explain a
 
 = Where is the plugin running? = 
 
-It's running on Wordpress 4.0 at [Financial mathematics](https://php-treaties.rhcloud.com/wordpress/ "Financial mathematics") 
+It's running at [Financial mathematics](https://php-treaties.rhcloud.com/ "Financial mathematics") 
 
 = How do I run the unit tests? =
 
