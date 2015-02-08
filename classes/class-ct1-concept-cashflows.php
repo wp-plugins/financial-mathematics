@@ -10,7 +10,7 @@ require_once 'class-ct1-render.php';
  * Provides input/output for multiple cashflows
  *
  * @package    CT1
- * @author     Owen Kellie-Smith owen@bdmfst.com
+ * @author     Owen Kellie-Smith
  */
 class CT1_Concept_Cashflows extends CT1_Form{
 

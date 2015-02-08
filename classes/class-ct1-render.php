@@ -9,7 +9,7 @@ define("CT1_maximum_levels_detail", 10);
  * CT1_Render class
  *
  * @package    CT1
- * @author     Owen Kellie-Smith owen@bdmfst.com
+ * @author     Owen Kellie-Smith
  */
 class CT1_Render  {
 

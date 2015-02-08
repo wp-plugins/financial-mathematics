@@ -3,7 +3,7 @@
  * CT1_Interest_Format class
  *
  * @package    CT1
- * @author     Owen Kellie-Smith owen@bdmfst.com
+ * @author     Owen Kellie-Smith
  */
 
 require_once 'class-ct1-object.php';
