@@ -173,7 +173,7 @@ class CT1_Render  {
 	 *
 	 * @access private
 	 */
-	private function get_render_latex_sentence( $equation_array, $label = '' ){
+	private function get_render_latex_sentence( $equation_array, &$label = '' ){
 		$out = "";
 		$detail = array();
 		if ( !empty($label) ){
@@ -181,7 +181,7 @@ class CT1_Render  {
 		}
 		$d = 1;
 		foreach ($equation_array as $e) {
-			$out .= $this->get_render_latex_sentence_line( $e, &$detail );
+			$out .= $this->get_render_latex_sentence_line( $e, $detail );
 			if ($d < count($equation_array)) 
 				$out.= " \\\\ " . "\r\n";
 			if ($d ==count($equation_array)) 
